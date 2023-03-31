@@ -14,12 +14,14 @@ namespace ResearchersPlatform_DAL.Models
         public string?  Objectives { get; set; }
         public double Price { get; set; }
         public List<Video> Videos { get; set; }
-       // public int Enroll { get; set; } ??
-        public TimeSpan Hours { get; set; }
+        public List<Quiz> Quizzes { get; set; }
+        public int Enroll { get; set; } 
+        public string? Hours { get; set; }
         public string? Brief { get; set; }
         public Course()
         {
             Videos=new List<Video>();
+            Quizzes = new List<Quiz>();
         }
     }
 }

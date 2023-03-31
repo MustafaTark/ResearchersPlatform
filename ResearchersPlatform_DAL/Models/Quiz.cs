@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class GeneralQuiz
+    public class Quiz
     {
         public Guid Id { get; set; }
         public int MaxScore { get; set; }
@@ -18,7 +18,7 @@ namespace ResearchersPlatform_DAL.Models
         public int SkillId { get; set; }
         public double Price { get; set; }
         public bool IsSuccessed { get; set; }
-        public GeneralQuiz()
+        public Quiz()
         {
             Questions= new List<Question>();
         }

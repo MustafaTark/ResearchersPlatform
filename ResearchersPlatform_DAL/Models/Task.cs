@@ -12,27 +12,18 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Task()
         {
-            Participants = new List<User>();
+            Participants = new List<Researcher>();
         }
         public Guid Id { get; set; }
         public int ParticipantsNumber { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-
-        [DataType(DataType.Time)]
         public DateTime Deadline { get; set; }
         public Progress Progress { get; set; }
-
-        public ICollection<User>? Participants { get; set; }
+        public ICollection<Researcher>? Participants { get; set; }
         [ForeignKey(nameof(Idea))]
         public Guid IdeaId { get; set; }
         public Idea? IdeaObject { get; set; }
-
-        //TODO..
-        //Task Creator 
-
-
-
     }
     public enum Progress
     {

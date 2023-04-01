@@ -12,7 +12,7 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Idea()
         {
-            Participants = new List<User>();
+            Participants = new List<Researcher>();
             Tasks = new List<Task>();
         }
         public Guid Id { get; set; }
@@ -20,15 +20,15 @@ namespace ResearchersPlatform_DAL.Models
         public int ParticipantsNumber { get; set; } 
         public int MaxParticipantsNumber { get; set; } 
 
-        [ForeignKey(nameof(User))]
+        [ForeignKey(nameof(Researcher))]
         public Guid? CreatorId { get; set; }
-        public User? UserCreator { get; set; }
-        public ICollection<User>? Participants { get; set; }
+        public Researcher? ResearcherCreator { get; set; }
+        public ICollection<Researcher> Participants { get; set; }
         public ICollection<Task> Tasks { get; set; }
         
         [ForeignKey(nameof(Specality))]
         public Guid? SpecalityId {get; set; }
-        public Specality? Specality { get; set; }
+        public Specality? SpecalityObj { get; set; }
         
         [DataType(DataType.Time)]
         public DateTime Deadline { get; set; }

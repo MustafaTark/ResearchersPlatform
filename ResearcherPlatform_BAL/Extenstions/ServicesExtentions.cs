@@ -12,7 +12,10 @@ namespace ResearchersPlatform_BAL.Extenstions
 {
     public static class ServicesExtentions
     {
-        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
-         => services.AddDbContext<AppDbContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+        public static void ConfigureSqlContext(this IServiceCollection services,
+                                               IConfiguration configuration)
+         => services.AddDbContext<AppDbContext>(opts =>
+                                    opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")
+                                    , b => b.MigrationsAssembly("ResearchersPlatform")));
     }
 }

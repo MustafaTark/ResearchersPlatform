@@ -11,10 +11,10 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public string? ImageUrl { get; set; }
         public bool IsVisible { get; set; } = true;
-        //public Guid ResearcherId {get;set;}
-        //public Researcher Researcher{get;set;}
+        [ForeignKey(nameof(Student))]
+        public Guid StudentId { get;set;}
+        public Student? StudentObj{get;set;}
 
 
     }

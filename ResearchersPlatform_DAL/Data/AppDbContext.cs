@@ -39,9 +39,12 @@ namespace ResearchersPlatform_DAL.Data
 
             builder.Entity<Researcher>()
                 .ToTable("Researchers").HasBaseType<Student>();
+
             builder.Entity<Researcher>().HasMany(p => p.Ideas).WithMany(p => p.Participants);
             builder.Entity<Idea>().HasOne(p => p.ResearcherCreator).WithMany(p => p.IdeasLeader);
             builder.Entity<Researcher>().HasMany(p => p.Tasks).WithMany(p => p.Participants);
+            builder.Entity<Researcher>().HasMany(r => r.Notifications).WithMany(n => n.Researchers);
+            builder.Entity<Researcher>().HasMany(r => r.Invitations).WithMany(i => i.Researchers);
 
         }
     }

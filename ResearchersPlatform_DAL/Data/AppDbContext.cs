@@ -20,7 +20,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<Badge> Badges { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Specality> Specalities { get; set; }
-        public DbSet<Models.Task> Tasks { get; set; }
+        public DbSet<TaskIdea> Tasks { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Idea> Ideas { get; set; }
 
@@ -46,6 +46,7 @@ namespace ResearchersPlatform_DAL.Data
             builder.Entity<Researcher>().HasMany(p => p.Tasks).WithMany(p => p.Participants);
             builder.Entity<Researcher>().HasMany(r => r.Notifications).WithMany(n => n.Researchers);
             builder.Entity<Researcher>().HasMany(r => r.Invitations).WithMany(i => i.Researchers);
+            builder.Entity<Student>().HasMany(r => r.Courses).WithMany(c => c.Students);
 
         }
     }

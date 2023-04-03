@@ -31,5 +31,6 @@ namespace ResearchersPlatform_BAL.Repositories
             : _context.Set<T>().Where(expression).AsTracking(QueryTrackingBehavior.TrackAll);
         public void Create(T entity) => _context.Set<T>().Add(entity);
         public void Delete(T entity) => _context.Set<T>().Remove(entity);
+        public void Update(T entity) => _context.Set<T>().Update(entity);
     }
 }

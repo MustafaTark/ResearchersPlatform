@@ -73,6 +73,17 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<User, Student>();
             services.AddScoped<Student, Researcher>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<GenericRepository<Student>,StudentRepository>();
+            services.AddScoped<GenericRepository<Course>,CourseRepository>();
+            services.AddScoped<GenericRepository<Researcher>,ResearcherRepository>();
+            services.AddScoped<GenericRepository<TaskIdea>,TaskRepository>();
+            services.AddScoped<GenericRepository<Idea>,IdeaRepository>();
+            services.AddScoped<IRepositoryManager,RepositoryManager>();
+            services.AddScoped<IStudentRepository,StudentRepository>();
+            services.AddScoped<ICourseRepository,CourseRepository>();
+            services.AddScoped<IResearcherRepository,ResearcherRepository>();
+            services.AddScoped<IIdeaRepository,IdeaRepository>();
+            services.AddScoped<ITaskRepository,TaskRepository>();
         }
     }
 }

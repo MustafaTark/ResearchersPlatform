@@ -15,6 +15,7 @@ namespace ResearchersPlatform_DAL.Models
         public string?  Objectives { get; set; }
         public double Price { get; set; }
         public List<Video> Videos { get; set; }
+        public ICollection<Student> Students { get; set; }
         public int Enroll { get; set; } 
         public string? Hours { get; set; }
         public string? Brief { get; set; }
@@ -24,6 +25,7 @@ namespace ResearchersPlatform_DAL.Models
         public Course()
         {
             Videos=new List<Video>();
+            Students = new List<Student>(); // NEW + MIGRATION
            
         }
     }

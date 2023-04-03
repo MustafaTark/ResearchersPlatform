@@ -13,7 +13,7 @@ namespace ResearchersPlatform_DAL.Models
         public Idea()
         {
             Participants = new List<Researcher>();
-            Tasks = new List<Task>();
+            Tasks = new List<TaskIdea>();
         }
         public Guid Id { get; set; }
         public string? Name { get; set; }
@@ -24,7 +24,7 @@ namespace ResearchersPlatform_DAL.Models
         public Guid? CreatorId { get; set; }
         public Researcher? ResearcherCreator { get; set; }
         public ICollection<Researcher> Participants { get; set; }
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<TaskIdea> Tasks { get; set; }
         
         [ForeignKey(nameof(Specality))]
         public Guid? SpecalityId {get; set; }

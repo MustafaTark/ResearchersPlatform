@@ -14,7 +14,7 @@ namespace ResearchersPlatform_DAL.Models
         public Gender Gender { get; set; }
         [Range(18, 70, ErrorMessage = "Age must be between (18 - 70)")]
         public int Age { get; set; }
-       public ICollection<Course> Courses { get; set; }
+       public ICollection<Course> Courses { get; set; } // NEW + MIGRATION
         public int Trails { get; set; }
         public ICollection<Badge> Badges { get; set; }
         public Student() {

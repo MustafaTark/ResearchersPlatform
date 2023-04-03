@@ -13,6 +13,7 @@ namespace ResearchersPlatform_BAL.Contracts
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
         void Create(T entity);
         void Delete(T entity);
+        void Update(T entity);
     }
 }
 

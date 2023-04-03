@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Task
+    public class TaskIdea
     {
-        public Task()
+        public TaskIdea()
         {
             Participants = new List<Researcher>();
         }

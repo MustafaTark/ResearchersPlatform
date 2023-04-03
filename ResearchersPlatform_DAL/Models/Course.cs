@@ -16,7 +16,6 @@ namespace ResearchersPlatform_DAL.Models
         public double Price { get; set; }
         public List<Video> Videos { get; set; }
         public int Enroll { get; set; } 
-        //Quiz Property
         public string? Hours { get; set; }
         public string? Brief { get; set; }
         [ForeignKey(nameof(Skill))]

@@ -33,6 +33,7 @@ namespace ResearchersPlatform_DAL.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new RoleConfigrations());
             builder.Entity<User>().UseTptMappingStrategy().ToTable("Users");
             builder.Entity<Student>()
                 .ToTable("Students").HasBaseType<User>();

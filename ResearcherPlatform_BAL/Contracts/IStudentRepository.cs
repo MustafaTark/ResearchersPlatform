@@ -14,8 +14,6 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteStudent(Student student);
         Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges);
         Task<IEnumerable<Student?>> GetAllStudentsAsync();
-        //void UploadImage(IFormFile file, string studentId);
-        //FileStream GetImageForStudent(string studentId);
         Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId , bool trackChanges);
     }
 }

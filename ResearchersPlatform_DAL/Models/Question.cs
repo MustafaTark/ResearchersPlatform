@@ -13,8 +13,8 @@ namespace ResearchersPlatform_DAL.Models
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public List<Answer> Answers { get; set; }
-        [ForeignKey(nameof(Answer))]
-        public Guid CorrectAnswerId { get; set; }
+        [ForeignKey(nameof(Quiz))]
+        public Guid QuizId { get; set; }
         public DifficultyLevel DifficultyLevel { get; set; }
         public int Score { get; set; }
         public Question()

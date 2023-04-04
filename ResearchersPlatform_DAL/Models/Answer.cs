@@ -12,6 +12,7 @@ namespace ResearchersPlatform_DAL.Models
         public Guid Id { get; set; }
         public string? AnswerText { get; set; }
         [ForeignKey(nameof(Question))]
+        public bool IsCorrectAnswer { get; set; }
         public Guid QuestionId { get; set; }
         
     }

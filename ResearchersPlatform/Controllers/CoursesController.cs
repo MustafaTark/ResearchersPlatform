@@ -115,6 +115,37 @@ namespace ResearchersPlatform.Controllers
             var studentDto = _mapper.Map<IEnumerable<StudentDto>>(student);
             return Ok(studentDto);
         }
+        [HttpPut("Enrollment")]
+        public async Task<IActionResult> EnrollForACourse([FromBody] EnrollmentDto enrollment ,Guid courseId)
+        {
+            if(courseId.ToString().IsNullOrEmpty())
+            {
+                return BadRequest("Course ID field shouldn't be null or empty");
+            }
+            if (enrollment is null)
+            {
+                return BadRequest("EnrollmentDto object sent from client is null");
+            }
+            var student = await _repository.Student.GetStudentByIdAsync(enrollment.studentId, trackChanges: true);
+            var course = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: true);
+
+            if (student is null || course is null)
+            {
+                return BadRequest($"Student's ID (OR) Course's ID doesn't exist in the database");
+
+            }
+            var enrolled = await _repository.Student.CheckToEnroll(courseId, enrollment.studentId);
+            if(enrolled == false)
+            {
+                return BadRequest("This student is already enrolled in the course");
+            }
+
+            _repository.Student.EnrollForCourse(courseId, student);
+            _mapper.Map(enrollment,course);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+
+        }
 
     }
 }

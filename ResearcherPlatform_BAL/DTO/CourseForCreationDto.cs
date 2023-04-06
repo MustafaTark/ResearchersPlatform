@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ResearchersPlatform_DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,15 @@ namespace ResearchersPlatform_BAL.DTO
 {
     public class CourseForCreationDto
     {
-        public string? Name { get; set; }
-        public string? Instructions { get; set; }
-        public string? Objectives { get; set; }
-        public double Price { get; set; }
-        public string? Hours { get; set; }
-        public string? Brief { get; set; }
+        public required string Name { get; set; }
+        public required string Instructions { get; set; }
+        public required string Objectives { get; set; }
+        public required double Price { get; set; }
+        //public ICollection<Section> Sections { get; set; }
+        public required string Hours { get; set; }
+        public required string Brief { get; set; }
         public int SkillId { get; set; }
+
 
     }
 }

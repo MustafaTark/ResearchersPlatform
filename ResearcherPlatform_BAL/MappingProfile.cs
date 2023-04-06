@@ -19,6 +19,8 @@ namespace ResearchersPlatform_BAL
             CreateMap<Course,CourseDto>();
             CreateMap<CourseForCreationDto,Course>();
             CreateMap<CourseForUpdateDto,Course>();
+            CreateMap<EnrollmentDto,Course>();
+            CreateMap<EnrollmentDto,Student>();
         }
     }
 }

@@ -15,5 +15,8 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges);
         Task<IEnumerable<Student?>> GetAllStudentsAsync();
         Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId , bool trackChanges);
+        void EnrollForCourse(Guid courseId, Student student);
+        Task<bool> CheckToEnroll(Guid courseId, string studentId);
+
     }
 }

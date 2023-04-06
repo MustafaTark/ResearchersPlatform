@@ -12,8 +12,12 @@ namespace ResearchersPlatform_BAL.Repositories
 {
     public class StudentRepository : GenericRepository<Student> , IStudentRepository
     {
+        private new readonly AppDbContext _context;
         public StudentRepository(AppDbContext dbContext)
-            :base(dbContext) { }
+            :base(dbContext) 
+        {
+            _context = dbContext;
+        }
 
         public void UpdateStudent(Student student) => Update(student);
         public void DeleteStudent(Student student) => Update(student);
@@ -31,7 +35,22 @@ namespace ResearchersPlatform_BAL.Repositories
             .FirstOrDefault(c => c.Id == courseId)!
             .Id == courseId, trackChanges)
             .OrderBy(e => e.UserName)
-            .ToListAsync();
+            .ToListAsync(); 
+
+        public void EnrollForCourse(Guid courseId, Student student)
+            => _context.Set<Course>().FirstOrDefault(c => c.Id == courseId)!.Students.Add(student);
+        /*FindByCondition(c => c.Courses.FirstOrDefault(c => c.Id == courseId).Id == courseId)*/
+        public async Task<bool> CheckToEnroll(Guid courseId, string studentId)
+        {
+            var enroll = await GetAllStudentsEnrolledInCourseAsync(courseId, false);
+            var student = enroll.Where(e => e.Id == studentId).FirstOrDefault();
+            if (student is not null)
+            {
+                return false;
+            }
+            return true;
+        }
+         
 
     }
 }

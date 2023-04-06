@@ -11,15 +11,16 @@ namespace ResearchersPlatform_DAL.Models
     public class Question
     {
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public List<Answer> Answers { get; set; }
+        public required string Name { get; set; }
+        public ICollection<Answer> Answers { get; set; }
+        // public string CorrectAnswer = " ";
         [ForeignKey(nameof(Quiz))]
         public Guid QuizId { get; set; }
-        public DifficultyLevel DifficultyLevel { get; set; }
+        public Quiz? QuizObject { get; set; }
         public int Score { get; set; }
         public Question()
         {
-            Answers = new List<Answer>();
+            Answers = new HashSet<Answer>();
         }
     }
 }

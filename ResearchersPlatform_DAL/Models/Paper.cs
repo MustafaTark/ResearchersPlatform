@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Specality
+    public class Paper
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public required string Name { get; set; }
+        public required string Citation { get; set; }
+        public required string Url { get; set; }
+
     }
 }

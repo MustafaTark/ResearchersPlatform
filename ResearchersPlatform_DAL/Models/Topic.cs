@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Specality
+    public class Topic
     {
         public int Id { get; set; }
         public required string Name { get; set; }

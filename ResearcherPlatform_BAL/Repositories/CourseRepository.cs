@@ -20,7 +20,7 @@ namespace ResearchersPlatform_BAL.Repositories
         public void DeleteCourse(Course course) => Delete(course);
         public async Task<Course?> GetCourseByIdAsync(Guid courseId, bool trackChanges)
             => await FindByCondition(c => c.Id == courseId, trackChanges)
-            .Include(v => v.Videos)
+            .Include(v => v.Sections)
             .FirstOrDefaultAsync();
         public async Task<IEnumerable<Course?>> GetAllCoursesAsync()
             => await FindAll(trackChanges:false)

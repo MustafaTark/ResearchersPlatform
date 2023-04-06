@@ -11,7 +11,7 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Invitation()
         {
-            Researchers = new List<Researcher>();
+            Researchers = new HashSet<Researcher>();
         }
         public Guid Id { get; set; }
         

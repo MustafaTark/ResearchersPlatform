@@ -10,22 +10,23 @@ namespace ResearchersPlatform_DAL.Models
     public class Course
     {
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public string? Instructions { get; set; }
-        public string?  Objectives { get; set; }
-        public double Price { get; set; }
-        public List<Video> Videos { get; set; }
+        public required string Name { get; set; }
+        public required string Instructions { get; set; }
+        public required string  Objectives { get; set; }
+        public required double Price { get; set; }
+        public ICollection<Section> Sections{ get; set; }
         public ICollection<Student> Students { get; set; }
-        public int Enroll { get; set; } 
-        public string? Hours { get; set; }
-        public string? Brief { get; set; }
+        public required int Enrollments { get; set; } 
+        public required string Hours { get; set; }
+        public required string Brief { get; set; }
         [ForeignKey(nameof(Skill))]
         public int SkillId { get; set; }
         public Skill? SkillObj {  get; set; }
+
         public Course()
         {
-            Videos=new List<Video>();
-            Students = new List<Student>(); // NEW + MIGRATION
+            Sections=new HashSet<Section>();
+            Students = new HashSet<Student>(); // NEW + MIGRATION
            
         }
     }

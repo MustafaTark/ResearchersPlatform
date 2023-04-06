@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Video
+    public class SectionQuiz : Quiz
     {
-        public int Id { get; set; }
-        public required string Title { get; set; }
-        public required string VideoUrl { get; set; }
         [ForeignKey(nameof(Section))]
         public Guid SectionId { get; set; }
-        public Section? SectionObject { get; set; }
+        public Section? SectionObj { get; set; }
+
+
     }
 }

@@ -9,12 +9,16 @@ namespace ResearchersPlatform_DAL.Models
 {
     public class Badge
     {
+        public Badge()
+        {
+            Students= new HashSet<Student>();
+        }
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public bool IsVisible { get; set; } = true;
-        [ForeignKey(nameof(Student))]
-        public Guid StudentId { get;set;}
-        public Student? StudentObj{get;set;}
+        public required string Name { get; set; }
+        public required bool IsVisible { get; set; } = true;
+
+        public ICollection<Student> Students{get;set;}
+
 
 
     }

@@ -14,6 +14,11 @@ namespace ResearchersPlatform_BAL
         public MappingProfile() {
             CreateMap<StudentForRegisterDto, Student>();
             CreateMap<UserForLoginDto, User>();
+            CreateMap<Student , StudentDto>();
+            CreateMap<StudentForUpdateDto, Student>();
+            CreateMap<Course,CourseDto>();
+            CreateMap<CourseForCreationDto,Course>();
+            CreateMap<CourseForUpdateDto,Course>();
         }
     }
 }

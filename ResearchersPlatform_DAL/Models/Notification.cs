@@ -12,14 +12,14 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Notification()
         {
-            Researchers = new List<Researcher>();
+            Researchers = new HashSet<Researcher>();
         }
         public Guid Id { get; set; }
 
         public bool IsRead { get; set; } = false;
 
         [Required(ErrorMessage = "Notification Content is a Required Field!")]
-        public string? Content { get; set; }
+        public required string Content { get; set; }
         public ICollection<Researcher>? Researchers { get; set; }
     }
 }

@@ -18,6 +18,5 @@ namespace ResearchersPlatform_DAL.Models
         [ForeignKey(nameof(Researcher))]
         public Guid ResearcherId { get; set; }
         public bool IsAccepted { get; set; } = false;
-        //M-M
     }
 }

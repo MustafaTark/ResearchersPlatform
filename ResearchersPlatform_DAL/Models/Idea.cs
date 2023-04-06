@@ -16,9 +16,9 @@ namespace ResearchersPlatform_DAL.Models
             Tasks = new List<TaskIdea>();
         }
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public int ParticipantsNumber { get; set; } 
-        public int MaxParticipantsNumber { get; set; } 
+        public required string? Name { get; set; }
+        public required int ParticipantsNumber { get; set; } 
+        public required int MaxParticipantsNumber { get; set; } 
 
         [ForeignKey(nameof(Researcher))]
         public Guid? CreatorId { get; set; }
@@ -32,6 +32,12 @@ namespace ResearchersPlatform_DAL.Models
         
         [DataType(DataType.Time)]
         public DateTime Deadline { get; set; }
-        public bool IsCompleted { get; set; } = false;
+        public required bool IsCompleted { get; set; } = false;
+       
+        [ForeignKey(nameof(Topic))]
+        public required int TopicId { get; set; }
+
+        public Topic? TopicObject { get; set; }
+
     }
 }

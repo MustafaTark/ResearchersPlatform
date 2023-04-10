@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    
-    public class Question
+    public class QuizResults
     {
         public Guid Id { get; set; }
-        public required string Name { get; set; }
-        public ICollection<Answer> Answers { get; set; }
         [ForeignKey(nameof(Quiz))]
         public Guid QuizId { get; set; }
-        public Quiz? QuizObject { get; set; }
+        public Quiz? QuizObj { get; set; }
+        [ForeignKey(nameof(Student))]
+        public required string StudentId { get; set; }
+        public Student? StudentObj { get; set; }
         public int Score { get; set; }
-        public Question()
-        {
-            Answers = new HashSet<Answer>();
-        }
+        public bool IsSuccessed { get; set; } = false;
     }
 }

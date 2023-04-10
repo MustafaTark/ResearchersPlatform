@@ -13,7 +13,6 @@ namespace ResearchersPlatform_DAL.Models
         public int MaxScore { get; set; }
         public ICollection<Question> Questions { get; set; }
         public TimeSpan TimeLimit { get; set; }
-        public bool IsSuccessed { get; set; } = false;
         public Quiz()
         {
             Questions= new HashSet<Question>();

@@ -78,12 +78,16 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<Researcher>,ResearcherRepository>();
             services.AddScoped<GenericRepository<TaskIdea>,TaskRepository>();
             services.AddScoped<GenericRepository<Idea>,IdeaRepository>();
+            services.AddScoped<GenericRepository<SectionQuiz>, SectionQuizRepository>();
+            services.AddScoped<GenericRepository<Section>, SectionRepository>();
             services.AddScoped<IRepositoryManager,RepositoryManager>();
             services.AddScoped<IStudentRepository,StudentRepository>();
             services.AddScoped<ICourseRepository,CourseRepository>();
             services.AddScoped<IResearcherRepository,ResearcherRepository>();
             services.AddScoped<IIdeaRepository,IdeaRepository>();
             services.AddScoped<ITaskRepository,TaskRepository>();
+            services.AddScoped<ISectionQuizRepository, SectionQuizRepository>();
+            services.AddScoped<ISectionRepository, SectionRepository>();
         }
     }
 }

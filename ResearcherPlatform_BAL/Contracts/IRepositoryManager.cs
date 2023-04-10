@@ -13,6 +13,8 @@ namespace ResearchersPlatform_BAL.Contracts
         IIdeaRepository Idea { get; }
         ITaskRepository Task { get; }
         IResearcherRepository Researcher { get; }
+        ISectionQuizRepository SectionQuiz { get; }
+        ISectionRepository Section { get; }
         Task SaveChangesAsync();
     }
 }

@@ -12,21 +12,21 @@ namespace ResearchersPlatform.Controllers
     [ApiController]
     public class CoursesController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
         //private readonly ILogger _logger;
 
         public CoursesController(
             IRepositoryManager repository, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllCourses()
         {
-            var course = await _repository.Course.GetAllCoursesAsync();
+            var course = await _repositoryManager.Course.GetAllCoursesAsync();
             if (course is null)
             {
                 return NotFound("There are no courses in the database");
@@ -42,8 +42,8 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest("CourseForCreationDto Object Sent From User os Null");
             }
             var courseEntity = _mapper.Map<Course>(course);
-            _repository.Course.CreateCourse(courseEntity);
-            await _repository.SaveChangesAsync();
+            _repositoryManager.Course.CreateCourse(courseEntity);
+            await _repositoryManager.SaveChangesAsync();
             return StatusCode(201);
         }
         [HttpGet("{courseId}")]
@@ -53,7 +53,7 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Course ID field shouldn't be null or empty");
             }
-            var course = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: false);
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: false);
             if (course is null)
             {
                 return NotFound($"Course with ID: {courseId} doesn't exist in the database ");
@@ -61,23 +61,23 @@ namespace ResearchersPlatform.Controllers
             var courseDto = _mapper.Map<CourseDto>(course);
             return Ok(courseDto);
         }
-        [HttpDelete("courseId")]
+        [HttpDelete("{courseId}")]
         public async Task<IActionResult> DeleteCourse(Guid courseId)
         {
             if(courseId.ToString().IsNullOrEmpty())
             {
                 return BadRequest("Course ID field shouldn't be null or empty");
             }
-            var course = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: false);
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: false);
             if (course is null)
             {
                 return NotFound($"Course with ID: {courseId} doesn't exist in the database ");
             }
-            _repository.Course.DeleteCourse(course);
-            await _repository.SaveChangesAsync();
+            _repositoryManager.Course.DeleteCourse(course);
+            await _repositoryManager.SaveChangesAsync();
             return NoContent();
         }
-        [HttpPut("courseId")]
+        [HttpPut("{courseId}")]
         public async Task<IActionResult> UpdateCourse([FromBody]CourseForUpdateDto course
             ,Guid courseId)
         {
@@ -89,13 +89,13 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Course ID field shouldn't be null or empty");
             }
-            var courseEntity = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: true);
+            var courseEntity = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);
             if (courseEntity is null)
             {
                 return NotFound($"Course with ID: {courseId} doesn't exist in the database ");
             }
             _mapper.Map(course, courseEntity);
-            await _repository.SaveChangesAsync();
+            await _repositoryManager.SaveChangesAsync();
             return NoContent();
 
         }
@@ -106,12 +106,12 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Course ID field shouldn't be null or empty");
             }
-            var course = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: false);
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: false);
             if (course is null)
             {
                 return NotFound($"Course with ID: {courseId} doesn't exist in the database ");
             }
-            var student = await _repository.Student.GetAllStudentsEnrolledInCourseAsync(courseId, trackChanges: false);
+            var student = await _repositoryManager.Student.GetAllStudentsEnrolledInCourseAsync(courseId, trackChanges: false);
             var studentDto = _mapper.Map<IEnumerable<StudentDto>>(student);
             return Ok(studentDto);
         }
@@ -126,26 +126,63 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("EnrollmentDto object sent from client is null");
             }
-            var student = await _repository.Student.GetStudentByIdAsync(enrollment.studentId, trackChanges: true);
-            var course = await _repository.Course.GetCourseByIdAsync(courseId, trackChanges: true);
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(enrollment.studentId, trackChanges: true);
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);
 
             if (student is null || course is null)
             {
                 return BadRequest($"Student's ID (OR) Course's ID doesn't exist in the database");
 
             }
-            var enrolled = await _repository.Student.CheckToEnroll(courseId, enrollment.studentId);
+            var enrolled = await _repositoryManager.Student.CheckToEnroll(courseId, enrollment.studentId);
             if(enrolled == false)
             {
                 return BadRequest("This student is already enrolled in the course");
             }
-
-            _repository.Student.EnrollForCourse(courseId, student);
+            _repositoryManager.Student.EnrollForCourse(courseId, student);
             _mapper.Map(enrollment,course);
-            await _repository.SaveChangesAsync();
+            await _repositoryManager.SaveChangesAsync();
             return NoContent();
 
         }
+        [HttpPost("Sections")]
+        public async Task<IActionResult> CreateSectionsToCourse(Guid courseId,
+                                                       [FromBody]  List<SectionForCreateDto> sections)
+        {
+            if (courseId.ToString().IsNullOrEmpty())
+            {
+                return BadRequest("Course ID field shouldn't be null or empty");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Something Wrong in Model{ModelState}");
+            }
+            var course=await _repositoryManager.Course.GetCourseByIdAsync(courseId,trackChanges: true);
+            if(course is null)
+            {
+                return NotFound();
+            }
+            var sectionsEntities = _mapper.Map<List<Section>>(sections);
+             _repositoryManager.Section.CreateSectionsToCourse(courseId,sectionsEntities);
+            await _repositoryManager.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpGet("Sections/{sectionId}")]
+        public async Task<IActionResult> GetSection(Guid sectionId)
+        {
+            if (sectionId.ToString().IsNullOrEmpty())
+            {
+                return BadRequest("Section ID field shouldn't be null or empty");
+            }
+            var section=await _repositoryManager.Section
+                                                .GetSectionByIdAsync(sectionId,trackChanges: false);
+            if(section is null)
+            {
+                return NotFound();
+            }
+            return Ok(section);
+        }
+
 
     }
 }

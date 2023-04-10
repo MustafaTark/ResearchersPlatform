@@ -13,20 +13,20 @@ namespace ResearchersPlatform.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
         //private readonly ILogger _logger;
 
         public StudentsController(
             IRepositoryManager repository,IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repository;
             _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllStudents()
         {
-            var student = await _repository.Student.GetAllStudentsAsync();
+            var student = await _repositoryManager.Student.GetAllStudentsAsync();
             if(student is null )
             {
                 return NotFound("There are no students in the database");
@@ -41,7 +41,7 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Student ID field shouldn't be null or empty");
             }
-            var student = await _repository.Student.GetStudentByIdAsync(studentId , trackChanges: false);
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId , trackChanges: false);
             if(student is null )
             {
                 return NotFound($"Student with ID: {studentId} doesn't exist in the database ");
@@ -61,13 +61,13 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Student ID field shouldn't be null or empty");
             }
-            var studentEntity = await _repository.Student.GetStudentByIdAsync(studentId , trackChanges: true);
+            var studentEntity = await _repositoryManager.Student.GetStudentByIdAsync(studentId , trackChanges: true);
             if(studentEntity is null)
             {
                 return NotFound($"Student with ID: {studentId} doesn't exist in the database ");
             }
             _mapper.Map(student,studentEntity);
-            await _repository.SaveChangesAsync();
+            await _repositoryManager.SaveChangesAsync();
             return NoContent();
 
         }
@@ -78,13 +78,13 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Student ID field shouldn't be null or empty");
             }
-            var student = await _repository.Student.GetStudentByIdAsync(studentId , trackChanges: false);
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId , trackChanges: false);
             if (student is null)
             {
                 return NotFound($"Student with ID: {studentId} doesn't exist in the database ");
             }
-            _repository.Student.DeleteStudent(student);
-            await _repository.SaveChangesAsync();
+            _repositoryManager.Student.DeleteStudent(student);
+            await _repositoryManager.SaveChangesAsync();
             return NoContent();
         }
         [HttpGet("Courses")]
@@ -95,12 +95,12 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Student ID field shouldn't be null or empty");
             }
-            var student = await _repository.Student.GetStudentByIdAsync(studentId, trackChanges: false);
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId, trackChanges: false);
             if(student is null)
             {
                 return NotFound($"Student with ID: {studentId} doesn't exist in the database ");
             }
-            var course = await _repository.Course.GetAllCoursesForStudentAsync(studentId,trackChanges: false);
+            var course = await _repositoryManager.Course.GetAllCoursesForStudentAsync(studentId,trackChanges: false);
             var courseDto = _mapper.Map<IEnumerable<CourseDto>>(course);
             return Ok(courseDto);
 

@@ -31,7 +31,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<Request> Requests{ get; set; }
         public DbSet<Paper> Papers{ get; set; }
         public DbSet<Topic> Topics { get; set; }
-
+        public DbSet<QuizResults> QuizResults { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)

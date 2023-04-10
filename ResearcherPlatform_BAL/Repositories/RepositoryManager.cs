@@ -1,4 +1,5 @@
-﻿using ResearchersPlatform_BAL.Contracts;
+﻿using AutoMapper;
+using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_DAL.Data;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,18 @@ namespace ResearchersPlatform_BAL.Repositories
         private IIdeaRepository _idea;
         private ITaskRepository _task;
         private IResearcherRepository _researcher;
-
+        private ISectionQuizRepository _sectionQuiz;
+        private ISectionRepository _section;
+        private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
             , IStudentRepository student
             , ICourseRepository course
             , IIdeaRepository idea
             , ITaskRepository task
-            , IResearcherRepository researcher)
+            , IResearcherRepository researcher
+            ,ISectionQuizRepository sectionQuiz
+            ,IMapper mapper
+            ,ISectionRepository section)
         {
             _context = context;
             _student = student;
@@ -30,6 +36,9 @@ namespace ResearchersPlatform_BAL.Repositories
             _idea = idea;
             _task = task;
             _researcher = researcher;
+            _sectionQuiz = sectionQuiz;
+            _mapper = mapper;
+            _section = section;
         }
         public IStudentRepository Student
         {
@@ -73,6 +82,25 @@ namespace ResearchersPlatform_BAL.Repositories
                 return _researcher;
             }
         }
+
+        public ISectionQuizRepository SectionQuiz
+        {
+            get
+            {
+                _sectionQuiz ??= new SectionQuizRepository(_context,_mapper);
+                return _sectionQuiz;
+            }
+        }
+
+        public ISectionRepository Section
+        {
+            get
+            {
+                _section ??= new SectionRepository(_context, _mapper);
+                return _section;
+            }
+        }
+
         public Task SaveChangesAsync() => _context.SaveChangesAsync();
 
 

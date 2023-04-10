@@ -11,13 +11,11 @@ namespace ResearchersPlatform_DAL.Models
     {
         public Guid Id { get; set; }
 
-        [ForeignKey(nameof(SectionQuiz))]
-        public Guid SectionQuizId { get; set; }
-        //public SectionQuiz? SectionQuizObject { get; set; }
-
         [ForeignKey(nameof(Course))]
         public Guid? CourseId {get;set;}
         public Course? CourseObject { get; set; }
+        [ForeignKey(nameof(Section))]
+        public Guid? SectionId { get; set; }
         public ICollection<Video>? Videos { get; set; }
         public required string Name { get; set; }
     }

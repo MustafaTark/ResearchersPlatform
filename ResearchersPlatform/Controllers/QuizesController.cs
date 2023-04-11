@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResearchersPlatform_BAL.Contracts;
@@ -10,6 +11,7 @@ namespace ResearchersPlatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("_myAllowSpecificOrigins")]
     public class QuizesController : ControllerBase
     {
         private readonly IRepositoryManager _repositoryManager;

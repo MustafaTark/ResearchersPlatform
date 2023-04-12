@@ -73,6 +73,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<User, Student>();
             services.AddScoped<Student, Researcher>();
             services.AddScoped<IAuthService, AuthService>();
+
             services.AddScoped<GenericRepository<Student>,StudentRepository>();
             services.AddScoped<GenericRepository<Course>,CourseRepository>();
             services.AddScoped<GenericRepository<Researcher>,ResearcherRepository>();
@@ -80,7 +81,11 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<Idea>,IdeaRepository>();
             services.AddScoped<GenericRepository<SectionQuiz>, SectionQuizRepository>();
             services.AddScoped<GenericRepository<Section>, SectionRepository>();
+
             services.AddScoped<IRepositoryManager,RepositoryManager>();
+            services.AddScoped<IFilesManager, FilesManager>();
+
+            services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IStudentRepository,StudentRepository>();
             services.AddScoped<ICourseRepository,CourseRepository>();
             services.AddScoped<IResearcherRepository,ResearcherRepository>();
@@ -88,6 +93,8 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<ITaskRepository,TaskRepository>();
             services.AddScoped<ISectionQuizRepository, SectionQuizRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();
+           
+
         }
     }
 }

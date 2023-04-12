@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResearchersPlatform_BAL.DTO
+namespace ResearchersPlatform_BAL.Contracts
 {
-    public class VideoForCreateDto
+    public interface IFilesManager
     {
-        public required string Title { get; set; }
-        public IFormFile File { get; set; }
+        FileStream GetFile(string fileName);
+        string UploadFiles(IFormFile file);
     }
 }

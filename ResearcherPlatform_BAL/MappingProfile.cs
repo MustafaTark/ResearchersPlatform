@@ -42,7 +42,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<SectionForCreateDto, Section>();
 
             CreateMap<Video, VideoDto>();
-            CreateMap<VideoForCreateDto, Video>();
+            //CreateMap<VideoForCreateDto, Video>();
         }
     }
 }

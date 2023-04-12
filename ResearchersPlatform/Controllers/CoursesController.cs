@@ -16,13 +16,15 @@ namespace ResearchersPlatform.Controllers
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private IFilesRepository _filesRepository;
         //private readonly ILogger _logger;
 
         public CoursesController(
-            IRepositoryManager repository, IMapper mapper)
+            IRepositoryManager repository, IMapper mapper, IFilesRepository filesRepository)
         {
             _repositoryManager = repository;
             _mapper = mapper;
+            _filesRepository = filesRepository;
         }
 
         [HttpGet]
@@ -46,7 +48,10 @@ namespace ResearchersPlatform.Controllers
             var courseEntity = _mapper.Map<Course>(course);
             _repositoryManager.Course.CreateCourse(courseEntity);
             await _repositoryManager.SaveChangesAsync();
-            return StatusCode(201);
+           
+            return Ok(
+                new {CourseId= courseEntity.Id }
+                );
         }
         [HttpGet("{courseId}")]
         public async Task<IActionResult> GetCourse(Guid courseId)
@@ -183,6 +188,57 @@ namespace ResearchersPlatform.Controllers
                 return NotFound();
             }
             return Ok(section);
+        }
+        [HttpPost("Videos/{sectionId}"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadVideos(Guid sectionId,
+                                [FromForm]  VideoForCreateDto video)
+        {
+            var section = await _repositoryManager.Section
+                                               .GetSectionByIdAsync(sectionId, trackChanges: false);
+            if (section is null)
+            {
+                return NotFound();
+            }
+            try {
+            if (video.File.Length > 0)
+            {
+                _filesRepository.UploadVideoToSection(sectionId, video.File, video.Title);
+                await _repositoryManager.SaveChangesAsync();
+            }
+            else
+            {
+                    return BadRequest();
+            }
+            } catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+            return NoContent();
+        }
+        [HttpGet("Videos/{videoId}")]
+        [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Produces("video/mp4")]
+        //[SwaggerOperation("GetVideoById")]
+        //[SwaggerResponse(StatusCodes.Status200OK, "The video file", typeof(FileStreamResult))]
+        //[SwaggerResponse(StatusCodes.Status404NotFound, "The video file could not be found")]
+        public async Task<IActionResult> GetVideo(int videoId)
+        {
+            
+            var fileStream =await  _filesRepository.GetVideoToSection(videoId);
+            return new FileStreamResult(fileStream, "video/mp4");
+        }
+        [HttpGet("Sections/Videos/{sectionId}")]
+        public async Task<IActionResult> GetVideosToSection(Guid sectionId)
+        {
+            var section = await _repositoryManager.Section
+                                              .GetSectionByIdAsync(sectionId, trackChanges: false);
+            if (section is null)
+            {
+                return NotFound();
+            }
+            var videos = await _filesRepository.GetAllVideosToSection(sectionId);
+            return Ok(videos);
         }
 
 

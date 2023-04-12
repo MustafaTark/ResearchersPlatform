@@ -10,6 +10,5 @@ namespace ResearchersPlatform_BAL.DTO
     {
         public int Id { get; set; }
         public required string Title { get; set; }
-        public required string VideoUrl { get; set; }
     }
 }

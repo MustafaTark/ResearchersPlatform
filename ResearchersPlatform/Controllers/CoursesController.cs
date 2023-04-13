@@ -152,7 +152,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
 
         }
-        [HttpGet("Sections/{courseId}")]
+        [HttpGet("SectionsToCourse")]
         public async Task<IActionResult> GetSections(Guid courseId)
         {
             var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);

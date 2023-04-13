@@ -10,6 +10,7 @@ namespace ResearchersPlatform_BAL.Contracts
 {
     public interface ISectionQuizRepository
     {
+        
         void CreateQuiz(SectionQuiz sectionQuiz);
         Task<SectionQuizDto> GetSingleQuizAsync(Guid sectionId, bool trackChanges);
         void Submit(QuizResults result);

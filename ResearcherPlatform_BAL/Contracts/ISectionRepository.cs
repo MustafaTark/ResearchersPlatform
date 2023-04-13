@@ -10,6 +10,7 @@ namespace ResearchersPlatform_BAL.Contracts
 {
     public interface ISectionRepository
     {
+        Task<IEnumerable<SectionDto>> GetSectionsToCourse(Guid courseId);
         void CreateSectionsToCourse(Guid courseId,List<Section> sections);
         Task<SectionDto?> GetSectionByIdAsync(Guid sectionId, bool trackChanges);
     }

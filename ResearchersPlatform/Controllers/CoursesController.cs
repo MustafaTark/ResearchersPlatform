@@ -152,6 +152,17 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
 
         }
+        [HttpGet("Sections/{courseId}")]
+        public async Task<IActionResult> GetSections(Guid courseId)
+        {
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);
+            if (course is null)
+            {
+                return NotFound();
+            }
+            var sections = await _repositoryManager.Section.GetSectionsToCourse(courseId);
+            return Ok(sections);
+        }
         [HttpPost("Sections")]
         public async Task<IActionResult> CreateSectionsToCourse(Guid courseId,
                                                        [FromBody]  List<SectionForCreateDto> sections)

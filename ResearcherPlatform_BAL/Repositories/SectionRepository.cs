@@ -20,7 +20,11 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _mapper = mapper;
         }
-
+        public async Task<IEnumerable<SectionDto>> GetSectionsToCourse(Guid courseId)
+           =>await FindByCondition(s=>s.CourseId==courseId,trackChanges:false)
+                .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        
         public void CreateSectionsToCourse(Guid courseId,List<Section> sections)
         {
            foreach(var section in sections) {

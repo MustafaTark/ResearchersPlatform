@@ -13,7 +13,6 @@ namespace ResearchersPlatform_BAL.DTO
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public Guid? CourseId { get; set; }
-     //   public ICollection<VideoDto>? Videos { get; set; }
        
     }
 }

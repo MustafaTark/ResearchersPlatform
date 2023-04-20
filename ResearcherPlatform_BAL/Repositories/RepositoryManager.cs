@@ -19,6 +19,7 @@ namespace ResearchersPlatform_BAL.Repositories
         private IResearcherRepository _researcher;
         private ISectionQuizRepository _sectionQuiz;
         private ISectionRepository _section;
+        private IFinalQuizRepository _finalQuiz;
         private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
             , IStudentRepository student
@@ -26,9 +27,10 @@ namespace ResearchersPlatform_BAL.Repositories
             , IIdeaRepository idea
             , ITaskRepository task
             , IResearcherRepository researcher
-            ,ISectionQuizRepository sectionQuiz
-            ,IMapper mapper
-            ,ISectionRepository section)
+            , ISectionQuizRepository sectionQuiz
+            , IMapper mapper
+            , ISectionRepository section,
+IFinalQuizRepository finalQuiz)
         {
             _context = context;
             _student = student;
@@ -39,6 +41,7 @@ namespace ResearchersPlatform_BAL.Repositories
             _sectionQuiz = sectionQuiz;
             _mapper = mapper;
             _section = section;
+            _finalQuiz = finalQuiz;
         }
         public IStudentRepository Student
         {
@@ -78,7 +81,7 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             get
             {
-                _researcher ??= new ResearcherRepository(_context);
+                _researcher ??= new ResearcherRepository(_context,_mapper);
                 return _researcher;
             }
         }
@@ -89,6 +92,14 @@ namespace ResearchersPlatform_BAL.Repositories
             {
                 _sectionQuiz ??= new SectionQuizRepository(_context,_mapper);
                 return _sectionQuiz;
+            }
+        }
+        public IFinalQuizRepository FinalQuiz
+        {
+            get
+            {
+                _finalQuiz ??= new FinalQuizRepository(_context, _mapper);
+                return _finalQuiz;
             }
         }
 

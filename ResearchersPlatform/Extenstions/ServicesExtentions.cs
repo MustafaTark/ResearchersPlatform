@@ -71,7 +71,7 @@ namespace ResearchersPlatform.Extenstions
         public static void ConfigureLifeTime(this IServiceCollection services)
         {
             services.AddScoped<User, Student>();
-            services.AddScoped<Student, Researcher>();
+            //services.AddScoped<Student, Researcher>();
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<GenericRepository<Student>,StudentRepository>();
@@ -80,6 +80,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<TaskIdea>,TaskRepository>();
             services.AddScoped<GenericRepository<Idea>,IdeaRepository>();
             services.AddScoped<GenericRepository<SectionQuiz>, SectionQuizRepository>();
+            services.AddScoped<GenericRepository<FinalQuiz>, FinalQuizRepository>();
             services.AddScoped<GenericRepository<Section>, SectionRepository>();
 
             services.AddScoped<IRepositoryManager,RepositoryManager>();
@@ -92,6 +93,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IIdeaRepository,IdeaRepository>();
             services.AddScoped<ITaskRepository,TaskRepository>();
             services.AddScoped<ISectionQuizRepository, SectionQuizRepository>();
+            services.AddScoped<IFinalQuizRepository, FinalQuizRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();
            
 

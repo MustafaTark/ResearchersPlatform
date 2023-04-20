@@ -41,6 +41,9 @@ namespace ResearchersPlatform_BAL
             CreateMap<Section, SectionDto>();
             CreateMap<SectionForCreateDto, Section>();
 
+            CreateMap<FinalQuiz, FinalQuizDto>();
+            CreateMap<FinalQuizForCreateDto, FinalQuiz>();
+
             CreateMap<Video, VideoDto>();
             //CreateMap<VideoForCreateDto, Video>();
         }

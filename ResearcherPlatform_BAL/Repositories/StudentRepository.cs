@@ -12,11 +12,10 @@ namespace ResearchersPlatform_BAL.Repositories
 {
     public class StudentRepository : GenericRepository<Student> , IStudentRepository
     {
-        private new readonly AppDbContext _context;
+       
         public StudentRepository(AppDbContext dbContext)
             :base(dbContext) 
         {
-            _context = dbContext;
         }
 
         public void UpdateStudent(Student student) => Update(student);
@@ -29,8 +28,22 @@ namespace ResearchersPlatform_BAL.Repositories
             => await FindAll(trackChanges:false)
             .OrderBy(e => e.UserName)
             .ToListAsync();
-
-        public async Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId, bool trackChanges)
+        public void CreateTrails(string studentId)
+        {
+            var skills= _context.Skills.Select(s=>s.Id).ToList();
+            foreach(var skill in skills)
+            {
+                var studentTrails = new StudentQuizTrails
+                {
+                    StudentId = studentId,
+                    SkillId = skill,
+                    Trails = 2
+                };
+                _context.StudentQuizTrails.Add(studentTrails);
+            }
+            _context.SaveChanges();
+        }
+       public async Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId, bool trackChanges)
             => await FindByCondition(c => c.Courses
             .FirstOrDefault(c => c.Id == courseId)!
             .Id == courseId, trackChanges)
@@ -39,7 +52,6 @@ namespace ResearchersPlatform_BAL.Repositories
 
         public void EnrollForCourse(Guid courseId, Student student)
             => _context.Set<Course>().FirstOrDefault(c => c.Id == courseId)!.Students.Add(student);
-        /*FindByCondition(c => c.Courses.FirstOrDefault(c => c.Id == courseId).Id == courseId)*/
         public async Task<bool> CheckToEnroll(Guid courseId, string studentId)
         {
             var enroll = await GetAllStudentsEnrolledInCourseAsync(courseId, false);

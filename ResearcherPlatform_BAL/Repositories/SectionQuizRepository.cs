@@ -16,7 +16,7 @@ namespace ResearchersPlatform_BAL.Repositories
 {
     public class SectionQuizRepository : GenericRepository<SectionQuiz>, ISectionQuizRepository
     {
-        public IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public SectionQuizRepository(AppDbContext context, IMapper mapper) : base(context)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Researcher : Student
+    public class Researcher 
     {
+        public Guid Id { get; set; }
+        [ForeignKey(nameof(Student))]
+        public required string StudentId { get; set; }
+        public Student? StudentObj { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
         public ICollection<Idea> Ideas { get; set; }
+        [MaxLength(2)]
         public ICollection<Idea> IdeasLeader { get; set; }
         public ICollection<TaskIdea> Tasks { get; set; }    
         public ICollection<Notification> Notifications { get; set; }
@@ -38,5 +44,5 @@ namespace ResearchersPlatform_DAL.Models
         Intermediate,
         Professional,
         Expert
-        }
+    }
 }

@@ -14,6 +14,6 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteIdea(Idea idea);
         Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges);
         Task<Idea?> GetIdeaAsync(Guid odeaId , bool trackChanges);
-        Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(string researcherId , bool trackChanges);
+        Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(Guid researcherId , bool trackChanges);
     }
 }

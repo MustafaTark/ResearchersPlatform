@@ -10,5 +10,6 @@ namespace ResearchersPlatform_DAL.Models
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+        public int MinmumPoints { get; set; }
     }
 }

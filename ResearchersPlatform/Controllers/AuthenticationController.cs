@@ -17,12 +17,14 @@ namespace ResearchersPlatform.Controllers
         private readonly UserManager<Student> _userManager;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
+        private readonly IStudentRepository _studentRepository; 
         public AuthenticationController(
-            UserManager<Student> userManager, IAuthService authService, IMapper mapper)
+            UserManager<Student> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository)
         {
             _userManager = userManager;
             _authService = authService;
             _mapper = mapper;
+            _studentRepository = studentRepository;
         }
         [HttpPost]
 
@@ -39,11 +41,12 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest(ModelState);
             }
             await _userManager.AddToRoleAsync(user, "Student");
-            var Student = await _userManager.FindByNameAsync(user.UserName!);
+            var student = await _userManager.FindByNameAsync(user.UserName!);
+            _studentRepository.CreateTrails(studentId: student!.Id);
             return Ok(
                 new
                 {
-                    UserId = await _userManager.GetUserIdAsync(Student!)
+                    UserId = await _userManager.GetUserIdAsync(student!)
                 }
                 );
 

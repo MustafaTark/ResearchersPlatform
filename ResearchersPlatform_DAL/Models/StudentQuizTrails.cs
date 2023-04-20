@@ -7,17 +7,15 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class QuizResults
+    public class StudentQuizTrails
     {
         public Guid Id { get; set; }
-        [ForeignKey(nameof(Quiz))]
-        public Guid QuizId { get; set; }
-        public Quiz? QuizObj { get; set; }
+        [ForeignKey(nameof(Skill))]
+        public int SkillId { get; set; }
+        public Skill? Skill { get; set; }
         [ForeignKey(nameof(Student))]
         public required string StudentId { get; set; }
         public Student? StudentObj { get; set; }
-        public int Score { get; set; }
-        public bool IsFinalQuiz { get; set; }=false;
-        public bool IsSuccessed { get; set; } = false;
+        public byte Trails { get; set; } = 2;
     }
 }

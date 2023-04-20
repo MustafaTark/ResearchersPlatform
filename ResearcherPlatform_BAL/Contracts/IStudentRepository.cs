@@ -14,6 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteStudent(Student student);
         Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges);
         Task<IEnumerable<Student?>> GetAllStudentsAsync();
+        void CreateTrails(string studentId);
         Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId , bool trackChanges);
         void EnrollForCourse(Guid courseId, Student student);
         Task<bool> CheckToEnroll(Guid courseId, string studentId);

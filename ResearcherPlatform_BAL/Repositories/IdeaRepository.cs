@@ -30,7 +30,7 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(p => p.Participants)
             .OrderBy(o => o.Deadline) 
             .FirstOrDefaultAsync();
-        public async Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(string researcherId, bool trackChanges)
+        public async Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(Guid researcherId, bool trackChanges)
             => await FindByCondition(i => i.Participants.FirstOrDefault(i => i.Id == researcherId)!.Id == researcherId , trackChanges)
             .OrderBy(o => o.Deadline).ToListAsync();
     }

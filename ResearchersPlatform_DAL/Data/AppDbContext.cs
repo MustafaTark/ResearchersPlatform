@@ -32,6 +32,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<Paper> Papers{ get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<QuizResults> QuizResults { get; set; }
+        public DbSet<StudentQuizTrails> StudentQuizTrails { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)
@@ -46,18 +47,13 @@ namespace ResearchersPlatform_DAL.Data
             builder.Entity<Student>()
                 .ToTable("Students").HasBaseType<User>();
 
-            builder.Entity<Researcher>()
-                .ToTable("Researchers").HasBaseType<Student>();
+            //builder.Entity<Researcher>()
+            //    .ToTable("Researchers").HasBaseType<Student>();
            
             builder.Entity<FinalQuiz>()
                 .ToTable("FinalQuizzes").HasBaseType<Quiz>();
             builder.Entity<SectionQuiz>()
                  .ToTable("SectionQuizzes").HasBaseType<Quiz>();
-
-            //builder.Entity<SectionQuiz>()
-            //    .HasOne(sq => sq.SectionObj)
-            //    .WithOne(s => s.SectionQuizObject)
-            //    .HasForeignKey<Section>(s => s.SectionQuizObject);
 
             builder.Entity<Researcher>().HasMany(p => p.Ideas).WithMany(p => p.Participants);
             builder.Entity<Researcher>().HasMany(p => p.Tasks).WithMany(p => p.Participants);
@@ -67,6 +63,9 @@ namespace ResearchersPlatform_DAL.Data
             builder.Entity<Student>().HasMany(r => r.Courses).WithMany(c => c.Students);
             builder.Entity<Student>().HasMany(s => s.Badges).WithMany(b => b.Students);
             builder.Entity<Idea>().HasOne(p => p.ResearcherCreator).WithMany(p => p.IdeasLeader);
+
+            builder.Entity<Researcher>().HasIndex(r => r.Points);
+            builder.Entity<Researcher>().HasIndex(r => r.StudentId).IsUnique();
 
 
 

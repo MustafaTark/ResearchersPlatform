@@ -27,7 +27,7 @@ namespace ResearchersPlatform.Controllers
         public async Task<IActionResult> AddSectionQuiz([FromBody]SectionQuizForCreateDto sectionQuizDto)
         {
             if (!ModelState.IsValid || sectionQuizDto == null)
-                return BadRequest($"Something Wrong in Request :{ModelState}");
+                return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
             var sectionQuiz = _mapper.Map<SectionQuiz>(sectionQuizDto);
             _repositoryManager.SectionQuiz.CreateQuiz(sectionQuiz);
             await _repositoryManager.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest($"Student with ID: {resultDto.StudentId!} doesn't exist in the database ");
             }
             if (!ModelState.IsValid || resultDto == null)
-                return BadRequest($"Something Wrong in Request :{ModelState}");
+                return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
             var result = _mapper.Map<QuizResults>(resultDto);
             _repositoryManager.SectionQuiz.Submit(result);
             await _repositoryManager.SaveChangesAsync();
@@ -67,7 +67,7 @@ namespace ResearchersPlatform.Controllers
         public async Task<IActionResult> AddFinalQuiz([FromBody] FinalQuizForCreateDto finalQuizDto)
         {
             if (!ModelState.IsValid || finalQuizDto == null)
-                return BadRequest($"Something Wrong in Request :{ModelState}");
+                return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
             var finalQuiz = _mapper.Map<FinalQuiz>(finalQuizDto);
             _repositoryManager.FinalQuiz.CreateQuiz(finalQuiz);
             await _repositoryManager.SaveChangesAsync();
@@ -104,7 +104,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest("Skill ID field shouldn't be null or empty");
             }
             if (!ModelState.IsValid || resultDto == null)
-                return BadRequest($"Something Wrong in Request :{ModelState}");
+                return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
 
             var result = _mapper.Map<QuizResults>(resultDto);
             _repositoryManager.FinalQuiz.Submit(result,skillId);

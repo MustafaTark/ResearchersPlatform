@@ -15,6 +15,10 @@ namespace ResearchersPlatform_BAL.Repositories
         {
 
             var folderName = Path.Combine("Resources", "Media");
+            if (!Directory.Exists(folderName))
+            {
+                Directory.CreateDirectory(folderName);//YOUSRY
+            }
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var dbPath = Path.Combine(pathToSave, fileName);
             var fileStream = new FileStream(dbPath, FileMode.Open, FileAccess.Read);
@@ -24,6 +28,10 @@ namespace ResearchersPlatform_BAL.Repositories
         public string UploadFiles(IFormFile file)
         {
             var folderName = Path.Combine("Resources", "Media");
+            if (!Directory.Exists(folderName))
+            {
+                Directory.CreateDirectory(folderName);//YOUSRY
+            }
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
             var fileName = Guid.NewGuid().ToString() +

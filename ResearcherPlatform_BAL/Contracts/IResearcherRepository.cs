@@ -11,7 +11,12 @@ namespace ResearchersPlatform_BAL.Contracts
     public interface IResearcherRepository
     {
         void DeleteResearcher(Researcher researcher);
-        Task<ResearcherViewModel?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges);
+        Task<ResearcherViewModel?> GetSingleResearcherByIdAsync(Guid researcherId, bool trackChanges);
+        Task<Researcher?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges);
         Task<IEnumerable<Researcher?>> GetAllResearchersAsync(bool trackChanges);
+        void AddSpeciality(Guid researcherId,int specialityId);
+        void DeleteSpeciality(Guid researcherId);
+        void CreatePapersToResearcher(Guid researcherId, List<Paper> papers);
+
     }
 }

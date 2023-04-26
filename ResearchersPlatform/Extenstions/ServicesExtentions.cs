@@ -82,10 +82,13 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<SectionQuiz>, SectionQuizRepository>();
             services.AddScoped<GenericRepository<FinalQuiz>, FinalQuizRepository>();
             services.AddScoped<GenericRepository<Section>, SectionRepository>();
+            services.AddScoped<GenericRepository<Specality>, SpecialityRepository>();
+            services.AddScoped<GenericRepository<Paper>, PaperRepository>();
+            services.AddScoped<GenericRepository<Invitation>, InvitationRepository>();
+            services.AddScoped<GenericRepository<RequestIdea>, RequestRepository>();
 
             services.AddScoped<IRepositoryManager,RepositoryManager>();
             services.AddScoped<IFilesManager, FilesManager>();
-
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IStudentRepository,StudentRepository>();
             services.AddScoped<ICourseRepository,CourseRepository>();
@@ -95,7 +98,10 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<ISectionQuizRepository, SectionQuizRepository>();
             services.AddScoped<IFinalQuizRepository, FinalQuizRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();
-           
+            services.AddScoped<ISpecialityRepository, SpecialityRepository>();
+            services.AddScoped<IPaperRepository , PaperRepository>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
 
         }
     }

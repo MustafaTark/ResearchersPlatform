@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,18 @@ namespace ResearchersPlatform_BAL
             CreateMap<FinalQuizForCreateDto, FinalQuiz>();
 
             CreateMap<Video, VideoDto>();
+            CreateMap<IdeaForCreateDTO,Idea>();
+            CreateMap<Idea, IdeaDto>();
+            CreateMap<IdeaForCreateDTO, Idea>();
+            CreateMap<Topic, TopicsDto>();
+            CreateMap<Specality, SpecialityDto>();
+            CreateMap<SpecalityForCreationDto, Specality>();
+            CreateMap<Paper, PaperDto>().ReverseMap();
+            CreateMap<PaperForCreationDto, Paper>();
+            CreateMap<Researcher, ResearcherDto>();
             //CreateMap<VideoForCreateDto, Video>();
+            CreateMap<RequestForCreationDto,RequestIdea>();
+            CreateMap<RequestIdea,RequestDto>();
         }
     }
 }

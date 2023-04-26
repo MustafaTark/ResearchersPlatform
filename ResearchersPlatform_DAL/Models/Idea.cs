@@ -27,7 +27,7 @@ namespace ResearchersPlatform_DAL.Models
         public ICollection<TaskIdea> Tasks { get; set; }
         
         [ForeignKey(nameof(Specality))]
-        public Guid? SpecalityId {get; set; }
+        public int? SpecalityId {get; set; }
         public Specality? SpecalityObj { get; set; }
         
         [DataType(DataType.Time)]

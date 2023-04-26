@@ -33,12 +33,12 @@ namespace ResearchersPlatform_BAL.Repositories
                                                  .FirstOrDefault(s => s.Id == studentId)!
                                                  .Id == studentId)
                                             .FirstOrDefaultAsync();
-            if (!(course == null))
+            if (!(course == null)) //Purchases the course
             {
-                return true;
+                return true; 
                
             }
-            else
+            else // As a Researcher he has 2 trails
             {
                 var studentTrails = await _context.StudentQuizTrails.Where(t => t.StudentId == studentId
                                                                       && t.SkillId == skillId)

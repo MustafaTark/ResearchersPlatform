@@ -16,6 +16,10 @@ namespace ResearchersPlatform_BAL.Contracts
         ISectionQuizRepository SectionQuiz { get; }
         ISectionRepository Section { get; }
         IFinalQuizRepository FinalQuiz { get; }
+        ISpecialityRepository Speciality { get; }
+        IPaperRepository Paper { get; }
+        IRequestRepository Request { get; }
+        IInvitationRepository Invitation { get; }
         Task SaveChangesAsync();
     }
 }

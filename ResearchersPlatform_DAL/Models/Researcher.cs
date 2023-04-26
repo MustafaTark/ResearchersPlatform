@@ -27,6 +27,7 @@ namespace ResearchersPlatform_DAL.Models
         public int SpecalityId { get; set; }
         public Specality? SpecalityObject { get; set; }
         public ICollection<Paper> Papers { get; set; }
+        public ICollection<RequestIdea> Requests { get; set; }
 
         public Researcher() { 
             Ideas = new HashSet<Idea>();
@@ -35,6 +36,7 @@ namespace ResearchersPlatform_DAL.Models
             Notifications = new HashSet<Notification>();
             Invitations = new HashSet<Invitation>();
             Papers = new HashSet<Paper>();
+            Requests = new HashSet<RequestIdea>();
         }
 
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Request
+    public class RequestIdea
     {
         public Guid Id { get; set; }
 
@@ -17,6 +17,7 @@ namespace ResearchersPlatform_DAL.Models
         
         [ForeignKey(nameof(Researcher))]
         public Guid ResearcherId { get; set; }
+        public Researcher? ResearcherObject { get; set; }
         public bool IsAccepted { get; set; } = false;
     }
 }

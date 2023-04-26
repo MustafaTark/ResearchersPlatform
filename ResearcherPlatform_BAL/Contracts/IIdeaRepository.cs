@@ -1,4 +1,5 @@
-﻿using ResearchersPlatform_DAL.Models;
+﻿using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,8 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges);
         Task<Idea?> GetIdeaAsync(Guid odeaId , bool trackChanges);
         Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(Guid researcherId , bool trackChanges);
+        Task<IEnumerable<Idea?>> GetAllIdeasForCreatorAsync(Guid researcherId, bool trackChanges);
+        Task<bool> ValidateIdeaCreation(Guid researcherId);
+        Task<IEnumerable<TopicsDto>> GetAvailableTopics(Guid researcherId);
     }
 }

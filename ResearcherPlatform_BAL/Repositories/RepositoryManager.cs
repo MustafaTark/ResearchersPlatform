@@ -20,6 +20,10 @@ namespace ResearchersPlatform_BAL.Repositories
         private ISectionQuizRepository _sectionQuiz;
         private ISectionRepository _section;
         private IFinalQuizRepository _finalQuiz;
+        private ISpecialityRepository _speciality;
+        private IPaperRepository _paper;
+        private IRequestRepository _request;
+        private IInvitationRepository _invitation;
         private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
             , IStudentRepository student
@@ -29,8 +33,12 @@ namespace ResearchersPlatform_BAL.Repositories
             , IResearcherRepository researcher
             , ISectionQuizRepository sectionQuiz
             , IMapper mapper
-            , ISectionRepository section,
-IFinalQuizRepository finalQuiz)
+            , ISectionRepository section
+            , IFinalQuizRepository finalQuiz
+            , ISpecialityRepository speciality
+            , IPaperRepository paper
+            , IRequestRepository request
+            , IInvitationRepository invitation)
         {
             _context = context;
             _student = student;
@@ -42,6 +50,10 @@ IFinalQuizRepository finalQuiz)
             _mapper = mapper;
             _section = section;
             _finalQuiz = finalQuiz;
+            _speciality = speciality;
+            _paper = paper;
+            _request = request;
+            _invitation = invitation;
         }
         public IStudentRepository Student
         {
@@ -65,7 +77,7 @@ IFinalQuizRepository finalQuiz)
         {
             get
             {
-                _idea ??= new IdeaRepository(_context);
+                _idea ??= new IdeaRepository(_context,_mapper);
                 return _idea;
             }
         }
@@ -109,6 +121,38 @@ IFinalQuizRepository finalQuiz)
             {
                 _section ??= new SectionRepository(_context, _mapper);
                 return _section;
+            }
+        }
+        public ISpecialityRepository Speciality
+        {
+            get
+            {
+                _speciality ??= new SpecialityRepository(_context, _mapper);
+                return _speciality;
+            }
+        }
+        public IPaperRepository Paper
+        {
+            get
+            {
+                _paper ??= new PaperRepository(_context, _mapper);
+                return _paper;
+            }
+        }
+        public IRequestRepository Request
+        {
+            get
+            {
+                _request ??= new RequestRepository(_context, _mapper);
+                return _request;
+            }
+        }
+        public IInvitationRepository Invitation
+        {
+            get
+            {
+                _invitation ??= new InvitationRepository(_context, _mapper);
+                return _invitation;
             }
         }
 

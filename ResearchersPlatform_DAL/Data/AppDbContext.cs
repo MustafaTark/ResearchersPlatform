@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ResearchersPlatform_DAL.Configurations;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<Idea> Ideas { get; set; }
         public DbSet<Invitation> Invitations{ get; set; }
         public DbSet<Notification> Notifications{ get; set; }
-        public DbSet<Request> Requests{ get; set; }
+        public DbSet<RequestIdea> Requests{ get; set; }
         public DbSet<Paper> Papers{ get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<QuizResults> QuizResults { get; set; }
@@ -43,29 +44,20 @@ namespace ResearchersPlatform_DAL.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new RoleConfigrations());
-            builder.Entity<User>().UseTptMappingStrategy().ToTable("Users");
-            builder.Entity<Student>()
-                .ToTable("Students").HasBaseType<User>();
-
-            //builder.Entity<Researcher>()
-            //    .ToTable("Researchers").HasBaseType<Student>();
+            builder.ApplyConfigurationsFromAssembly(typeof(ResearcherEntityTypeConfigurations).Assembly);
+            builder.AddIndexes();
+            builder.AddInhertanceTables();
+            builder.AddManyToManyTables();
+            builder.AddOneToManyRelationship();
            
-            builder.Entity<FinalQuiz>()
-                .ToTable("FinalQuizzes").HasBaseType<Quiz>();
-            builder.Entity<SectionQuiz>()
-                 .ToTable("SectionQuizzes").HasBaseType<Quiz>();
+ 
 
-            builder.Entity<Researcher>().HasMany(p => p.Ideas).WithMany(p => p.Participants);
-            builder.Entity<Researcher>().HasMany(p => p.Tasks).WithMany(p => p.Participants);
-            builder.Entity<Researcher>().HasMany(r => r.Notifications).WithMany(n => n.Researchers);
-            builder.Entity<Researcher>().HasMany(r => r.Invitations).WithMany(i => i.Researchers);
 
-            builder.Entity<Student>().HasMany(r => r.Courses).WithMany(c => c.Students);
-            builder.Entity<Student>().HasMany(s => s.Badges).WithMany(b => b.Students);
-            builder.Entity<Idea>().HasOne(p => p.ResearcherCreator).WithMany(p => p.IdeasLeader);
 
-            builder.Entity<Researcher>().HasIndex(r => r.Points);
-            builder.Entity<Researcher>().HasIndex(r => r.StudentId).IsUnique();
+
+
+
+
 
 
 

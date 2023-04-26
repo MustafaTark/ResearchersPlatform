@@ -22,7 +22,7 @@ namespace ResearchersPlatform_BAL.Repositories
             _mapper = mapper;
         }
         public void DeleteResearcher(Researcher researcher) => Delete(researcher);
-        public async Task<ResearcherViewModel?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges)
+        public async Task<ResearcherViewModel?> GetSingleResearcherByIdAsync(Guid researcherId, bool trackChanges)
         {
             var resercher = await FindByCondition(r => r.Id == researcherId, trackChanges)
             .Include(i => i.Ideas)
@@ -60,9 +60,9 @@ namespace ResearchersPlatform_BAL.Repositories
            var researcher= FindByCondition(r=>r.StudentId==studentId,trackChanges:true).FirstOrDefault();
             researcher!.SpecalityId= specality;
         }
-        public void CreatePapersToResearcher(string studentId, List<Paper> papers)
+        public void CreatePapersToResearcher(Guid researcherId, List<Paper> papers)
         {
-            var researcher =  FindByCondition(s => s.StudentId == studentId, trackChanges: true)
+            var researcher =  FindByCondition(s => s.Id == researcherId, trackChanges: true)
                                   .FirstOrDefault();
             foreach (var paper in papers)
             {
@@ -79,7 +79,23 @@ namespace ResearchersPlatform_BAL.Repositories
             };
             researcher!.Points += points;
         }
-    } 
+        public async void AddSpeciality(Guid researcherId,int specialityId)
+        {
+            var researcher = await FindByCondition(r => r.Id == researcherId, trackChanges: true)
+                .FirstOrDefaultAsync();
+                    researcher!.SpecalityId = specialityId;
+        }
+        public async Task<Researcher?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges)
+            => await FindByCondition(r => r.Id == researcherId , trackChanges)
+            .FirstOrDefaultAsync();
+
+        public void DeleteSpeciality(Guid researcherId)
+        {
+            var researcher = _context.Researchers.Where(r => r.Id == researcherId).FirstOrDefault();
+            researcher!.SpecalityId = 1;
+            _context.SaveChangesAsync();
+        }
+    }
 }
     
  

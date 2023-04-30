@@ -16,7 +16,7 @@ namespace ResearchersPlatform_BAL.DTO
         public Gender Gender { get; set; }
         public int Age { get; set; }
         //public List<Course>? Courses { get; set; }
-        public int Trails { get; set; }
+        //public int Trails { get; set; }
         //public List<Badge>? Badges { get; set; }
     }
 }

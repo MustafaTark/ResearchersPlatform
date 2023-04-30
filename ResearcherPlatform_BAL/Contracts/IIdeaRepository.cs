@@ -10,7 +10,7 @@ namespace ResearchersPlatform_BAL.Contracts
 {
     public interface IIdeaRepository
     {
-        void CreateIdea(Idea idea);
+        void CreateIdea(Idea idea , Guid creatorId);
         void UpdateIdea(Idea idea);
         void DeleteIdea(Idea idea);
         Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges);
@@ -19,5 +19,9 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<Idea?>> GetAllIdeasForCreatorAsync(Guid researcherId, bool trackChanges);
         Task<bool> ValidateIdeaCreation(Guid researcherId);
         Task<IEnumerable<TopicsDto>> GetAvailableTopics(Guid researcherId);
+        Task<bool> ValidateResearcherForIdea(Guid ideaId, Guid researcherId);
+        Task<bool> HasParticipants(Guid ideaId);
+        Task<bool> CheckParticipantsNumber(Guid ideaId);
+
     }
 }

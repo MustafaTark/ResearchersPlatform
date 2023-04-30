@@ -87,6 +87,7 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public async Task<Researcher?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges)
             => await FindByCondition(r => r.Id == researcherId , trackChanges)
+            .Include(i => i.Ideas)
             .FirstOrDefaultAsync();
 
         public void DeleteSpeciality(Guid researcherId)
@@ -95,6 +96,13 @@ namespace ResearchersPlatform_BAL.Repositories
             researcher!.SpecalityId = 1;
             _context.SaveChangesAsync();
         }
+         public async Task<IEnumerable<SingleResearcherDto>> GetAllIdeaParticipants(Guid ideaId)
+             => await FindByCondition(i => i.Ideas.FirstOrDefault(i => i.Id== ideaId)!.Id == ideaId, trackChanges: false)
+             .ProjectTo<SingleResearcherDto>(_mapper.ConfigurationProvider)
+             .ToListAsync();
+        public async Task<string?> GetResearcherByStudentId(string studentId)
+            => await FindByCondition(r => r.StudentId == studentId,trackChanges:false).Select(r => r.Id.ToString()).FirstOrDefaultAsync();
+
     }
 }
     

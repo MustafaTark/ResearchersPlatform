@@ -26,10 +26,12 @@ namespace ResearchersPlatform_DAL.Configurations
             builder.HasMany(r => r.Papers).WithOne(p => p.ResearcherObject)
                 .HasForeignKey(j => j.ResearcherId).OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasMany(r => r.Invitations).WithOne(p => p.ResearcherObj)
+                .HasForeignKey(j => j.ResearcherId).OnDelete(DeleteBehavior.NoAction);
+
             //Many_To_Many
             builder.HasMany(r => r.Tasks).WithMany(t => t.Participants);
             builder.HasMany(r => r.Notifications).WithMany(n => n.Researchers);
-            builder.HasMany(r => r.Invitations).WithMany(i => i.Researchers);
             builder.HasMany(r => r.Ideas).WithMany(i => i.Participants);
 
         }

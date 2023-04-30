@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_BAL.DTO
 {
-    public class InvitationDto
+    public class SingleResearcherDto
     {
         public Guid Id { get; set; }
-        public Guid IdeaId { get; set; }
-        public bool IsAccepted { get; set; }
-        //public List<Researcher>? Researchers { get; set; }
+        public StudentDto? StudentObj { get; set; }
+        public int Points { get; set; }
+        public int SpecalityId { get; set; }
+        public Specality? SpecalityObject { get; set; }
+
     }
 }

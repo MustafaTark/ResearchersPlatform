@@ -22,6 +22,17 @@ namespace ResearchersPlatform.Controllers
             _mapper= mapper;
             _filesRepository= files;
         }
+        [HttpGet("ResearcherId/{studentId}")]
+        public async Task<IActionResult> GetResearcherByStudentId(string studentId)
+        {
+            var researcherId = await _repository.Researcher.GetResearcherByStudentId(studentId);
+            if(researcherId is null)
+            {
+                return NotFound($"Student with ID {studentId} doesn't exist in the database");
+            }
+            return Ok(researcherId);
+
+        }
         [HttpDelete("{researcherId}")]
         public async Task<IActionResult> DeleteResearcher(Guid researcherId)
         {
@@ -130,6 +141,37 @@ namespace ResearchersPlatform.Controllers
                 return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
             }
             return Ok(researcher);
+        }
+        [HttpGet("Invitations/{researcherId}")]
+        public async Task<IActionResult> GetResearcherInvitations(Guid researcherId)
+        {
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
+            if (researcher is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
+            }
+            var invitation = await _repository.Invitation.GetAllInvitationsForResearcher(researcherId, trackChanges: false);
+            if (invitation is null)
+            {
+                return NotFound("You have no Invitations");
+            }
+            return Ok(invitation);
+        }
+        [HttpGet("Ideas/{researcherId}")]
+        public async Task<IActionResult> GetIdeasForResearcher(Guid researcherId)
+        {
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
+            if (researcher is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
+            }
+            var ideas = await _repository.Idea.GetAllIdeasForCreatorAsync(researcherId, trackChanges: false);
+            if (ideas is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} doesn't have any Ideas in the database");
+            }
+            var IdeaEntities = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
+            return Ok(IdeaEntities);
         }
     }
 }

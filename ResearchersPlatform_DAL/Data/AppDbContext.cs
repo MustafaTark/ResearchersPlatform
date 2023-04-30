@@ -49,18 +49,10 @@ namespace ResearchersPlatform_DAL.Data
             builder.AddInhertanceTables();
             builder.AddManyToManyTables();
             builder.AddOneToManyRelationship();
-           
- 
-
-
-
-
-
-
-
-
-
-
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
     }
 }

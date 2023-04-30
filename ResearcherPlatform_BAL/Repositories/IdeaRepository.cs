@@ -21,7 +21,12 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _mapper= mapper;
         }
-        public void CreateIdea(Idea idea) => Create(idea);
+        public void CreateIdea(Idea idea, Guid creatorId)
+        {
+            idea.CreatorId = creatorId;
+            idea.ParticipantsNumber = 1;
+            Create(idea);
+        }
         public void UpdateIdea(Idea idea) => Update(idea);
         public void DeleteIdea(Idea idea) => Delete(idea);
         public async Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges)
@@ -79,5 +84,30 @@ namespace ResearchersPlatform_BAL.Repositories
                 return await _context.Topics.ProjectTo<TopicsDto>(_mapper.ConfigurationProvider).Where(t => t.MinmumPoints <= 4).ToListAsync();
             }
         }
+        public async Task<bool> ValidateResearcherForIdea(Guid ideaId,Guid researcherId)
+        {
+            var ideaParticipant = await FindByCondition(i => i.Id == ideaId 
+            && i.Participants.FirstOrDefault(r => r.Id == researcherId)!.Id == researcherId, trackChanges:false)
+                .FirstOrDefaultAsync();
+            if (ideaParticipant is null)
+                return false;
+            return true;
+        }
+        public async Task<bool> HasParticipants(Guid ideaId)
+        {
+            var ideaParticipants = await _context.Ideas.Where(i => i.Id == ideaId && i.Participants.Any()).ToListAsync();
+            if(ideaParticipants.Any()) return true;
+            return false;
+        }
+        public async Task<bool> CheckParticipantsNumber(Guid ideaId)
+        {
+            var idea = await FindByCondition(i => i.Id == ideaId , trackChanges:false)
+                .Include(p => p.Participants).FirstOrDefaultAsync();
+
+            if (idea!.ParticipantsNumber < idea.MaxParticipantsNumber) 
+                return true;
+            return false;
+        }
+
     }
 }

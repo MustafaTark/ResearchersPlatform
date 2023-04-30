@@ -1,4 +1,5 @@
-﻿using ResearchersPlatform_BAL.ViewModels;
+﻿using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace ResearchersPlatform_BAL.Contracts
         void AddSpeciality(Guid researcherId,int specialityId);
         void DeleteSpeciality(Guid researcherId);
         void CreatePapersToResearcher(Guid researcherId, List<Paper> papers);
+        Task<IEnumerable<SingleResearcherDto>> GetAllIdeaParticipants(Guid ideaId);
+        Task<string?> GetResearcherByStudentId(string studentId);
 
     }
 }

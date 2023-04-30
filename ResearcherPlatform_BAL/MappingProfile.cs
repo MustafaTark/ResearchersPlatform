@@ -48,6 +48,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<Video, VideoDto>();
             CreateMap<IdeaForCreateDTO,Idea>();
             CreateMap<Idea, IdeaDto>();
+            CreateMap<Idea, SingleIdeaDto>();
             CreateMap<IdeaForCreateDTO, Idea>();
             CreateMap<Topic, TopicsDto>();
             CreateMap<Specality, SpecialityDto>();
@@ -55,9 +56,12 @@ namespace ResearchersPlatform_BAL
             CreateMap<Paper, PaperDto>().ReverseMap();
             CreateMap<PaperForCreationDto, Paper>();
             CreateMap<Researcher, ResearcherDto>();
+            CreateMap<Researcher, SingleResearcherDto>();
             //CreateMap<VideoForCreateDto, Video>();
             CreateMap<RequestForCreationDto,RequestIdea>();
             CreateMap<RequestIdea,RequestDto>();
+            CreateMap<InvitationForCreationDto,Invitation>();
+            CreateMap<Invitation, InvitationDto>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ResearchersPlatform_BAL.Repositories
         }
 
         public void UpdateStudent(Student student) => Update(student);
-        public void DeleteStudent(Student student) => Update(student);
+        public void DeleteStudent(Student student) => Delete(student);
         public async Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges)
             => await FindByCondition(e => e.Id == studentId, trackChanges)
             .OrderBy(e => e.UserName)

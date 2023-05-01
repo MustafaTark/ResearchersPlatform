@@ -10,6 +10,7 @@ namespace ResearchersPlatform_BAL.DTO
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
+        public double? Price { get; set; }
         public string? Instructions { get; set; }
         public string? Objectives { get; set; }
         public string? Hours { get; set; }

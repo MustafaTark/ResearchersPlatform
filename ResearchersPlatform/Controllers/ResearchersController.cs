@@ -157,6 +157,17 @@ namespace ResearchersPlatform.Controllers
             }
             return Ok(invitation);
         }
+        [HttpGet("Requests/{researcherId}")]
+        public async Task<IActionResult> GetAllRequestsForResearcher(Guid researcherId)
+        {
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
+            if (researcher is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
+            }
+            var requests = await _repository.Request.GetAllRequestsForResearcher(researcherId, trackChanges: false);
+            return Ok(requests);
+        }
         [HttpGet("Ideas/{researcherId}")]
         public async Task<IActionResult> GetIdeasForResearcher(Guid researcherId)
         {
@@ -173,5 +184,6 @@ namespace ResearchersPlatform.Controllers
             var IdeaEntities = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
             return Ok(IdeaEntities);
         }
+
     }
 }

@@ -14,11 +14,8 @@ namespace ResearchersPlatform_BAL.DTO
         public required int ParticipantsNumber { get; set; }
         public required int MaxParticipantsNumber { get; set; }
         public Guid? CreatorId { get; set; }
-        public Researcher? ResearcherCreator { get; set; }
-        public ICollection<Researcher>? Participants { get; set; }
-        public ICollection<TaskIdea>? Tasks { get; set; }
-        public Guid? SpecalityId { get; set; }
-        public Specality? SpecalityObj { get; set; }
+        //public ICollection<TaskIdea>? Tasks { get; set; }
+        public SpecialityDto? SpecalityObj { get; set; }
         public DateTime Deadline { get; set; }
         public required bool IsCompleted { get; set; } = false;
         public required int TopicId { get; set; }

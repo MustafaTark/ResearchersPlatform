@@ -12,7 +12,6 @@ namespace ResearchersPlatform_BAL.DTO
         public Guid Id { get; set; }
         public StudentDto? StudentObj { get; set; }
         public int Points { get; set; }
-        public int SpecalityId { get; set; }
         public Specality? SpecalityObject { get; set; }
 
     }

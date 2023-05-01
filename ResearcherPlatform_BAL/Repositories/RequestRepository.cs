@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Data;
@@ -19,35 +21,80 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _mapper = mapper;
         }
-        public void CreateRequest(Guid ideaId, RequestIdea request)
+        public bool ValidateRequest(Guid researcherId, Guid ideaId)
         {
-            var idea = _context.Ideas.FirstOrDefault(i => i.Id == ideaId);
-            //_context.Set<RequestIdea>().FirstOrDefault().Add(request);
+            var researcherRequest = _context.Requests.Any(r => r.IdeaId == ideaId && r.ResearcherId == researcherId);
+            if (researcherRequest)
+                return true;
+            return false;
         }
-
-        public void DeleteRequest(RequestIdea request)
+        public async Task<bool> ValidateIdea(Guid ideaId)
         {
-            throw new NotImplementedException();
+            var idea = await _context.Ideas.Where(i => i.Id == ideaId).FirstOrDefaultAsync();
+            if(idea!.ParticipantsNumber < idea.MaxParticipantsNumber)
+                return true;
+            return false;
         }
-
-        public Task<IEnumerable<RequestDto>> GetAllRequests(Guid ideaId, bool trackChanges)
+        public async Task<bool> ValidateResearcher(Guid researcherId , Guid ideaId)
         {
-            throw new NotImplementedException();
+            var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == ideaId);
+            if (idea!.CreatorId == researcherId)
+                return false;
+            return true;
         }
-
-        public Task<RequestDto> GetRequestByIdeaId(Guid ideaId, bool trackChanges)
+        public async Task SendRequest(Guid researcherId, Guid ideaId)
         {
-            throw new NotImplementedException();
+            var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id== ideaId);
+            var researcher = await _context.Researchers.FirstOrDefaultAsync(r => r.Id == researcherId);
+            //if (!ValidateRequest(researcherId, ideaId) && ValidateIdea(ideaId) && ValidateResearcher(researcherId,ideaId)) { 
+                var request = new RequestIdea { IdeaId = ideaId, ResearcherId = researcherId };
+                _context.Requests.Add(request);
         }
-
-        public Task<RequestDto> GetRequestByRequestId(Guid requestId, bool trackChanges)
+        private bool ValidateAcception(Guid requestId, Guid researcherId)
         {
-            throw new NotImplementedException();
+            var request = FindByCondition(i => i.Id == requestId
+              && i.ResearcherId == researcherId
+              && i.IsAccepted == false, trackChanges: false).FirstOrDefaultAsync();
+            if (request is null)
+                return false;
+            return true;
         }
-        //void DeleteRequest(RequestIdea request);
+        public async Task AcceptRequest(Guid requestId, Guid researcherId)
+        {
+            var researcher = await _context.Researchers.Include(r => r.Requests).FirstOrDefaultAsync(r => r.Id == researcherId);
+            var request =  researcher!.Requests.FirstOrDefault(r => r.Id == requestId);
+            var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == request!.IdeaId);
+            if(ValidateAcception(requestId, researcherId))
+            {
+                request!.IsAccepted = true;
+                _context.Set<Idea>().FirstOrDefault(i => i.Id == idea!.Id)!.Participants.Add(researcher);
+                idea!.ParticipantsNumber++;
+                DeleteRequest(requestId, researcherId);
+            }
 
-        //Task<RequestDto> GetRequestByIdeaId(Guid ideaId, bool trackChanges);
-        //Task<RequestDto> GetRequestByRequestId(Guid requestId, bool trackChanges);
-        //Task<IEnumerable<RequestDto>> GetAllRequests(Guid ideaId, bool trackChanges);
+        }
+        public void DeleteRequest(Guid requestId, Guid researcherId)
+        {
+            var request = FindByCondition(i => i.Id == requestId && i.ResearcherId == researcherId, trackChanges: true).FirstOrDefault();
+            _context.Requests.Remove(request!);
+        }
+        public async Task<IEnumerable<RequestDto>> GetAllRequests(Guid ideaId, bool trackChanges)
+            => await FindByCondition(i => i.IdeaId == ideaId , trackChanges:false)
+            .ProjectTo<RequestDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        public async Task<RequestDto?> GetRequestByIdeaId(Guid ideaId, bool trackChanges)
+            => await FindByCondition(r => r.IdeaId == ideaId, trackChanges: false)
+            .ProjectTo<RequestDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+
+        public async Task<RequestDto?> GetRequestById(Guid requestId, bool trackChanges)
+            => await FindByCondition(r => r.Id == requestId, trackChanges: false)
+            .ProjectTo<RequestDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+        public async Task<IEnumerable<RequestDto>> GetAllRequestsForResearcher(Guid researcherId, bool trackChanges)
+            => await FindByCondition(r => r.ResearcherId == researcherId, trackChanges: false)
+            .ProjectTo<RequestDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 }

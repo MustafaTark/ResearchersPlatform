@@ -10,6 +10,7 @@ namespace ResearchersPlatform_BAL.DTO
     {
         public Guid Id { get; set; }
         public Guid ResearcherId { get; set; }
+        public Guid IdeaId { get; set; }
         public bool IsAccepted { get; set; }
 
     }

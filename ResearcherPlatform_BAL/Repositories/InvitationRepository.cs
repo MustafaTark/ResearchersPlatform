@@ -21,12 +21,6 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _mapper= mapper;
         }
-        //public void CreateInvitationForIdea(Guid ideaId)
-        //{
-        //    Invitation invitation = new Invitation { IdeaId = ideaId};
-        //    Create(invitation);
-
-        //}
         public async Task<InvitationDto?> GetInvitationById(Guid invitationid, bool trackChanges)
             => await FindByCondition(i => i.Id == invitationid, trackChanges)
             .ProjectTo<InvitationDto>(_mapper.ConfigurationProvider)

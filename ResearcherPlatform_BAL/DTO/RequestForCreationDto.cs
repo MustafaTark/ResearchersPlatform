@@ -8,6 +8,6 @@ namespace ResearchersPlatform_BAL.DTO
 {
     public class RequestForCreationDto
     {
-        public Guid ResearcherId { get; set; }
+        public Guid IdeaId { get; set; }
     }
 }

@@ -108,6 +108,18 @@ namespace ResearchersPlatform_BAL.Repositories
                 return true;
             return false;
         }
+        public async Task<bool> CheckResearcherIdeasNumber(Guid researcherId)
+        {
+            //var researcher = await _context.Researchers
+            //    .Include(r => r.Ideas)
+            //    .FirstOrDefaultAsync(r => r.Id == researcherId);
+            //var researcherIdeas = await _context.Researchers.Where(r => r.Id == researcherId).Select(r => r.Ideas).FirstOrDefaultAsync();
+            var ideas = await FindByCondition(i => i.CreatorId == researcherId, trackChanges: false).ToListAsync();
+            if (ideas.Count >= 2)
+                return false;
+            return true;
+        }
+
 
     }
 }

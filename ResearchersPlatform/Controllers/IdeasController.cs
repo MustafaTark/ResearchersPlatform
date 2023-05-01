@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
@@ -34,9 +35,10 @@ namespace ResearchersPlatform.Controllers
                 return NotFound($"Researcher With ID {researcherId} doesn't exist in the database");
             }
             //  TEST 
-            if(researcher.Ideas.Count>2)
+            var researcherIdeasNumber = await _repository.Idea.CheckResearcherIdeasNumber(researcherId);
+            if(!researcherIdeasNumber)
             {
-                return BadRequest($"You have exceeded Your Limit For Idea Initilization which is {researcher.Ideas.Count} .");
+                return BadRequest($"You have exceeded Your Limit For Idea Initialization .");
             }
             var ideaValidation = await _repository.Idea.ValidateIdeaCreation(researcherId);
             if(ideaValidation)
@@ -198,6 +200,87 @@ namespace ResearchersPlatform.Controllers
              _repository.Invitation.DeleteInvitation(invitationId, researcherId);
             await _repository.SaveChangesAsync();
             return NoContent();
+        }
+        [HttpPost("Requests/SendRequest/{researcherId}/{ideaId}")]
+        public async Task<IActionResult> SendRequest(Guid researcherId, Guid ideaId)
+        {
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId,trackChanges:true);
+            if(researcher is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} does not exist in the database");
+            }
+            var idea = await _repository.Idea.GetIdeaAsync(ideaId, trackChanges:false);
+            if(idea is null)
+            {
+                return NotFound($"Idea with Id {ideaId} doesn't exist in the database");
+            }
+            var researcherValidation = await _repository.Request.ValidateResearcher(researcherId, ideaId);
+            if (!researcherValidation)
+                return BadRequest("You are the creator of the Idea, you idiot!");
+            var requestValidation=  _repository.Request.ValidateRequest(researcherId,ideaId);
+            if (requestValidation)
+                return BadRequest("Researcher has already send a request to the Idea");
+            var ideaValidation = await _repository.Request.ValidateIdea(ideaId);
+            if(!ideaValidation)
+                return BadRequest($"Idea with ID {ideaId} is full of participants !");
+            var validateResearcher = await _repository.Idea.ValidateResearcherForIdea(ideaId, researcherId);
+            if (validateResearcher)
+            {
+                return BadRequest($"Researcher with ID {researcherId} has already joined to the idea");
+            }
+            await _repository.Request.SendRequest(researcherId,ideaId);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpPost("Requests/{requestId}/{researcherId}")]
+        public async Task<IActionResult> AcceptRequest(Guid requestId , Guid researcherId)
+        {
+            var request = await _repository.Request.GetRequestById(requestId, trackChanges: false);
+            if (request is null)
+            {
+                return NotFound($"Request with ID {requestId} doesn't exist in the database");
+            }
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: true);
+            if (researcher is null)
+            {
+                return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
+            }
+            await _repository.Request.AcceptRequest(requestId, researcherId);
+            await _repository.SaveChangesAsync();
+            return StatusCode(201);
+        }
+        [HttpDelete("Requests/{requestId}")]
+        public async Task<IActionResult> RejectRequest(Guid requestId)
+        {
+            var request = await _repository.Request.GetRequestById(requestId, trackChanges: false);
+            if (request is null)
+            {
+                return NotFound($"Request with ID {requestId} doesn't exist in the database");
+            }
+            _repository.Request.DeleteRequest(requestId, request.ResearcherId);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpGet("Request/{ideaId}")]
+        public async Task<IActionResult> GetAllRequestsForIdea(Guid ideaId)
+        {
+            var idea = await _repository.Idea.GetIdeaAsync(ideaId,trackChanges: false);
+            if (idea is null)
+            {
+                return NotFound($"Idea with ID {ideaId} doesn't exist in the database");
+            }
+            var requests = await _repository.Request.GetAllRequests(ideaId, trackChanges: false);
+            return Ok(requests);
+        }
+        [HttpGet("Requests/SingleRequest/{requestId}")]
+        public async Task<IActionResult> GetRequestById(Guid requestId)
+        {
+            var request = await _repository.Request.GetRequestById(requestId, trackChanges: false);
+            if (request is null)
+            {
+                return NotFound($"Request with ID {requestId} doesn't exist in the database");
+            }
+            return Ok(request);
         }
 
     }

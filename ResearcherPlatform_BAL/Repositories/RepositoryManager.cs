@@ -24,6 +24,7 @@ namespace ResearchersPlatform_BAL.Repositories
         private IPaperRepository _paper;
         private IRequestRepository _request;
         private IInvitationRepository _invitation;
+        private IChatRepository _chat;
         private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
             , IStudentRepository student
@@ -38,7 +39,8 @@ namespace ResearchersPlatform_BAL.Repositories
             , ISpecialityRepository speciality
             , IPaperRepository paper
             , IRequestRepository request
-            , IInvitationRepository invitation)
+            , IInvitationRepository invitation,
+IChatRepository chat)
         {
             _context = context;
             _student = student;
@@ -54,6 +56,7 @@ namespace ResearchersPlatform_BAL.Repositories
             _paper = paper;
             _request = request;
             _invitation = invitation;
+            _chat = chat;
         }
         public IStudentRepository Student
         {
@@ -153,6 +156,14 @@ namespace ResearchersPlatform_BAL.Repositories
             {
                 _invitation ??= new InvitationRepository(_context, _mapper);
                 return _invitation;
+            }
+        } 
+        public IChatRepository Chat
+        {
+            get
+            {
+                _chat ??= new ChatRepository(_context, _mapper);
+                return _chat;
             }
         }
 

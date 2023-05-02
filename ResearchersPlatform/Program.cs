@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using ResearchersPlatform.Extenstions;
+using ResearchersPlatform.Hubs;
 using ResearchersPlatform_DAL.Models;
 using System.Text.Json.Serialization;
 
@@ -45,5 +46,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<DiscussionHub>("hubs/discussion");
+app.MapHub<ChatHub>("hubs/chat");
 app.Run();

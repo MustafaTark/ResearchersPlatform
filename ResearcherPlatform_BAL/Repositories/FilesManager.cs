@@ -30,7 +30,7 @@ namespace ResearchersPlatform_BAL.Repositories
             var folderName = Path.Combine("Resources", "Media");
             if (!Directory.Exists(folderName))
             {
-                Directory.CreateDirectory(folderName);//YOUSRY
+                Directory.CreateDirectory(folderName);
             }
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 

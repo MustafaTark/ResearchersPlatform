@@ -45,6 +45,9 @@ namespace ResearchersPlatform_BAL
             CreateMap<FinalQuiz, FinalQuizDto>();
             CreateMap<FinalQuizForCreateDto, FinalQuiz>();
 
+            CreateMap<MessageDto, IdeaMessage>().ReverseMap();
+            CreateMap<MessageDto, TaskMessage>().ReverseMap();
+
             CreateMap<Video, VideoDto>();
             CreateMap<IdeaForCreateDTO,Idea>();
             CreateMap<Idea, IdeaDto>();

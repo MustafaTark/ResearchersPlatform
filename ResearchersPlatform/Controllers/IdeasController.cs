@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -12,6 +13,7 @@ namespace ResearchersPlatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("_myAllowSpecificOrigins")]
     public class IdeasController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
@@ -34,7 +36,6 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Researcher With ID {researcherId} doesn't exist in the database");
             }
-            //  TEST 
             var researcherIdeasNumber = await _repository.Idea.CheckResearcherIdeasNumber(researcherId);
             if(!researcherIdeasNumber)
             {

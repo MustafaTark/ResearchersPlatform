@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using ResearchersPlatform.Hubs;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.Repositories;
 using ResearchersPlatform_DAL.Data;
@@ -86,6 +87,9 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<Paper>, PaperRepository>();
             services.AddScoped<GenericRepository<Invitation>, InvitationRepository>();
             services.AddScoped<GenericRepository<RequestIdea>, RequestRepository>();
+            services.AddScoped<GenericRepository<TaskIdea>, TaskRepository>();
+            //services.AddScoped<GenericRepository<ChatHub>, ChatRepository>();
+
 
             services.AddScoped<IRepositoryManager,RepositoryManager>();
             services.AddScoped<IFilesManager, FilesManager>();
@@ -102,6 +106,8 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IPaperRepository , PaperRepository>();
             services.AddScoped<IRequestRepository, RequestRepository>();
             services.AddScoped<IInvitationRepository, InvitationRepository>();
+            services.AddScoped<ITaskRepository , TaskRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
 
         }
     }

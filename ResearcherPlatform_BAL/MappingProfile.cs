@@ -65,6 +65,9 @@ namespace ResearchersPlatform_BAL
             CreateMap<RequestIdea,RequestDto>();
             CreateMap<InvitationForCreationDto,Invitation>();
             CreateMap<Invitation, InvitationDto>();
+            CreateMap<TaskForCreateDto, TaskIdea>();
+            CreateMap<TaskIdea, TaskDto>();
+            CreateMap<TaskForParticipantsDto, TaskIdea>();
         }
     }
 }

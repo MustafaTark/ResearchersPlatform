@@ -88,7 +88,7 @@ IChatRepository chat)
         {
             get
             {
-                _task ??= new TaskRepository(_context);
+                _task ??= new TaskRepository(_context,_mapper);
                 return _task;
             }
         }

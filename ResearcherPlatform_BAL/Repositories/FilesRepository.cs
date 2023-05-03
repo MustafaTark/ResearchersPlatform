@@ -31,37 +31,20 @@ namespace ResearchersPlatform_BAL.Repositories
             _memoryCache = memoryCache;
         }
         public async Task<IEnumerable<VideoDto>> GetAllVideosToSection(Guid sectionId)
-        {
-            string key = $"videosTo:{sectionId}";
-            var videos = await _memoryCache.GetOrCreateAsync(
-                key,
-                async entry =>
-                {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
-                   return await _context.Set<Video>()
-                                        .Where(v => v.SectionId == sectionId)
-                                        .ProjectTo<VideoDto>(_mapper.ConfigurationProvider)
-                                        .ToListAsync();
-                }
-              );
-            return videos!;
-        }   
+        => await _context.Set<Video>()
+                         .Where(v => v.SectionId == sectionId)
+                         .ProjectTo<VideoDto>(_mapper.ConfigurationProvider)
+                         .ToListAsync();
+             
+           
 
         public async Task<FileStream> GetVideoToSection(int videoId)
         {
-            string key = $"video:{videoId}";
-            var file = await _memoryCache.GetOrCreateAsync(
-                key,
-                async entry =>
-                {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
-                    var url = await _context.Videos.Where(v => v.Id == videoId)
-                                                   .Select(v => v.VideoUrl)
-                                                   .SingleOrDefaultAsync();
-                  return _filesManager.GetFile(url!);
-                }
-              );
-            return file!;
+             var url = await _context.Videos.Where(v => v.Id == videoId)
+                                            .Select(v => v.VideoUrl)
+                                            .SingleOrDefaultAsync();
+              return _filesManager.GetFile(url!);
+               
         }
 
         public void UploadVideoToSection(Guid sectionId,IFormFile video,string title)

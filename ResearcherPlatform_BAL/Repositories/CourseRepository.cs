@@ -39,36 +39,15 @@ namespace ResearchersPlatform_BAL.Repositories
             
         }
         public async Task<IEnumerable<Course?>> GetAllCoursesAsync()
-        {
-            string key = "courses";
-            var courses = await _memoryCache.GetOrCreateAsync(
-                key,
-                async entry =>
-                {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
-                   return await FindAll(trackChanges: false).ToListAsync();
-                }
-              );
-            return courses!;
-        }
+         =>await FindAll(trackChanges: false).ToListAsync();
+               
+        
         public async Task<IEnumerable<Course?>> GetAllCoursesForStudentAsync(string studentId, bool trackChanges)
-        {
-            {
-                string key = $"coursesTo:{studentId}";
-                var courses = await _memoryCache.GetOrCreateAsync(
-                    key,
-                    async entry =>
-                    {
-                        entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
-                        return await FindByCondition(s => s.Students
+           =>await FindByCondition(s => s.Students
                                     .FirstOrDefault(e => e.Id == studentId)!
                                     .Id == studentId, trackChanges)
                                     .ToListAsync();
-                    }
-                  );
-                return courses!;
-            }
-        }
+        
      
     }
 }

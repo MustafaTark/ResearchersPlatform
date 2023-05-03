@@ -24,20 +24,10 @@ namespace ResearchersPlatform_BAL.Repositories
             _memoryCache = memoryCache;
         }
         public async Task<IEnumerable<SectionDto>> GetSectionsToCourse(Guid courseId)
-        {
-            string key = $"SectionsTo:{courseId}";
-            var sections = await _memoryCache.GetOrCreateAsync(
-                key,
-                async entry =>
-                {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
-                    return  await FindByCondition(s => s.CourseId == courseId, trackChanges: false)
+              => await FindByCondition(s => s.CourseId == courseId, trackChanges: false)
                                 .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
                                 .ToListAsync();
-                }
-              );
-            return sections!;
-        } 
+
         
         public void CreateSectionsToCourse(Guid courseId,List<Section> sections)
         {
@@ -45,6 +35,7 @@ namespace ResearchersPlatform_BAL.Repositories
 
                 _context.Courses.Where(c => c.Id == courseId).SingleOrDefault()!.Sections.Add(section);
             }
+            
         }
 
         public async Task<SectionDto?> GetSectionByIdAsync(Guid sectionId, bool trackChanges)

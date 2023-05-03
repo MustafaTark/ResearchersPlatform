@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_DAL.Data;
 using System;
@@ -25,6 +26,7 @@ namespace ResearchersPlatform_BAL.Repositories
         private IRequestRepository _request;
         private IInvitationRepository _invitation;
         private IChatRepository _chat;
+        private readonly IMemoryCache _memoryCache;
         private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
             , IStudentRepository student
@@ -40,7 +42,7 @@ namespace ResearchersPlatform_BAL.Repositories
             , IPaperRepository paper
             , IRequestRepository request
             , IInvitationRepository invitation,
-IChatRepository chat)
+IChatRepository chat, IMemoryCache memoryCache)
         {
             _context = context;
             _student = student;
@@ -57,6 +59,7 @@ IChatRepository chat)
             _request = request;
             _invitation = invitation;
             _chat = chat;
+            _memoryCache = memoryCache;
         }
         public IStudentRepository Student
         {
@@ -72,7 +75,7 @@ IChatRepository chat)
         {
             get
             {
-                _course ??= new CourseRepository(_context);
+                _course ??= new CourseRepository(_context,_memoryCache);
                 return _course;
             }
         }
@@ -122,7 +125,7 @@ IChatRepository chat)
         {
             get
             {
-                _section ??= new SectionRepository(_context, _mapper);
+                _section ??= new SectionRepository(_context, _mapper,_memoryCache);
                 return _section;
             }
         }

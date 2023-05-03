@@ -25,8 +25,6 @@ namespace ResearchersPlatform_BAL.Repositories
         public async Task<ResearcherViewModel?> GetSingleResearcherByIdAsync(Guid researcherId, bool trackChanges)
         {
             var resercher = await FindByCondition(r => r.Id == researcherId, trackChanges)
-            .Include(i => i.Ideas)
-            .Include(i => i.IdeasLeader)
             .Include(i => i.Papers)
             .Include(i => i.SpecalityObject)
             .ProjectTo<ResearcherDto>(_mapper.ConfigurationProvider)
@@ -42,10 +40,8 @@ namespace ResearchersPlatform_BAL.Repositories
                 FirstName = student!.FirstName,
                 LastName = student.LastName,
                 StudentId = student.Id,
-                Ideas = resercher.Ideas,
                 Points = resercher.Points,
                 Level = resercher.Level,
-                IdeasLeader = resercher!.IdeasLeader,
                 Papers = resercher!.Papers,
                 Specality = resercher.SpecalityObject,
                 Badges = student!.Badges,//can be exception

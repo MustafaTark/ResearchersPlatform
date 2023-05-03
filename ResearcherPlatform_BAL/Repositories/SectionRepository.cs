@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Data;
@@ -16,14 +17,27 @@ namespace ResearchersPlatform_BAL.Repositories
     public class SectionRepository : GenericRepository<Section>,ISectionRepository
     {
         private readonly IMapper _mapper;
-        public SectionRepository(AppDbContext context,IMapper mapper) : base(context)
+        private readonly IMemoryCache _memoryCache;
+        public SectionRepository(AppDbContext context,IMapper mapper, IMemoryCache memoryCache) : base(context)
         {
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
         public async Task<IEnumerable<SectionDto>> GetSectionsToCourse(Guid courseId)
-           =>await FindByCondition(s=>s.CourseId==courseId,trackChanges:false)
-                .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+        {
+            string key = $"SectionsTo:{courseId}";
+            var sections = await _memoryCache.GetOrCreateAsync(
+                key,
+                async entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+                    return  await FindByCondition(s => s.CourseId == courseId, trackChanges: false)
+                                .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
+                                .ToListAsync();
+                }
+              );
+            return sections!;
+        } 
         
         public void CreateSectionsToCourse(Guid courseId,List<Section> sections)
         {
@@ -35,10 +49,18 @@ namespace ResearchersPlatform_BAL.Repositories
 
         public async Task<SectionDto?> GetSectionByIdAsync(Guid sectionId, bool trackChanges)
         {
-           
-          var section=  await FindByCondition(s => s.Id == sectionId, trackChanges)
-           .ProjectTo<SectionDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
-            return section;
+            string key = $"section:{sectionId}";
+            var sections = await _memoryCache.GetOrCreateAsync(
+                key,
+                async entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+                    return await FindByCondition(s => s.Id == sectionId, trackChanges)
+                               .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
+                               .FirstOrDefaultAsync();
+                }
+              );
+            return sections!;
         }
         
     }

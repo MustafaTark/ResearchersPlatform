@@ -12,8 +12,8 @@ using ResearchersPlatform_DAL.Data;
 namespace ResearchersPlatform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230401221553_AddManyToManyToTasks")]
-    partial class AddManyToManyToTasks
+    [Migration("20230502032134_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,43 @@ namespace ResearchersPlatform.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BadgeStudent", b =>
+                {
+                    b.Property<Guid>("BadgesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudentsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("BadgesId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("BadgeStudent");
+                });
+
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudentsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CoursesId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("CourseStudent");
+                });
+
             modelBuilder.Entity("IdeaResearcher", b =>
                 {
                     b.Property<Guid>("IdeasId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ParticipantsId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("ParticipantsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("IdeasId", "ParticipantsId");
 
@@ -65,6 +95,32 @@ namespace ResearchersPlatform.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c2225411-3b30-4c1e-8370-2421b2eefc5c",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "bdd75fb0-e3cd-4cc8-9087-b7fdd08a4d58",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "59de512a-c6d0-4210-8b55-3c5f27ae51ff",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "07c97ce5-b306-4efd-86af-323e7f27cd31",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -173,10 +229,25 @@ namespace ResearchersPlatform.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ResearcherTask", b =>
+            modelBuilder.Entity("NotificationResearcher", b =>
                 {
-                    b.Property<string>("ParticipantsId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("NotificationsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResearchersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("NotificationsId", "ResearchersId");
+
+                    b.HasIndex("ResearchersId");
+
+                    b.ToTable("NotificationResearcher");
+                });
+
+            modelBuilder.Entity("ResearcherTaskIdea", b =>
+                {
+                    b.Property<Guid>("ParticipantsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TasksId")
                         .HasColumnType("uniqueidentifier");
@@ -185,7 +256,7 @@ namespace ResearchersPlatform.Migrations
 
                     b.HasIndex("TasksId");
 
-                    b.ToTable("ResearcherTask");
+                    b.ToTable("ResearcherTaskIdea");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Answer", b =>
@@ -195,7 +266,11 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AnswerText")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCorrectAnswer")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -217,17 +292,10 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("StudentObjId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentObjId");
 
                     b.ToTable("Badges");
                 });
@@ -239,21 +307,26 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Brief")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Enroll")
+                    b.Property<int>("Enrollments")
                         .HasColumnType("int");
 
                     b.Property<string>("Hours")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Instructions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Objectives")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
@@ -262,14 +335,9 @@ namespace ResearchersPlatform.Migrations
                     b.Property<int>("SkillId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SkillId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Courses");
                 });
@@ -298,22 +366,91 @@ namespace ResearchersPlatform.Migrations
                     b.Property<int>("ParticipantsNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("ResearcherCreatorId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("SpecalityId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("SpecalityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("SpecalityObjId")
+                    b.Property<int>("TopicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResearcherCreatorId");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("SpecalityObjId");
+                    b.HasIndex("SpecalityId");
+
+                    b.HasIndex("TopicId");
 
                     b.ToTable("Ideas");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdeaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ResearcherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdeaId");
+
+                    b.HasIndex("ResearcherId");
+
+                    b.ToTable("Invitations");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Paper", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Citation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ResearcherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearcherId");
+
+                    b.ToTable("Papers");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Question", b =>
@@ -322,16 +459,11 @@ namespace ResearchersPlatform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CorrectAnswerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("DifficultyLevel")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("QuizId")
+                    b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Score")
@@ -350,19 +482,7 @@ namespace ResearchersPlatform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DifficultyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSuccessed")
-                        .HasColumnType("bit");
-
                     b.Property<int>("MaxScore")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("SkillId")
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("TimeLimit")
@@ -371,6 +491,117 @@ namespace ResearchersPlatform.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Quizzes");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.QuizResults", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsFinalQuiz")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccessed")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("QuizResults");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.RequestIdea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdeaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ResearcherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdeaId");
+
+                    b.HasIndex("ResearcherId");
+
+                    b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Researcher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecalityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Points");
+
+                    b.HasIndex("SpecalityId");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("Researchers");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Section", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Section");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Skill", b =>
@@ -382,6 +613,7 @@ namespace ResearchersPlatform.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -398,6 +630,7 @@ namespace ResearchersPlatform.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -405,7 +638,32 @@ namespace ResearchersPlatform.Migrations
                     b.ToTable("Specalities");
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Task", b =>
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.StudentQuizTrails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Trails")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentQuizTrails");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.TaskIdea", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -415,12 +673,14 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("IdeaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ParticipantsNumber")
@@ -434,6 +694,28 @@ namespace ResearchersPlatform.Migrations
                     b.HasIndex("IdeaId");
 
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MinmumPoints")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MinmumPoints");
+
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.User", b =>
@@ -511,20 +793,49 @@ namespace ResearchersPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid>("SectionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.FinalQuiz", b =>
+                {
+                    b.HasBaseType("ResearchersPlatform_DAL.Models.Quiz");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("FinalQuizzes", (string)null);
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.SectionQuiz", b =>
+                {
+                    b.HasBaseType("ResearchersPlatform_DAL.Models.Quiz");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("SectionQuizzes", (string)null);
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Student", b =>
@@ -535,31 +846,47 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Firstname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("Lastname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Trails")
-                        .HasColumnType("int");
 
                     b.ToTable("Students", (string)null);
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Researcher", b =>
+            modelBuilder.Entity("BadgeStudent", b =>
                 {
-                    b.HasBaseType("ResearchersPlatform_DAL.Models.Student");
+                    b.HasOne("ResearchersPlatform_DAL.Models.Badge", null)
+                        .WithMany()
+                        .HasForeignKey("BadgesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
+                    b.HasOne("ResearchersPlatform_DAL.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.ToTable("Researchers", (string)null);
+                    b.HasOne("ResearchersPlatform_DAL.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdeaResearcher", b =>
@@ -628,7 +955,22 @@ namespace ResearchersPlatform.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ResearcherTask", b =>
+            modelBuilder.Entity("NotificationResearcher", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Notification", null)
+                        .WithMany()
+                        .HasForeignKey("NotificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Researcher", null)
+                        .WithMany()
+                        .HasForeignKey("ResearchersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ResearcherTaskIdea", b =>
                 {
                     b.HasOne("ResearchersPlatform_DAL.Models.Researcher", null)
                         .WithMany()
@@ -636,7 +978,7 @@ namespace ResearchersPlatform.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResearchersPlatform_DAL.Models.Task", null)
+                    b.HasOne("ResearchersPlatform_DAL.Models.TaskIdea", null)
                         .WithMany()
                         .HasForeignKey("TasksId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -652,15 +994,6 @@ namespace ResearchersPlatform.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Badge", b =>
-                {
-                    b.HasOne("ResearchersPlatform_DAL.Models.Student", "StudentObj")
-                        .WithMany("Badges")
-                        .HasForeignKey("StudentObjId");
-
-                    b.Navigation("StudentObj");
-                });
-
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Course", b =>
                 {
                     b.HasOne("ResearchersPlatform_DAL.Models.Skill", "SkillObj")
@@ -669,10 +1002,6 @@ namespace ResearchersPlatform.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResearchersPlatform_DAL.Models.Student", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("StudentId");
-
                     b.Navigation("SkillObj");
                 });
 
@@ -680,25 +1009,153 @@ namespace ResearchersPlatform.Migrations
                 {
                     b.HasOne("ResearchersPlatform_DAL.Models.Researcher", "ResearcherCreator")
                         .WithMany("IdeasLeader")
-                        .HasForeignKey("ResearcherCreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("ResearchersPlatform_DAL.Models.Specality", "SpecalityObj")
                         .WithMany()
-                        .HasForeignKey("SpecalityObjId");
+                        .HasForeignKey("SpecalityId");
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Topic", "TopicObject")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ResearcherCreator");
 
                     b.Navigation("SpecalityObj");
+
+                    b.Navigation("TopicObject");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Invitation", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Idea", "IdeaObject")
+                        .WithMany()
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Researcher", "ResearcherObj")
+                        .WithMany("Invitations")
+                        .HasForeignKey("ResearcherId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("IdeaObject");
+
+                    b.Navigation("ResearcherObj");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Paper", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Researcher", "ResearcherObject")
+                        .WithMany("Papers")
+                        .HasForeignKey("ResearcherId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ResearcherObject");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Question", b =>
                 {
-                    b.HasOne("ResearchersPlatform_DAL.Models.Quiz", null)
+                    b.HasOne("ResearchersPlatform_DAL.Models.Quiz", "QuizObject")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId");
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuizObject");
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Task", b =>
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.QuizResults", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Quiz", "QuizObj")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Student", "StudentObj")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuizObj");
+
+                    b.Navigation("StudentObj");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.RequestIdea", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Idea", "IdeaObject")
+                        .WithMany()
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Researcher", "ResearcherObject")
+                        .WithMany("Requests")
+                        .HasForeignKey("ResearcherId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("IdeaObject");
+
+                    b.Navigation("ResearcherObject");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Researcher", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Specality", "SpecalityObject")
+                        .WithMany()
+                        .HasForeignKey("SpecalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Student", "StudentObj")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SpecalityObject");
+
+                    b.Navigation("StudentObj");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Section", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Course", "CourseObject")
+                        .WithMany("Sections")
+                        .HasForeignKey("CourseId");
+
+                    b.Navigation("CourseObject");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.StudentQuizTrails", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Student", "StudentObj")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Skill");
+
+                    b.Navigation("StudentObj");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.TaskIdea", b =>
                 {
                     b.HasOne("ResearchersPlatform_DAL.Models.Idea", "IdeaObject")
                         .WithMany("Tasks")
@@ -711,11 +1168,47 @@ namespace ResearchersPlatform.Migrations
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Video", b =>
                 {
-                    b.HasOne("ResearchersPlatform_DAL.Models.Course", null)
+                    b.HasOne("ResearchersPlatform_DAL.Models.Section", "SectionObject")
                         .WithMany("Videos")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("SectionObject");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.FinalQuiz", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Quiz", null)
+                        .WithOne()
+                        .HasForeignKey("ResearchersPlatform_DAL.Models.FinalQuiz", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Skill", "SkillObj")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SkillObj");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.SectionQuiz", b =>
+                {
+                    b.HasOne("ResearchersPlatform_DAL.Models.Quiz", null)
+                        .WithOne()
+                        .HasForeignKey("ResearchersPlatform_DAL.Models.SectionQuiz", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchersPlatform_DAL.Models.Section", "SectionObj")
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SectionObj");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Student", b =>
@@ -727,18 +1220,9 @@ namespace ResearchersPlatform.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Researcher", b =>
-                {
-                    b.HasOne("ResearchersPlatform_DAL.Models.Student", null)
-                        .WithOne()
-                        .HasForeignKey("ResearchersPlatform_DAL.Models.Researcher", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Course", b =>
                 {
-                    b.Navigation("Videos");
+                    b.Navigation("Sections");
                 });
 
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Idea", b =>
@@ -756,16 +1240,20 @@ namespace ResearchersPlatform.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Student", b =>
-                {
-                    b.Navigation("Badges");
-
-                    b.Navigation("Courses");
-                });
-
             modelBuilder.Entity("ResearchersPlatform_DAL.Models.Researcher", b =>
                 {
                     b.Navigation("IdeasLeader");
+
+                    b.Navigation("Invitations");
+
+                    b.Navigation("Papers");
+
+                    b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("ResearchersPlatform_DAL.Models.Section", b =>
+                {
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
+using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 
 namespace ResearchersPlatform.Controllers
@@ -48,7 +49,8 @@ namespace ResearchersPlatform.Controllers
             return Ok(quizDto);
         }
         [HttpPost("SectionQuiz/Submit")]
-        public async Task<IActionResult> AddSectionQuizResults([FromBody] QuizResultsForCreateDto resultDto)
+        public async Task<IActionResult> AddSectionQuizResults([FromBody] List<Guid> answersIds,
+            [FromQuery] QuizResultsForCreateDto resultDto)
         {
             var student = await _repositoryManager.Student.GetStudentByIdAsync(resultDto.StudentId!, trackChanges: false);
             if (student is null)
@@ -58,6 +60,8 @@ namespace ResearchersPlatform.Controllers
             if (!ModelState.IsValid || resultDto == null)
                 return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
             var result = _mapper.Map<QuizResults>(resultDto);
+            int score = _repositoryManager.FinalQuiz.GetScore(answersIds);
+            result.Score = score;
             _repositoryManager.SectionQuiz.Submit(result);
             await _repositoryManager.SaveChangesAsync();
             var resultToShow = _mapper.Map<QuizResultsDto>(result);
@@ -68,6 +72,13 @@ namespace ResearchersPlatform.Controllers
         {
             if (!ModelState.IsValid || finalQuizDto == null)
                 return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
+            
+            foreach(var question in finalQuizDto.Questions!)
+            {
+                bool isOneCorrectAnswer = _repositoryManager.FinalQuiz.IsValidatedCorrectAnswers(question.Answers!);
+                if(!isOneCorrectAnswer)
+                    return BadRequest($"Please Send One Correct Answer");
+            }
             var finalQuiz = _mapper.Map<FinalQuiz>(finalQuizDto);
             _repositoryManager.FinalQuiz.CreateQuiz(finalQuiz);
             await _repositoryManager.SaveChangesAsync();
@@ -97,16 +108,20 @@ namespace ResearchersPlatform.Controllers
             return Ok(quiz);
         }
         [HttpPost("FinalQuiz/Submit")]
-        public async Task<IActionResult> AddFinalQuizResults(QuizResultsForCreateDto resultDto, int skillId)
+        public async Task<IActionResult> AddFinalQuizResults([FromBody] List<Guid> answersIds,
+            [FromQuery]QuizResultsForCreateDto resultDto,
+            int skillId)
         {
             if (skillId.ToString().IsNullOrEmpty())
             {
                 return BadRequest("Skill ID field shouldn't be null or empty");
             }
-            if (!ModelState.IsValid || resultDto == null)
+            if (!ModelState.IsValid || answersIds == null)
                 return BadRequest($"Something Wrong in RequestIdea :{ModelState}");
 
             var result = _mapper.Map<QuizResults>(resultDto);
+            int score = _repositoryManager.FinalQuiz.GetScore(answersIds);
+            result.Score = score;
             _repositoryManager.FinalQuiz.Submit(result,skillId);
             await _repositoryManager.SaveChangesAsync();
             

@@ -12,7 +12,9 @@ namespace ResearchersPlatform_BAL.Contracts
     {
         
         void CreateQuiz(SectionQuiz sectionQuiz);
+        bool IsValidatedCorrectAnswers(ICollection<AnswerForCreateDto> answers);
         Task<SectionQuizDto> GetSingleQuizAsync(Guid sectionId, bool trackChanges);
+        int GetScore(List<Guid> answersIds);
         void Submit(QuizResults result);
     }
 }

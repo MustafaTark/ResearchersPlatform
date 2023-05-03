@@ -23,11 +23,13 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureIdentity<User>();
 builder.Services.ConfigureIdentity<Student>();
 builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers().AddJsonOptions(
   opt =>
       opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
 );
+builder.Services.AddMemoryCache();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

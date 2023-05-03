@@ -37,8 +37,11 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public async Task<bool> ValidateResearcher(Guid researcherId , Guid ideaId)
         {
-            var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == ideaId);
-            if (idea!.CreatorId == researcherId)
+            var ideaCreator = await _context.Ideas
+                .Where(i => i.Id == ideaId)
+                .Select(i=>i.CreatorId)
+                .FirstOrDefaultAsync();
+            if (ideaCreator == researcherId)
                 return false;
             return true;
         }

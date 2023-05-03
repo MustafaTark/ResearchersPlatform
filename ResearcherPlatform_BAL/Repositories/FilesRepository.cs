@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Data;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ResearchersPlatform_BAL.Repositories
 {
@@ -19,25 +21,47 @@ namespace ResearchersPlatform_BAL.Repositories
         private readonly AppDbContext _context;
         private readonly IFilesManager _filesManager;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
 
-
-        public FilesRepository(AppDbContext context, IFilesManager filesManager, IMapper mapper)
+        public FilesRepository(AppDbContext context, IFilesManager filesManager, IMapper mapper, IMemoryCache memoryCache)
         {
             _context = context;
             _filesManager = filesManager;
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
         public async Task<IEnumerable<VideoDto>> GetAllVideosToSection(Guid sectionId)
-          => await _context.Set<Video>().Where(v=>v.SectionId == sectionId)
-            .ProjectTo<VideoDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();   
+        {
+            string key = $"videosTo:{sectionId}";
+            var videos = await _memoryCache.GetOrCreateAsync(
+                key,
+                async entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+                   return await _context.Set<Video>()
+                                        .Where(v => v.SectionId == sectionId)
+                                        .ProjectTo<VideoDto>(_mapper.ConfigurationProvider)
+                                        .ToListAsync();
+                }
+              );
+            return videos!;
+        }   
 
         public async Task<FileStream> GetVideoToSection(int videoId)
         {
-           var url=await _context.Videos.Where(v=>v.Id== videoId)
-                .Select(v=>v.VideoUrl)
-                .SingleOrDefaultAsync();
-            return _filesManager.GetFile(url!);
+            string key = $"video:{videoId}";
+            var file = await _memoryCache.GetOrCreateAsync(
+                key,
+                async entry =>
+                {
+                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+                    var url = await _context.Videos.Where(v => v.Id == videoId)
+                                                   .Select(v => v.VideoUrl)
+                                                   .SingleOrDefaultAsync();
+                  return _filesManager.GetFile(url!);
+                }
+              );
+            return file!;
         }
 
         public void UploadVideoToSection(Guid sectionId,IFormFile video,string title)

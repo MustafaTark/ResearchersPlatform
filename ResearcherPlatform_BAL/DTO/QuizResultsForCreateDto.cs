@@ -12,6 +12,6 @@ namespace ResearchersPlatform_BAL.DTO
     {
         public Guid QuizId { get; set; }
         public string? StudentId { get; set; }
-        public int Score { get; set; }
+       
     }
 }

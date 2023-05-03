@@ -21,7 +21,18 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _mapper = mapper;
         }
-
+        public bool IsValidatedCorrectAnswers(ICollection<AnswerForCreateDto> answers)
+        {
+            int correctAnswers = 0;
+            foreach(var answer in answers)
+            {
+                if(answer.IsCorrectAnswer)
+                    correctAnswers++;
+            }
+            if (correctAnswers > 1)
+                return false;
+            return true;
+        }
         public void CreateQuiz(FinalQuiz quiz)
            => Create(quiz);
         public async Task<bool> IsValidateToFinalQuiz(int skillId, string studentId)
@@ -60,6 +71,25 @@ namespace ResearchersPlatform_BAL.Repositories
             Random random = new();
             int randomIndex = random.Next(quizes.Count);
             return quizes[randomIndex];
+        }
+        public int GetScore(List<Guid> answersIds)
+        {
+            int score = 0;
+            foreach(var answerId in answersIds)
+            {
+               var answer= _context.Answers.AsNoTracking()
+                    .Where(a => a.Id == answerId)
+                    .Select(a =>new { a.IsCorrectAnswer, a.QuestionId})
+                    .FirstOrDefault();
+                int questionScore = _context.Questions.AsNoTracking()
+                    .Where(q=>q.Id==answer!.QuestionId)
+                    .Select(q=>q.Score)
+                    .FirstOrDefault();
+                if(answer!.IsCorrectAnswer)
+                    score += questionScore;
+
+            }
+            return score;
         }
 
         public void Submit(QuizResults results,int skillId)

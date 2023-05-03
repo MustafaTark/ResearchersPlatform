@@ -12,7 +12,9 @@ namespace ResearchersPlatform_BAL.Contracts
     {
         Task<bool> IsValidateToFinalQuiz(int skillId, string studentId);
         void CreateQuiz(FinalQuiz quiz);
+        bool IsValidatedCorrectAnswers(ICollection<AnswerForCreateDto> answers);
         Task<FinalQuizDto> GetSingleFinalQuiz(int skillId,string studentId, bool trackChanges);
+        int GetScore(List<Guid> answersIds);
         void Submit (QuizResults results, int skillId);
         Task UpdateTrails(int skillId, string studentId);
     }

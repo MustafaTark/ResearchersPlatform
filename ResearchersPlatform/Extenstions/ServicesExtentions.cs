@@ -88,6 +88,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<RequestIdea>, RequestRepository>();
 
             services.AddScoped<IRepositoryManager,RepositoryManager>();
+            services.AddScoped<IChatRepository, ChatRepository>();
             services.AddScoped<IFilesManager, FilesManager>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IStudentRepository,StudentRepository>();

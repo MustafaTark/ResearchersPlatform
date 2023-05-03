@@ -17,8 +17,6 @@ namespace ResearchersPlatform_BAL.ViewModels
         public required string StudentId { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
-        public ICollection<Idea>? Ideas { get; set; }
-        public ICollection<Idea>? IdeasLeader { get; set; }
         public Specality? Specality { get; set; }
         public ICollection<Paper>? Papers { get; set; }
         public ICollection<Badge>? Badges { get; set; }

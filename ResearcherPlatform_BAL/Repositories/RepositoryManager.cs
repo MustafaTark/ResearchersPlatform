@@ -91,7 +91,7 @@ IChatRepository chat, IMemoryCache memoryCache)
         {
             get
             {
-                _task ??= new TaskRepository(_context);
+                _task ??= new TaskRepository(_context,_mapper);
                 return _task;
             }
         }

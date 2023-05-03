@@ -25,6 +25,7 @@ builder.Services.ConfigureIdentity<Student>();
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddSignalR();
 builder.Services.AddControllers().AddJsonOptions(
   opt =>
       opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles

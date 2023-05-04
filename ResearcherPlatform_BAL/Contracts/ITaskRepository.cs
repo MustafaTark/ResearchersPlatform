@@ -10,7 +10,6 @@ namespace ResearchersPlatform_BAL.Contracts
 {
     public interface ITaskRepository
     {
-        //void CreateTask(TaskIdea task);
         void UpdateTask(TaskIdea task);
         void DeleteTask(TaskIdea task);
         Task<IEnumerable<TaskDto?>> GetAllTasksForAnIdeaAsync(Guid ideaId, bool trackChanges);
@@ -19,7 +18,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task AssignParticipantsToTask(Guid ideaId , List<Guid> participantsIds);
         Task<int> IdeaParticipantNumber(Guid ideaId);
         Task<bool> ValidateTaskParticipants(List<Guid> participantsIds, Guid taskId);
-        //Task ValidateTaskParticipants(List<Guid> participantsIds, Guid taskId);
+        Task<bool> ValidateTaskSingleParticipant(Guid participantId, Guid taskId);
 
     }
 }

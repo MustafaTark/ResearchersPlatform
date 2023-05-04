@@ -355,24 +355,11 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Task with ID {taskId} doesn't exist in the database");
             }
-            var Ideaparticipants = await _repository.Researcher.GetAllIdeaParticipants(task.IdeaId);
-            if(Ideaparticipants is null)
-            {
-                return BadRequest($"Idea with ID {task.IdeaId} doesn't have any Participants yet");
-            }
-            foreach(var id in participantsIds)
-            {
-                var participant = Ideaparticipants.FirstOrDefault();
-                if(participant!.Id != id)
-                {
-                    return BadRequest($"Researcher with ID {participant.Id} doesn't belong to the Idea");
-                }
                 var validateParticipants = await _repository.Task.ValidateTaskParticipants(participantsIds, taskId);
-                if(validateParticipants)
-                    return BadRequest($"Participant with ID {id} is already assigned to the task");
+                if(!validateParticipants)
+                    return BadRequest($"one of the Participant is already assigned to the task");
                 await _repository.Task.AssignParticipantsToTask(taskId,participantsIds);
                 await _repository.SaveChangesAsync();
-            }
             return NoContent();
         }
     }

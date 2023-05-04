@@ -74,9 +74,17 @@ namespace ResearchersPlatform_BAL.Repositories
             foreach (var id in participantsIds)
             {
                 var taskParticipant = task!.Participants!.FirstOrDefault(i => i.Id == id);
-                if (taskParticipant == null)
+                if (taskParticipant != null)
                     return false;
             }
+            return true;
+        }
+        public async Task<bool> ValidateTaskSingleParticipant(Guid participantId, Guid taskId)
+        {
+            var task = await FindByCondition(p => p.Id == taskId,trackChanges: false).Include(t => t.Participants).FirstOrDefaultAsync();
+            var participant = task!.Participants!.FirstOrDefault(p => p.Id == participantId);
+                if (participant == null)
+                    return false;
             return true;
         }
     }

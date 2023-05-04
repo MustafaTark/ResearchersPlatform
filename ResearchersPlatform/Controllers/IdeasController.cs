@@ -367,7 +367,7 @@ namespace ResearchersPlatform.Controllers
                 {
                     return BadRequest($"Researcher with ID {participant.Id} doesn't belong to the Idea");
                 }
-                var validateParticipants = await _repository.Task.ValidateTaskParticipantsBool(participantsIds, taskId);
+                var validateParticipants = await _repository.Task.ValidateTaskParticipants(participantsIds, taskId);
                 if(validateParticipants)
                     return BadRequest($"Participant with ID {id} is already assigned to the task");
                 await _repository.Task.AssignParticipantsToTask(taskId,participantsIds);

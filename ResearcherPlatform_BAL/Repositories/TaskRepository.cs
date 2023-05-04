@@ -68,7 +68,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 return false;
             return true;
         }
-        public async Task<bool> ValidateTaskParticipantsBool(List<Guid> participantsIds, Guid taskId)
+        public async Task<bool> ValidateTaskParticipants(List<Guid> participantsIds, Guid taskId)
         {
             var task = await FindByCondition(p => p.Id == taskId, trackChanges: false).Include(p => p.Participants).FirstOrDefaultAsync();
             foreach (var id in participantsIds)

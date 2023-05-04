@@ -233,7 +233,7 @@ namespace ResearchersPlatform.Controllers
         //[SwaggerOperation("GetVideoById")]
         //[SwaggerResponse(StatusCodes.Status200OK, "The video file", typeof(FileStreamResult))]
         //[SwaggerResponse(StatusCodes.Status404NotFound, "The video file could not be found")]
-        [EnableCors("_myAllowSpecificOrigins")]
+       // [EnableCors("_myAllowSpecificOrigins")]
         public async Task<IActionResult> GetVideo(int videoId)
         {
             

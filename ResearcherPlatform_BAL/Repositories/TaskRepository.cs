@@ -48,10 +48,10 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public async Task AssignParticipantsToTask(Guid taskId,List<Guid> participantsIds)
         {
-            var task = await FindByCondition(t => t.Id == taskId, trackChanges: false)
+            var task = await FindByCondition(t => t.Id == taskId, trackChanges: true)
                             .Include(t => t.Participants)
                             .FirstOrDefaultAsync();
-            var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Tasks.FirstOrDefault(t => t.Id == taskId)!.Id == taskId);
+            var idea = await _context.Ideas.Include(p=> p.Participants).FirstOrDefaultAsync(i => i.Tasks.FirstOrDefault(t => t.Id == taskId)!.Id == taskId);
             foreach (var id in participantsIds)
             { 
                // await ValidateTaskParticipants(participantsIds, taskId);

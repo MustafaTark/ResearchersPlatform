@@ -23,8 +23,10 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public void CreateIdea(Idea idea, Guid creatorId)
         {
+            var researcher = _context.Researchers.FirstOrDefault(r => r.Id == creatorId);
             idea.CreatorId = creatorId;
             idea.ParticipantsNumber = 1;
+            idea.Participants.Add(researcher!);
             Create(idea);
         }
         public void UpdateIdea(Idea idea) => Update(idea);
@@ -110,10 +112,6 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public async Task<bool> CheckResearcherIdeasNumber(Guid researcherId)
         {
-            //var researcher = await _context.Researchers
-            //    .Include(r => r.Ideas)
-            //    .FirstOrDefaultAsync(r => r.Id == researcherId);
-            //var researcherIdeas = await _context.Researchers.Where(r => r.Id == researcherId).Select(r => r.Ideas).FirstOrDefaultAsync();
             var ideas = await FindByCondition(i => i.CreatorId == researcherId, trackChanges: false).ToListAsync();
             if (ideas.Count >= 2)
                 return false;

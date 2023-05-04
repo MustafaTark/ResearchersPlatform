@@ -59,14 +59,16 @@ namespace ResearchersPlatform_BAL.Repositories
         public void CreatePapersToResearcher(Guid researcherId, List<Paper> papers)
         {
             var researcher =  FindByCondition(s => s.Id == researcherId, trackChanges: true)
-                                  .FirstOrDefault();
+                .Include(p => p.Papers)
+                .FirstOrDefault();
             foreach (var paper in papers)
             {
                 researcher!.Papers.Add(paper);
             }
-            int points = papers.Count / 2;
-           var pointscheck=researcher!.Points+points;
-            researcher.Level = pointscheck switch
+            
+            int points = researcher!.Papers.Count / 2;
+            researcher.Points = points;
+            researcher.Level = researcher.Points switch
             {
                 1 or 2 or 3 => Level.Beginner,
                 4 or 5 or 6 => Level.Intermediate,

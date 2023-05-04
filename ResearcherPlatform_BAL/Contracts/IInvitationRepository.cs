@@ -14,7 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<InvitationDto?> GetInvitationById(Guid invitationid,bool trackChanges);
         Task<InvitationDto?> GetInvitationByIdeaId(Guid ideaId, bool trackChanges);
         Task<IEnumerable<InvitationDto?>> GetAllInvitationsForResearcher(Guid researcherId,bool trackChanges);
-
+        Task<IEnumerable<InvitationDto>> GetAllInvitationsForIdea(Guid ideaId, bool trackChanges);
         void CreateInvitations(Guid ideaId , List<Guid> researcherIds);
         Task SendInvitation(Guid invitationId , Guid ideaId, List<Guid> researcherIds);
         Task<bool> ValidationAcception(Guid invitationId, Guid researcherId);

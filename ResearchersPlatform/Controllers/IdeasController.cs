@@ -64,19 +64,20 @@ namespace ResearchersPlatform.Controllers
             }
         }
         [HttpGet("Invitations/{ideaId}")]
-        public async Task<IActionResult> GetInvitationForIdea(Guid ideaId)
+        public async Task<IActionResult> GetAllInvitationsForIdea(Guid ideaId)
         {
             var idea = await _repository.Idea.GetIdeaAsync(ideaId, trackChanges: false);
             if (idea is null)
             {
                 return NotFound($"Idea with ID {ideaId} doesn't exist in the database");
             }
-            var invitation = await _repository.Invitation.GetInvitationByIdeaId(ideaId, trackChanges: false);
+            var invitation = await _repository.Invitation.GetAllInvitationsForIdea(ideaId, trackChanges: false);
             if (invitation is null)
             {
                 return NotFound($"Idea with ID {ideaId} doesn't have any invitations");
             }
-            return Ok(invitation);
+            var invitationEntity = _mapper.Map<IEnumerable<InvitationDto>>(invitation);
+            return Ok(invitationEntity);
         }
         [HttpGet("SingleIdea/{ideaId}")]
         public async Task<IActionResult> GetIdeaById(Guid ideaId)
@@ -176,6 +177,11 @@ namespace ResearchersPlatform.Controllers
             var checkIdeaParticipants = await _repository.Idea.CheckParticipantsNumber(invitation.IdeaId);
             if(!checkIdeaParticipants)
                 return BadRequest($"Idea with ID {invitation.IdeaId} is full of participants !");
+            var validateResearcher = await _repository.Idea.ValidateResearcherForIdea(invitation.IdeaId, researcherId);
+            if (validateResearcher)
+            {
+                return BadRequest($"Researcher with ID {researcherId} has already joined to the idea");
+            }
             await _repository.Invitation.AcceptInvitation(invitationId, researcherId);
             //await _repository.Invitation.DeleteInvitation(invitationId, researcherId);
             await _repository.SaveChangesAsync();
@@ -233,7 +239,7 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             return NoContent();
         }
-        [HttpPost("Requests/{requestId}/{researcherId}")]
+        [HttpPost("Requests/AcceptRequest/{requestId}/{researcherId}")]
         public async Task<IActionResult> AcceptRequest(Guid requestId , Guid researcherId)
         {
             var request = await _repository.Request.GetRequestById(requestId, trackChanges: false);
@@ -262,7 +268,7 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             return NoContent();
         }
-        [HttpGet("Request/{ideaId}")]
+        [HttpGet("Requests/{ideaId}")]
         public async Task<IActionResult> GetAllRequestsForIdea(Guid ideaId)
         {
             var idea = await _repository.Idea.GetIdeaAsync(ideaId,trackChanges: false);
@@ -346,20 +352,24 @@ namespace ResearchersPlatform.Controllers
         [HttpPost("Tasks/Participants/{taskId}")]
         public async Task<IActionResult> AssignParticipantsToTask(Guid taskId , [FromBody] List<Guid> participantsIds)
         {
-            if(participantsIds.ToString().IsNullOrEmpty())
+            if(!ModelState.IsValid)
             {
-                return BadRequest("Participant Ids should not be null or empty");
+                return UnprocessableEntity(ModelState);
             }
             var task = await _repository.Task.GetTaskByIdAsync(taskId, trackChanges: true);
             if (task is null)
             {
                 return NotFound($"Task with ID {taskId} doesn't exist in the database");
             }
-                var validateParticipants = await _repository.Task.ValidateTaskParticipants(participantsIds, taskId);
-                if(!validateParticipants)
-                    return BadRequest($"one of the Participant is already assigned to the task");
-                await _repository.Task.AssignParticipantsToTask(taskId,participantsIds);
-                await _repository.SaveChangesAsync();
+            if(task.ParticipantsNumber < participantsIds.Count)
+            {
+                return BadRequest($"Allowd Participants count is {task.ParticipantsNumber}");
+            }
+            var validateParticipants = await _repository.Task.ValidateTaskParticipants(participantsIds, taskId);
+            if(!validateParticipants)
+                return BadRequest($"one of the Participant is already assigned to the task");
+            await _repository.Task.AssignParticipantsToTask(taskId,participantsIds);
+            await _repository.SaveChangesAsync();
             return NoContent();
         }
     }

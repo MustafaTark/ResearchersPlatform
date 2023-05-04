@@ -29,6 +29,10 @@ namespace ResearchersPlatform_BAL.Repositories
             => await FindByCondition(i => i.IdeaId == ideaId, trackChanges)
             .ProjectTo<InvitationDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+        public async Task<IEnumerable<InvitationDto>> GetAllInvitationsForIdea(Guid ideaId , bool trackChanges)
+            => await FindByCondition(i => i.IdeaId == ideaId , trackChanges)
+            .ProjectTo<InvitationDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
         public async Task<IEnumerable<InvitationDto?>> GetAllInvitationsForResearcher(Guid researcherId, bool trackChanges)
             => await FindByCondition(i => i.ResearcherId== researcherId , trackChanges)
             .ProjectTo<InvitationDto>(_mapper.ConfigurationProvider).ToListAsync();

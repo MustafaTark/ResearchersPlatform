@@ -35,9 +35,6 @@ namespace ResearchersPlatform_BAL.Repositories
                          .Where(v => v.SectionId == sectionId)
                          .ProjectTo<VideoDto>(_mapper.ConfigurationProvider)
                          .ToListAsync();
-             
-           
-
         public async Task<FileStream> GetVideoToSection(int videoId)
         {
              var url = await _context.Videos.Where(v => v.Id == videoId)

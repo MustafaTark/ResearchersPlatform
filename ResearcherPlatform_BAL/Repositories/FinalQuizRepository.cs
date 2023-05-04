@@ -64,6 +64,7 @@ namespace ResearchersPlatform_BAL.Repositories
         {
           
             var quizes = await FindByCondition(q => q.SkillId == skillId, trackChanges)
+                 .Include(q=>q.SkillObj)
                  .Include(s => s.Questions)
                  .ThenInclude(a => a.Answers)
                  .ProjectTo<FinalQuizDto>(_mapper.ConfigurationProvider)
@@ -102,6 +103,10 @@ namespace ResearchersPlatform_BAL.Repositories
             if (results.Score >= quiz!.MaxScore!)
             {
                 results.IsSuccessed = true;
+                var studenTrails =  _context.StudentQuizTrails
+                                          .Where(s => s.StudentId == results.StudentId
+                                                                     && s.SkillId == skillId).ToList();
+                studenTrails.Clear();
                 CreateBadge(skillId,results.StudentId);
                 InitiateResearcher(results.StudentId);
             }

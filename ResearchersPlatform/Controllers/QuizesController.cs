@@ -126,6 +126,7 @@ namespace ResearchersPlatform.Controllers
             await _repositoryManager.SaveChangesAsync();
             
             var resultToShow = _mapper.Map<QuizResultsDto>(result);
+           
             return Ok(resultToShow);
         }
 

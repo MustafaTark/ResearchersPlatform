@@ -37,9 +37,9 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest($"Researcher With ID {researcherId} doesn't exist in this Idea");
             }
            _repositoryManager.Chat.CreateIdeaMessage(ideaId, researcherId, message);
+            await _repositoryManager.SaveChangesAsync();
            await  _discussionHub.Clients.All.ReceiveMessage(message);
             return Ok(message);
-           // _discussionHub.Clients.Clients(researcherId.ToString());
         } 
         [HttpPost("Task/{ideaId}")]
         public async Task<IActionResult> PostMessageToTask(Guid taskId,
@@ -50,15 +50,15 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Researcher With ID {researcherId} doesn't exist in the database");
             }
-           //bool isPartcipate= await _repositoryManager.Task.ValidateTaskParticipants(ideaId, researcherId);
-           // if(!isPartcipate)
-           // {
-           //     return BadRequest($"Researcher With ID {researcherId} doesn't exist in this Idea");
-           // }
-           //_repositoryManager.Chat.CreateIdeaMessage(ideaId, researcherId, message);
-           await  _chatHub.Clients.All.ReceiveMessage(message);
+            bool isPartcipate = await _repositoryManager.Task.ValidateTaskSingleParticipant(researcherId, taskId);
+            if (!isPartcipate)
+            {
+                return BadRequest($"Researcher With ID {researcherId} doesn't exist in this Idea");
+            }
+            _repositoryManager.Chat.CreateTaskMessage(taskId, researcherId, message);
+            await _repositoryManager.SaveChangesAsync();
+            await  _chatHub.Clients.All.ReceiveMessage(message);
             return Ok(message);
-           // _discussionHub.Clients.Clients(researcherId.ToString());
         }
         [HttpGet("Discussion/{ideaId})")]
         public async Task<IActionResult> GetMessagesToIdea(Guid ideaId)

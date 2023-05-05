@@ -26,7 +26,7 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             var resercher = await FindByCondition(r => r.Id == researcherId, trackChanges)
              .Include(i => i.SpecalityObject)
-            .Include(i => i.Papers).ProjectTo<PaperDto>(_mapper.ConfigurationProvider)
+            .Include(i => i.Papers)
             .ProjectTo<ResearcherDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
             var student = await _context.Students

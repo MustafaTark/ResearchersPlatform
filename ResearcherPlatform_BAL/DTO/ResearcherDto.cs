@@ -17,6 +17,6 @@ namespace ResearchersPlatform_BAL.DTO
         public ICollection<Idea>? Ideas { get; set; }
         public ICollection<Idea>? IdeasLeader { get; set; }
         public Specality? SpecalityObject { get; set; }
-        public ICollection<Paper>? Papers { get; set; }
+        public ICollection<PaperDto>? Papers { get; set; }
     }
 }

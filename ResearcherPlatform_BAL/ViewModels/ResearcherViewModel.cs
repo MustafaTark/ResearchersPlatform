@@ -18,7 +18,7 @@ namespace ResearchersPlatform_BAL.ViewModels
         public Level Level { get; set; }
         public int Points { get; set; }
         public Specality? Specality { get; set; }
-        public ICollection<Paper>? Papers { get; set; }
-        public ICollection<Badge>? Badges { get; set; }
+        public ICollection<PaperDto>? Papers { get; set; }
+        public ICollection<BadgeDto>? Badges { get; set; }
     }
 }

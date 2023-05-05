@@ -44,9 +44,16 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound();
             }
-            var quizDto = await _repositoryManager.SectionQuiz
-                                                  .GetSingleQuizAsync(sectionId, trackChanges: false);
-            return Ok(quizDto);
+            try{
+                var quizDto = await _repositoryManager.SectionQuiz
+                                                 .GetSingleQuizAsync(sectionId, trackChanges: false);
+                return Ok(quizDto);
+            }
+            catch(IndexOutOfRangeException ex)
+            {
+                return BadRequest($"Not Quizes Available To Section {sectionId} message:{ex}");
+            }
+           
         }
         [HttpPost("SectionQuiz/Submit")]
         public async Task<IActionResult> AddSectionQuizResults([FromBody] List<Guid> answersIds,

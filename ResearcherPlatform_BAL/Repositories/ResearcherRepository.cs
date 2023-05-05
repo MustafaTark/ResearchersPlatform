@@ -25,13 +25,15 @@ namespace ResearchersPlatform_BAL.Repositories
         public async Task<ResearcherViewModel?> GetSingleResearcherByIdAsync(Guid researcherId, bool trackChanges)
         {
             var resercher = await FindByCondition(r => r.Id == researcherId, trackChanges)
-            .Include(i => i.Papers)
-            .Include(i => i.SpecalityObject)
+             .Include(i => i.SpecalityObject)
+            .Include(i => i.Papers).ProjectTo<PaperDto>(_mapper.ConfigurationProvider)
             .ProjectTo<ResearcherDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
             var student = await _context.Students
-                .Include(s => s.Badges)
+               
                 .Where(s => s.Id == resercher!.StudentId)
+                .Include(s => s.Badges).ProjectTo<BadgeDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
                 .Select(s => new { Id = s.Id, Badges = s.Badges, FirstName = s.Firstname, LastName = s.Lastname })
                 .FirstOrDefaultAsync();
             var resercherVM = new ResearcherViewModel
@@ -39,7 +41,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 Id = resercher!.Id,
                 FirstName = student!.FirstName,
                 LastName = student.LastName,
-                StudentId = student.Id,
+                StudentId = student.Id!,
                 Points = resercher.Points,
                 Level = resercher.Level,
                 Papers = resercher!.Papers,
@@ -65,9 +67,9 @@ namespace ResearchersPlatform_BAL.Repositories
             {
                 researcher!.Papers.Add(paper);
             }
-            
+            _context.SaveChanges();
             int points = researcher!.Papers.Count / 2;
-            researcher.Points = points;
+            researcher.Points =1+ points;
             researcher.Level = researcher.Points switch
             {
                 1 or 2 or 3 => Level.Beginner,
@@ -75,7 +77,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 7 or 8 => Level.Professional,
                 _ => Level.Expert // this is the default case
             };
-            researcher!.Points += points;
+           
         }
         public async void AddSpeciality(Guid researcherId,int specialityId)
         {

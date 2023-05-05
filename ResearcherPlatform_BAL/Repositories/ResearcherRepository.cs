@@ -32,7 +32,7 @@ namespace ResearchersPlatform_BAL.Repositories
             var student = await _context.Students
                
                 .Where(s => s.Id == resercher!.StudentId)
-                .Include(s => s.Badges).ProjectTo<BadgeDto>(_mapper.ConfigurationProvider)
+                .Include(s => s.Badges)
                 .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
                 .Select(s => new { Id = s.Id, Badges = s.Badges, FirstName = s.Firstname, LastName = s.Lastname })
                 .FirstOrDefaultAsync();

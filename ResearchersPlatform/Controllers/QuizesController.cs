@@ -55,6 +55,28 @@ namespace ResearchersPlatform.Controllers
             }
            
         }
+        [HttpGet("IsSuccessedSectionQuiz/{sectionId}")]
+        public async Task<IActionResult> CheckSuccessInSectionQuiz(Guid sectionId, string studentId)
+        {
+            var section = await _repositoryManager.Section
+                                                .GetSectionByIdAsync(sectionId, trackChanges: false);
+            if (section is null)
+            {
+                return NotFound();
+            }
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId!, trackChanges: false);
+            if (student is null)
+            {
+                return BadRequest($"Student with ID: {studentId!} doesn't exist in the database ");
+            }
+            bool isSuccessed = await _repositoryManager.SectionQuiz.IsSuccessedInSection(sectionId, studentId);
+            return Ok(
+                new
+                {
+                    IsSuccessed = isSuccessed
+                }
+              );
+        }
         [HttpPost("SectionQuiz/Submit")]
         public async Task<IActionResult> AddSectionQuizResults([FromBody] List<Guid> answersIds,
             [FromQuery] QuizResultsForCreateDto resultDto)
@@ -113,6 +135,22 @@ namespace ResearchersPlatform.Controllers
                                                  .GetSingleFinalQuiz(skillId, studentId,trackChanges:false);
             await _repositoryManager.FinalQuiz.UpdateTrails(skillId, studentId);
             return Ok(quiz);
+        }
+        [HttpGet("IsSuccessedFinalQuiz/{skillId}")]
+        public async Task<IActionResult> CheckSuccessInFinalQuiz(int skillId, string studentId)
+        {
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId!, trackChanges: false);
+            if (student is null)
+            {
+                return BadRequest($"Student with ID: {studentId!} doesn't exist in the database ");
+            }
+            bool isSuccessed = await _repositoryManager.FinalQuiz.IsSuccessedInSkill(skillId, studentId);
+            return Ok(
+                new
+                {
+                    IsSuccessed = isSuccessed
+                }
+              );
         }
         [HttpPost("FinalQuiz/Submit")]
         public async Task<IActionResult> AddFinalQuizResults([FromBody] List<Guid> answersIds,

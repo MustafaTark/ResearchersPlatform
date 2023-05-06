@@ -15,6 +15,7 @@ namespace ResearchersPlatform_BAL.Contracts
         bool IsValidatedCorrectAnswers(ICollection<AnswerForCreateDto> answers);
         Task<SectionQuizDto> GetSingleQuizAsync(Guid sectionId, bool trackChanges);
         int GetScore(List<Guid> answersIds);
+        Task<bool> IsSuccessedInSection(Guid sectionId, string studentId);
         void Submit(QuizResults result);
     }
 }

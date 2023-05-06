@@ -49,6 +49,21 @@ namespace ResearchersPlatform_BAL.Repositories
             return quizes[randomIndex];
 
         }
+        public async Task<bool> IsSuccessedInSection(Guid sectionId, string studentId)
+        {
+            var results = await _context.QuizResults
+           .Where(r => r.StudentId == studentId && !r.IsFinalQuiz && r.IsSuccessed )
+           .ToListAsync();
+            if (results is null)
+                return false;
+            foreach (var result in results)
+            {
+                var quiz = FindByCondition(q => q.Id == result.QuizId && q.SectionId == sectionId, false);
+                if (quiz is not null)
+                    return true;
+            }
+            return false;
+        }
         public int GetScore(List<Guid> answersIds)
         {
             int score = 0;

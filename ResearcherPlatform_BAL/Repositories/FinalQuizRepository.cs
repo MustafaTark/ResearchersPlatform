@@ -110,6 +110,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 CreateBadge(skillId,results.StudentId);
                 InitiateResearcher(results.StudentId);
             }
+            results.IsFinalQuiz = true;
             _context.QuizResults.Add(results);
             
         }
@@ -130,6 +131,23 @@ namespace ResearchersPlatform_BAL.Repositories
                                           .ExecuteUpdateAsync(t => t.SetProperty(s => s.Trails,
                                                                                     s => s.Trails - 1));
             }
+        }
+        public async Task<bool> IsSuccessedInSkill(int skillId, string studentId)
+        {
+            var results =await _context.QuizResults
+           .Where(r => r.StudentId == studentId && r.IsFinalQuiz && r.IsSuccessed)
+           .ToListAsync();
+            if(results is null)
+                return false;
+            foreach(var result in results)
+            {
+                var quiz = FindByCondition(q => q.Id == result.QuizId && q.SkillId == skillId, false);
+                if (quiz is not null)
+                    return true;
+            }
+            return false;
+            
+           
         }
         private void CreateBadge(int skillId, string studentId)
         {

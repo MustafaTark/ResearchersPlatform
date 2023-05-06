@@ -30,11 +30,11 @@ namespace ResearchersPlatform.Controllers
             var researcherId = await _repository.Researcher.GetResearcherByStudentId(studentId);
             if(researcherId is null)
             {
-                return NotFound($"Student with ID {studentId} doesn't exist in the database");
+                return NotFound($"Student with ID {studentId} not exist in the database");
             }
             return Ok(
                 new {
-                    ResearcherId= researcherId,
+                    ResearcherId= researcherId
                 });
 
         }

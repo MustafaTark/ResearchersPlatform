@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ResearchersPlatform_DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace ResearchersPlatform_BAL.DTO
         public string? Objectives { get; set; }
         public string? Hours { get; set; }
         public string? Brief { get; set; }
+        public Skill? SkillObj { get; set; }
 
     }
 }

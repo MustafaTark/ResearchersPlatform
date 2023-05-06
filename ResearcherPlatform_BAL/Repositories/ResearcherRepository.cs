@@ -46,7 +46,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 Level = resercher.Level,
                 Papers = resercher!.Papers,
                 Specality = resercher.SpecalityObject,
-                Badges = student!.Badges,//can be exception
+                Badges = student!.Badges,
             };
             return resercherVM;
         }
@@ -101,7 +101,14 @@ namespace ResearchersPlatform_BAL.Repositories
              .ProjectTo<SingleResearcherDto>(_mapper.ConfigurationProvider)
              .ToListAsync();
         public async Task<string?> GetResearcherByStudentId(string studentId)
-            => await FindByCondition(r => r.StudentId == studentId,trackChanges:false).Select(r => r.Id.ToString()).FirstOrDefaultAsync();
+            => await FindByCondition(r => r.StudentId == studentId,trackChanges:false)
+            .Select(r => r.Id.ToString()).FirstOrDefaultAsync();
+        public async Task<ICollection<Skill>> GetSkillsAsync()
+            => await _context.Skills.AsNoTracking().ToListAsync();
+          public async Task<ICollection<Specality>> GetSpecalitiesAsync()
+            => await _context.Specalities.AsNoTracking().ToListAsync();
+        public async Task<ICollection<Topic>> GetTopicsAsync()
+            => await _context.Topics.AsNoTracking().ToListAsync();
 
     }
 }

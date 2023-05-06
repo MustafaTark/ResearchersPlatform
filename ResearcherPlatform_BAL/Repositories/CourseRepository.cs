@@ -32,6 +32,7 @@ namespace ResearchersPlatform_BAL.Repositories
                     entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
                     return await FindByCondition(c => c.Id == courseId, trackChanges)
                                 .Include(v => v.Sections)
+                                .Include(c=>c.SkillObj)
                                 .FirstOrDefaultAsync();
                 }
               );
@@ -39,13 +40,14 @@ namespace ResearchersPlatform_BAL.Repositories
             
         }
         public async Task<IEnumerable<Course?>> GetAllCoursesAsync()
-         =>await FindAll(trackChanges: false).ToListAsync();
+         =>await FindAll(trackChanges: false).Include(c=>c.SkillObj).ToListAsync();
                
         
         public async Task<IEnumerable<Course?>> GetAllCoursesForStudentAsync(string studentId, bool trackChanges)
            =>await FindByCondition(s => s.Students
                                     .FirstOrDefault(e => e.Id == studentId)!
                                     .Id == studentId, trackChanges)
+                                    .Include(c => c.SkillObj)
                                     .ToListAsync();
         
      

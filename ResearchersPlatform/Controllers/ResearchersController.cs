@@ -186,6 +186,24 @@ namespace ResearchersPlatform.Controllers
             var IdeaEntities = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
             return Ok(IdeaEntities);
         }
+        [HttpGet("Skills")]
+        public async Task<IActionResult> GetSkills()
+        {
+            var skills = await _repository.Researcher.GetSkillsAsync();
+            return Ok(skills);
+        }  
+        [HttpGet("Specialties")]
+        public async Task<IActionResult> GetSpecialties()
+        {
+            var Specialties = await _repository.Researcher.GetSpecalitiesAsync();
+            return Ok(Specialties);
+        } 
+        [HttpGet("Topics")]
+        public async Task<IActionResult> GetTopics()
+        {
+            var topics = await _repository.Researcher.GetTopicsAsync();
+            return Ok(topics);
+        }
 
     }
 }

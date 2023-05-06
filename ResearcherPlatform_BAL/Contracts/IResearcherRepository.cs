@@ -20,6 +20,9 @@ namespace ResearchersPlatform_BAL.Contracts
         void CreatePapersToResearcher(Guid researcherId, List<Paper> papers);
         Task<IEnumerable<SingleResearcherDto>> GetAllIdeaParticipants(Guid ideaId);
         Task<string?> GetResearcherByStudentId(string studentId);
+        Task<ICollection<Skill>> GetSkillsAsync();
+        Task<ICollection<Specality>> GetSpecalitiesAsync();
+        Task<ICollection<Topic>> GetTopicsAsync();
 
     }
 }

@@ -32,7 +32,10 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Student with ID {studentId} doesn't exist in the database");
             }
-            return Ok(researcherId);
+            return Ok(
+                new {
+                    ResearcherId= researcherId,
+                });
 
         }
         [HttpDelete("{researcherId}")]

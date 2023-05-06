@@ -52,6 +52,8 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public async Task<IEnumerable<Researcher?>> GetAllResearchersAsync(bool trackChanges)
             => await FindAll(trackChanges)
+            .Include(s => s.StudentObj)
+            .Include(s => s.SpecalityObject)
             .ToListAsync();
         public void CreateSpecality(int specality,string studentId)
         {

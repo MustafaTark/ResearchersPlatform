@@ -57,6 +57,13 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(t => t.TopicObject)
             .Include(r => r.ResearcherCreator)
             .OrderBy(o => o.Deadline).ToListAsync();
+        public async Task<IEnumerable<IdeaDto>> GetAllIdeas(bool trackChanges)
+            => await FindAll(trackChanges)
+            .ProjectTo<IdeaDto>(_mapper.ConfigurationProvider)
+            //.Include(s => s.SpecalityObj)
+            //.Include(t => t.TopicObject)
+            //.Include(r => r.CreatorId)
+            .OrderBy(o => o.Deadline).ToListAsync();
         public async Task<bool> ValidateIdeaCreation(Guid researcherId)
         {
             var researcherPoints = await _context.Set<Researcher>()

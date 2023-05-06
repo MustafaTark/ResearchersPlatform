@@ -88,6 +88,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<Invitation>, InvitationRepository>();
             services.AddScoped<GenericRepository<RequestIdea>, RequestRepository>();
             services.AddScoped<GenericRepository<TaskIdea>, TaskRepository>();
+            services.AddScoped<GenericRepository<User>, AdminRepository>();
             //services.AddScoped<GenericRepository<ChatHub>, ChatRepository>();
 
 
@@ -109,6 +110,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IInvitationRepository, InvitationRepository>();
             services.AddScoped<ITaskRepository , TaskRepository>();
             services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
 
         }
     }

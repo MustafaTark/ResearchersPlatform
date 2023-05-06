@@ -15,6 +15,10 @@ namespace ResearchersPlatform_DAL.Configurations
             builder.Entity<Topic>().HasIndex(p => p.MinmumPoints);
             builder.Entity<Researcher>().HasIndex(r => r.Points);
             builder.Entity<Researcher>().HasIndex(r => r.StudentId).IsUnique();
+            builder.Entity<Topic>().HasIndex(n => n.Name).IsUnique();
+            builder.Entity<Skill>().HasIndex(n => n.Name).IsUnique();
+            builder.Entity<Specality>().HasIndex(n => n.Name).IsUnique();
+
 
         }
         public static void AddInhertanceTables(this ModelBuilder builder) 

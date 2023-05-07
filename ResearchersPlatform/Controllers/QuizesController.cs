@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -8,6 +9,7 @@ using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
 using System.Collections.Generic;
+using System.Data;
 using static System.Collections.Specialized.BitVector32;
 
 namespace ResearchersPlatform.Controllers
@@ -25,6 +27,7 @@ namespace ResearchersPlatform.Controllers
             _mapper = mapper;
         }
         [HttpPost("SectionQuiz")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddSectionQuiz([FromBody]SectionQuizForCreateDto sectionQuizDto)
         {
             if (!ModelState.IsValid || sectionQuizDto == null)
@@ -36,6 +39,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpGet("SectionQuiz/{sectionId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSectionQuiz(Guid sectionId)
         {
             var section = await _repositoryManager.Section
@@ -56,6 +60,7 @@ namespace ResearchersPlatform.Controllers
            
         }
         [HttpGet("IsSuccessedSectionQuiz/{sectionId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> CheckSuccessInSectionQuiz(Guid sectionId, string studentId)
         {
             var section = await _repositoryManager.Section
@@ -78,6 +83,7 @@ namespace ResearchersPlatform.Controllers
               );
         }
         [HttpPost("SectionQuiz/Submit")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> AddSectionQuizResults([FromBody] List<Guid> answersIds,
             [FromQuery] QuizResultsForCreateDto resultDto)
         {
@@ -97,6 +103,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(resultToShow);    
         }
         [HttpPost("FinalQuiz")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddFinalQuiz([FromBody] FinalQuizForCreateDto finalQuizDto)
         {
             if (!ModelState.IsValid || finalQuizDto == null)
@@ -115,6 +122,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpGet("FinalQuiz/{skillId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetFinalQuiz(int skillId, string studentId)
         {
             if (string.IsNullOrEmpty(studentId))
@@ -137,6 +145,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(quiz);
         }
         [HttpGet("IsSuccessedFinalQuiz/{skillId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> CheckSuccessInFinalQuiz(int skillId, string studentId)
         {
             var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId!, trackChanges: false);
@@ -153,6 +162,7 @@ namespace ResearchersPlatform.Controllers
               );
         }
         [HttpPost("FinalQuiz/Submit")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> AddFinalQuizResults([FromBody] List<Guid> answersIds,
             [FromQuery]QuizResultsForCreateDto resultDto,
             int skillId)

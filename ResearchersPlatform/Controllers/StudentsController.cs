@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
+using System.Data;
 
 namespace ResearchersPlatform.Controllers
 {
@@ -26,6 +28,7 @@ namespace ResearchersPlatform.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetAllStudents()
         {
             var student = await _repositoryManager.Student.GetAllStudentsAsync();
@@ -37,6 +40,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(studentDto);
         }
         [HttpGet("{studentId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetStudent(string studentId)
         {
             if(studentId.IsNullOrEmpty())
@@ -52,6 +56,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(studentDto);
         }
         [HttpPut("studentId")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateStudent([FromBody] StudentForUpdateDto student,
             string studentId)
         {
@@ -74,6 +79,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpDelete("studentId")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> DeleteStudent(string studentId)
         {
             if (studentId.IsNullOrEmpty())
@@ -90,6 +96,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("Courses")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStudentEnrolledCourses(string studentId)
         {
 

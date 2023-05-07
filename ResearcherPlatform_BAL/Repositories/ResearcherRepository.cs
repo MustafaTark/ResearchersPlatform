@@ -34,7 +34,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 .Where(s => s.Id == resercher!.StudentId)
                 .Include(s => s.Badges)
                 .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
-                .Select(s => new { Id = s.Id, Badges = s.Badges, FirstName = s.Firstname, LastName = s.Lastname })
+                //.Select(s => new { Id = s.Id, Badges = s.Badges, FirstName = s.Firstname, LastName = s.Lastname })
                 .FirstOrDefaultAsync();
             var resercherVM = new ResearcherViewModel
             {

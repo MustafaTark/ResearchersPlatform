@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_BAL.Repositories;
 using ResearchersPlatform_DAL.Models;
+using System.Data;
 
 namespace ResearchersPlatform.Controllers
 {
@@ -25,6 +27,7 @@ namespace ResearchersPlatform.Controllers
             _filesRepository= files;
         }
         [HttpGet]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetAllResearchers()
         {
             var researchers = await _repository.Researcher.GetAllResearchersAsync(trackChanges: false);
@@ -36,6 +39,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(researchersDto);
         }
         [HttpGet("ResearcherId/{studentId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetResearcherByStudentId(string studentId)
         {
             var researcherId = await _repository.Researcher.GetResearcherByStudentId(studentId);
@@ -50,6 +54,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpDelete("{researcherId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> DeleteResearcher(Guid researcherId)
         {
             if (researcherId.ToString().IsNullOrEmpty())
@@ -68,6 +73,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpPut("Speciality/{researcherId}/{specialityId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> AssignSpeciality(Guid researcherId,int specialityId)
         {
             var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId,trackChanges:true);
@@ -90,6 +96,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(response);
         }
         [HttpDelete("Speciality/{researcherId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSpeciality(Guid researcherId)
         {
             var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
@@ -102,6 +109,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpPost("Papers/{researcherId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> UploadPaper([FromBody] List<PaperForCreationDto> paperDto
             ,Guid researcherId)
         {
@@ -120,6 +128,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpPut("Papers/{paperId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdatePaper([FromBody] PaperDto paperDto, Guid paperId)
         {
             if(paperDto is null)
@@ -137,6 +146,7 @@ namespace ResearchersPlatform.Controllers
         }
 
         [HttpDelete("Papers/{paperId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> DeletePaper(Guid paperId)
         {
             var paper = await _repository.Paper.GetPaperByIdForDeletion(paperId, trackChanges: false);
@@ -149,6 +159,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("{researcherId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSingleResearcher(Guid researcherId)
         {
             var researcher = await _repository.Researcher.GetSingleResearcherByIdAsync(researcherId,trackChanges: false);
@@ -159,6 +170,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(researcher);
         }
         [HttpGet("Invitations/{researcherId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetResearcherInvitations(Guid researcherId)
         {
             var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
@@ -174,6 +186,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(invitation);
         }
         [HttpGet("Requests/{researcherId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetAllRequestsForResearcher(Guid researcherId)
         {
             var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
@@ -185,6 +198,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(requests);
         }
         [HttpGet("Ideas/{researcherId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetIdeasForResearcher(Guid researcherId)
         {
             var researcher = await _repository.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
@@ -201,18 +215,21 @@ namespace ResearchersPlatform.Controllers
             return Ok(IdeaEntities);
         }
         [HttpGet("Skills")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSkills()
         {
             var skills = await _repository.Researcher.GetSkillsAsync();
             return Ok(skills);
         }  
         [HttpGet("Specialties")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSpecialties()
         {
             var Specialties = await _repository.Researcher.GetSpecalitiesAsync();
             return Ok(Specialties);
         } 
         [HttpGet("Topics")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetTopics()
         {
             var topics = await _repository.Researcher.GetTopicsAsync();

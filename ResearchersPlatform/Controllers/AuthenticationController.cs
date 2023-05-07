@@ -14,12 +14,12 @@ namespace ResearchersPlatform.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IStudentRepository _studentRepository; 
         public AuthenticationController(
-            UserManager<Student> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository)
+            UserManager<User> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository)
         {
             _userManager = userManager;
             _authService = authService;

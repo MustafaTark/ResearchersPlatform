@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using ResearchersPlatform.Hubs;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.ViewModels;
+using System.Data;
 
 namespace ResearchersPlatform.Controllers
 {
@@ -23,6 +25,7 @@ namespace ResearchersPlatform.Controllers
             _repositoryManager = repositoryManager;
         }
         [HttpPost("Discussion/{ideaId}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostMessageToDiscussion(Guid ideaId,
             Guid researcherId, [FromBody] MessageViewModel message)
         {
@@ -42,6 +45,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(message);
         } 
         [HttpPost("Task")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostMessageToTask(Guid taskId,
             Guid researcherId, [FromBody] MessageViewModel message)
         {
@@ -61,12 +65,14 @@ namespace ResearchersPlatform.Controllers
             return Ok(message);
         }
         [HttpGet("Discussion/{ideaId})")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetMessagesToIdea(Guid ideaId)
         {
            var messages= await _repositoryManager.Chat.GetMessagesToIdea(ideaId);
             return Ok(messages);
         }[
         HttpGet("Task/{ideaId})")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetMessagesToTask(Guid taskId)
         {
            var messages= await _repositoryManager.Chat.GetMessagesToTasks(taskId);

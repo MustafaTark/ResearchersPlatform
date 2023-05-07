@@ -41,6 +41,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(courseDto);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCourse([FromBody] CourseForCreationDto course)
         {
             if(course is null)
@@ -56,6 +57,7 @@ namespace ResearchersPlatform.Controllers
                 );
         }
         [HttpGet("{courseId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetCourse(Guid courseId)
         {
             if (courseId.ToString().IsNullOrEmpty())
@@ -70,6 +72,7 @@ namespace ResearchersPlatform.Controllers
             var courseDto = _mapper.Map<CourseDto>(course);
             return Ok(courseDto);
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{courseId}")]
         public async Task<IActionResult> DeleteCourse(Guid courseId)
         {
@@ -87,6 +90,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpPut("{courseId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCourse([FromBody]CourseForUpdateDto course
             ,Guid courseId)
         {
@@ -109,6 +113,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpGet("Students")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllStudentsEnrolledInCourse(Guid courseId)
         {
             if (courseId.ToString().IsNullOrEmpty())
@@ -125,6 +130,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(studentDto);
         }
         [HttpPut("Enrollment")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> EnrollForACourse([FromBody] EnrollmentDto enrollment ,Guid courseId)
         {
             if(courseId.ToString().IsNullOrEmpty())
@@ -155,6 +161,7 @@ namespace ResearchersPlatform.Controllers
 
         }
         [HttpGet("SectionsToCourse")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSections(Guid courseId)
         {
             var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);
@@ -166,6 +173,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(sections);
         }
         [HttpPost("Sections")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> CreateSectionsToCourse(Guid courseId,
                                                        [FromBody]  List<SectionForCreateDto> sections)
         {
@@ -187,6 +195,7 @@ namespace ResearchersPlatform.Controllers
             await _repositoryManager.SaveChangesAsync();
             return NoContent();
         }
+        [Authorize(Roles = "Student,Admin")]
         [HttpGet("Sections/{sectionId}")]
         public async Task<IActionResult> GetSection(Guid sectionId)
         {
@@ -203,6 +212,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(section);
         }
         [HttpPost("Videos/{sectionId}"), DisableRequestSizeLimit]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> UploadVideos(Guid sectionId,
                                 [FromForm]  VideoForCreateDto video)
         {
@@ -229,6 +239,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("Videos/{videoId}")]
+        [Authorize(Roles = "Student,Admin")]
         [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Produces("video/mp4")]
@@ -239,6 +250,7 @@ namespace ResearchersPlatform.Controllers
             return new FileStreamResult(fileStream, "video/mp4");
         }
         [HttpGet("Sections/Videos/{sectionId}")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetVideosToSection(Guid sectionId)
         {
             var section = await _repositoryManager.Section

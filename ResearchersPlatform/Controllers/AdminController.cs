@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
+using System.Data;
 
 namespace ResearchersPlatform.Controllers
 {
@@ -63,6 +65,7 @@ namespace ResearchersPlatform.Controllers
             );
         }
         [HttpGet("Researchers")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetResearchersCount()
         {
             var researchersCount = _repository.Admin.ResearchersCount(trackChanges: false);
@@ -73,6 +76,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(researchersCount);
         }
         [HttpGet("Ideas/Count")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetIdeasCount()
         {
             var ideasCount = _repository.Admin.IdeasCount(trackChanges: false);
@@ -83,6 +87,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(ideasCount);
         }
         [HttpPost("Speciality")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddSpeciality([FromBody] SpecialityForCreationDto specialityDto)
         {
             if(specialityDto is null)
@@ -109,6 +114,7 @@ namespace ResearchersPlatform.Controllers
             }
         }
         [HttpPost("Topic")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddTopic([FromBody] TopicForCreationDto topicDto)
         {
             if (topicDto is null)
@@ -135,6 +141,7 @@ namespace ResearchersPlatform.Controllers
             }
         }
         [HttpPost("Skill")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddSkill([FromBody] SkillForCreationDto skillDto)
         {
             if (skillDto is null)

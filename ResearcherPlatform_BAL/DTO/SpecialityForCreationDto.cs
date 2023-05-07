@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_BAL.DTO
 {
-    public class SpecalityForCreationDto
+    public class SpecialityForCreationDto
     {
         public required string Name { get; set; }
 

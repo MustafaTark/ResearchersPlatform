@@ -24,6 +24,17 @@ namespace ResearchersPlatform.Controllers
             _mapper= mapper;
             _filesRepository= files;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllResearchers()
+        {
+            var researchers = await _repository.Researcher.GetAllResearchersAsync(trackChanges: false);
+            if(researchers is null)
+            {
+                return NotFound("There are no researchers in the database");
+            }
+            var researchersDto = _mapper.Map<IEnumerable<SingleResearcherDto>>(researchers);
+            return Ok(researchersDto);
+        }
         [HttpGet("ResearcherId/{studentId}")]
         public async Task<IActionResult> GetResearcherByStudentId(string studentId)
         {

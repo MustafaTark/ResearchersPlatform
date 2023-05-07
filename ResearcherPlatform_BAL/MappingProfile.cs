@@ -55,9 +55,8 @@ namespace ResearchersPlatform_BAL
             CreateMap<IdeaForCreateDTO, Idea>();
             CreateMap<Topic, TopicsDto>();
             CreateMap<Specality, SpecialityDto>();
-            CreateMap<SpecalityForCreationDto, Specality>();
+            CreateMap<SpecialityForCreationDto, Specality>();
             CreateMap<Paper, PaperDto>().ReverseMap();
-            CreateMap<Badge, BadgeDto>();
             CreateMap<PaperForCreationDto, Paper>();
             CreateMap<Researcher, ResearcherDto>();
             CreateMap<Researcher, SingleResearcherDto>();
@@ -69,6 +68,11 @@ namespace ResearchersPlatform_BAL
             CreateMap<TaskForCreateDto, TaskIdea>();
             CreateMap<TaskIdea, TaskDto>();
             CreateMap<TaskForParticipantsDto, TaskIdea>();
+            CreateMap<AdminForRegisterDto, User>();
+            CreateMap<SkillForCreationDto, Skill>();
+            CreateMap<TopicForCreationDto, Topic>();
+
+
         }
     }
 }

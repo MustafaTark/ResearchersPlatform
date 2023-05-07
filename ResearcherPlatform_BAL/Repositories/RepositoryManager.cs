@@ -26,6 +26,7 @@ namespace ResearchersPlatform_BAL.Repositories
         private IRequestRepository _request;
         private IInvitationRepository _invitation;
         private IChatRepository _chat;
+        private IAdminRepository _admin;
         private readonly IMemoryCache _memoryCache;
         private readonly IMapper _mapper;
         public RepositoryManager(AppDbContext context 
@@ -41,8 +42,9 @@ namespace ResearchersPlatform_BAL.Repositories
             , ISpecialityRepository speciality
             , IPaperRepository paper
             , IRequestRepository request
-            , IInvitationRepository invitation,
-IChatRepository chat, IMemoryCache memoryCache)
+            , IInvitationRepository invitation
+            , IChatRepository chat, IMemoryCache memoryCache
+            , IAdminRepository admin)
         {
             _context = context;
             _student = student;
@@ -60,6 +62,7 @@ IChatRepository chat, IMemoryCache memoryCache)
             _invitation = invitation;
             _chat = chat;
             _memoryCache = memoryCache;
+            _admin = admin;
         }
         public IStudentRepository Student
         {
@@ -167,6 +170,14 @@ IChatRepository chat, IMemoryCache memoryCache)
             {
                 _chat ??= new ChatRepository(_context, _mapper);
                 return _chat;
+            }
+        }
+        public IAdminRepository Admin
+        {
+            get
+            {
+                _admin ??= new AdminRepository(_context, _mapper);
+                return _admin;
             }
         }
 

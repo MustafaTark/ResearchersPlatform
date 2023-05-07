@@ -24,6 +24,17 @@ namespace ResearchersPlatform.Controllers
             _repository= repository;
             _mapper= mapper;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllIdeas()
+        {
+            var ideas = await _repository.Idea.GetAllIdeas(trackChanges: false);
+            if (ideas is null)
+            {
+                return NotFound("There are no ideas in the database");
+            }
+            var ideaEntity = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
+            return Ok(ideaEntity);
+        }
         [HttpPost("InitiateIdea/{researcherId}")]
         public async Task<IActionResult> InitiateIdea([FromBody] IdeaForCreateDTO ideaDto, Guid researcherId)
         {

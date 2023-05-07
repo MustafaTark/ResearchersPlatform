@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
 using ResearchersPlatform.Extenstions;
 using ResearchersPlatform.Hubs;
 using ResearchersPlatform_DAL.Models;
@@ -18,6 +19,17 @@ builder.Services.AddCors(options =>
                    policy.WithOrigins("http://localhost:3000").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                });
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StudentOnly", policy =>
+    {
+        policy.RequireRole("student");
+    });
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireRole("admin");
+    });
+});
 builder.Services.ConfigureLifeTime();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureIdentity<User>();
@@ -33,7 +45,33 @@ builder.Services.AddControllers().AddJsonOptions(
 builder.Services.AddMemoryCache();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Place to add JWT with Bearer",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+{
+
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            },
+            Name = "Bearer",
+        },
+        new List<string>()
+    }
+});
+});
 
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);

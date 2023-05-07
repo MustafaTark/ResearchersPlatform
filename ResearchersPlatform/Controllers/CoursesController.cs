@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace ResearchersPlatform.Controllers
         }
 
         [HttpGet]
+       [Authorize(Roles="Student,Admin")]
         public async Task<IActionResult> GetAllCourses()
         {
             var course = await _repositoryManager.Course.GetAllCoursesAsync();

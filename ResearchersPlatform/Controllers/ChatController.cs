@@ -41,7 +41,7 @@ namespace ResearchersPlatform.Controllers
            await  _discussionHub.Clients.All.ReceiveMessage(message);
             return Ok(message);
         } 
-        [HttpPost("Task/{ideaId}")]
+        [HttpPost("Task")]
         public async Task<IActionResult> PostMessageToTask(Guid taskId,
             Guid researcherId, [FromBody] MessageViewModel message)
         {

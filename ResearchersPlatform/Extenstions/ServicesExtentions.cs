@@ -50,7 +50,9 @@ namespace ResearchersPlatform.Extenstions
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                //opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
                 .AddJwtBearer(
                 options =>

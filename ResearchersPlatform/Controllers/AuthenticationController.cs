@@ -67,5 +67,27 @@ namespace ResearchersPlatform.Controllers
             }
             );
         }
+        [HttpPost("AdminLogin")]
+
+        public async Task<IActionResult> AuthenticateToAdmin([FromBody] UserForLoginDto user)
+        {
+            if (!await _authService.ValidateUser(user))
+            {
+                return Unauthorized();
+            }
+
+
+            var admin = await _userManager.FindByEmailAsync(user.Email!);
+            var useradmin = await _userManager.IsInRoleAsync(admin!, "Admin");
+            if (!useradmin)
+                return NotFound();
+            return Ok(
+            new
+            {
+                Token = await _authService.CreateToken(),
+                UserId = await _userManager.GetUserIdAsync(admin!)
+            }
+            );
+        }
     }
 }

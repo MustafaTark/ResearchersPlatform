@@ -23,11 +23,11 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("StudentOnly", policy =>
     {
-        policy.RequireRole("student");
+        policy.RequireRole("Student");
     });
     options.AddPolicy("AdminOnly", policy =>
     {
-        policy.RequireRole("admin");
+        policy.RequireRole("Admin");
     });
 });
 builder.Services.ConfigureLifeTime();

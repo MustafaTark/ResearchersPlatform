@@ -51,7 +51,6 @@ namespace ResearchersPlatform.Controllers
                 new {
                     ResearcherId= researcherId
                 });
-
         }
         [HttpDelete("{researcherId}")]
         [Authorize(Roles = "Student,Admin")]

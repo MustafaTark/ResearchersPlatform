@@ -18,7 +18,6 @@ namespace ResearchersPlatform.Controllers
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
         private IFilesRepository _filesRepository;
-        //private readonly ILogger _logger;
 
         public CoursesController(
             IRepositoryManager repository, IMapper mapper, IFilesRepository filesRepository)
@@ -29,7 +28,7 @@ namespace ResearchersPlatform.Controllers
         }
 
         [HttpGet]
-       [Authorize(Roles="Student,Admin")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetAllCourses()
         {
             var course = await _repositoryManager.Course.GetAllCoursesAsync();

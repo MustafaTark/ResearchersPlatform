@@ -62,7 +62,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 issuer: jwtSettings.GetSection("validIssuer").Value,
                 audience: jwtSettings.GetSection("validAudience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                expires: DateTime.Now.AddMonths(Convert.ToInt32(jwtSettings.GetSection("expires").Value)),
                 signingCredentials: signingCredentials
                 );
             return tokenOptions;

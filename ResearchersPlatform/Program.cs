@@ -89,4 +89,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<DiscussionHub>("hubs/discussion");
 app.MapHub<ChatHub>("hubs/chat");
+app.MapHub<ChatHub>("hubs/Privatechat");
 app.Run();

@@ -38,6 +38,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<TaskMessage> TaskMessages { get; set; }
         public DbSet<Problem> Problems { get; set; }
         public DbSet<ProblemCategory> ProblemCategories { get; set; }
+        public DbSet<PrivateMessage> PrivateMessages { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)

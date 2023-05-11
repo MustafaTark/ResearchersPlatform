@@ -56,6 +56,17 @@ namespace ResearchersPlatform_BAL.Repositories
             };
             _context.TaskMessages.Add(message);
         }
+        //public void CreateTaskMessage(Guid taskId,Guid researcherId,MessageDto messageVM)
+        //{
+        //    var message = new TaskMessage
+        //    {
+        //        Content = messageVM.Content,
+        //        Date = messageVM.Date,
+        //        ResearcherId = researcherId,
+        //        TaskIdeaId = taskId,
+        //    };
+        //    _context.TaskMessages.Add(message);
+        //}
 
     }
 }

@@ -136,6 +136,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("Problems")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetProblemsToCategory(int categoryId)
         {
             if (categoryId == 0)
@@ -144,6 +145,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(problems);
         }
         [HttpGet("Problems/{problemId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetProblemsToCategory(Guid problemId)
         {
             var problem = await _repositoryManager.Problem.GetProblemByIdAsync(problemId);

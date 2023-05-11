@@ -22,6 +22,7 @@ namespace ResearchersPlatform_BAL.Contracts
         IInvitationRepository Invitation { get; }
         IChatRepository Chat { get; }
         IAdminRepository Admin { get; }
+        IProblemRepository Problem { get; }
         Task SaveChangesAsync();
     }
 }

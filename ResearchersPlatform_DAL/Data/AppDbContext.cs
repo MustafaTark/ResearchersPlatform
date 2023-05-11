@@ -36,6 +36,8 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<StudentQuizTrails> StudentQuizTrails { get; set; }
         public DbSet<IdeaMessage> IdeaMessages { get; set; }
         public DbSet<TaskMessage> TaskMessages { get; set; }
+        public DbSet<Problem> Problems { get; set; }
+        public DbSet<ProblemCategory> ProblemCategories { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)

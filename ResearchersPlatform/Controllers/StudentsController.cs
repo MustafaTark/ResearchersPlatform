@@ -114,6 +114,42 @@ namespace ResearchersPlatform.Controllers
             return Ok(courseDto);
 
         }
-
+        [HttpPost("Problems")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> PostProblem(ProblemFoCreateDto problemDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Somthing Wrong in Model State {ModelState}");
+            }
+            if (problemDto.StudentId.IsNullOrEmpty())
+            {
+                return BadRequest("Student ID field shouldn't be null or empty");
+            }
+            if (problemDto.ProblemCategoryId is 0)
+            {
+                return BadRequest("ProblemCategoryId field shouldn't be null or empty");
+            }
+            var problem = _mapper.Map<Problem>(problemDto);
+            _repositoryManager.Problem.CreateProblem(problem);
+            await _repositoryManager.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpGet("Problems")]
+        public async Task<IActionResult> GetProblemsToCategory(int categoryId)
+        {
+            if (categoryId == 0)
+                return BadRequest("categoryId required field");
+            var problems = await _repositoryManager.Problem.GetProblemsAsync(categoryId);
+            return Ok(problems);
+        }
+        [HttpGet("Problems/{problemId}")]
+        public async Task<IActionResult> GetProblemsToCategory(Guid problemId)
+        {
+            var problem = await _repositoryManager.Problem.GetProblemByIdAsync(problemId);
+            if (problem == null)
+                return NotFound();
+            return Ok(problem);
+        }
     }
 }

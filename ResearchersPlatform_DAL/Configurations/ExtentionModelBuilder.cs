@@ -40,6 +40,7 @@ namespace ResearchersPlatform_DAL.Configurations
         public static void AddOneToManyRelationship(this ModelBuilder builder)
         {
             builder.Entity<Idea>().HasOne(p => p.ResearcherCreator).WithMany(p => p.IdeasLeader);
+            builder.Entity<ExpertRequest>().HasOne(i => i.IdeaObject).WithMany(r => r.ExpertRequests);
 
         }
 

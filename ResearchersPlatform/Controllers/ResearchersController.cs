@@ -234,6 +234,31 @@ namespace ResearchersPlatform.Controllers
             var topics = await _repository.Researcher.GetTopicsAsync();
             return Ok(topics);
         }
-
+        [HttpPost("Ideas/ExpertRequest")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> SendRequestToExpert([FromBody] ExpertRequestDto requestDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"Somthing Wrong in Model State {ModelState}");
+            }
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(requestDto.ParticipantId,trackChanges:false);
+            if (researcher is null)
+                return NotFound($"Researcher with ID {requestDto.ParticipantId} doesn't exist in the database");
+            var idea = await _repository.Idea.GetIdeaAsync(requestDto.IdeaId, trackChanges: false);
+            if (idea is null)
+                return NotFound($"Idea with ID {requestDto.IdeaId} doesn't exist in the database");
+            var validateParticipant = await _repository.Idea.ValidateResearcherForIdea(requestDto.IdeaId, requestDto.ParticipantId);
+            if (!validateParticipant)
+                return BadRequest($"Researcher with ID {requestDto.ParticipantId} isn't a participant to the idea");
+            var validateParticipantPoints = await _repository.ExpertRequest.ValidateParticipantPoints(requestDto.ParticipantId);
+            if (!validateParticipantPoints)
+                return BadRequest($"You Should have at least 3 points to send a request");
+            var request = _mapper.Map<ExpertRequest>(requestDto);
+            _repository.ExpertRequest.CreateRequest(request);
+            await _repository.SaveChangesAsync();
+            var requestToReturn = _mapper.Map<ExpertRequestDto>(request);
+            return Ok(requestToReturn);
+        }
     }
 }

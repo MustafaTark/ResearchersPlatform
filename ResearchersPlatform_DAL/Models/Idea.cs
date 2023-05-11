@@ -14,6 +14,7 @@ namespace ResearchersPlatform_DAL.Models
         {
             Participants = new List<Researcher>();
             Tasks = new List<TaskIdea>();
+            ExpertRequests = new List<ExpertRequest>();
         }
         public Guid Id { get; set; }
         public required string? Name { get; set; }
@@ -25,6 +26,7 @@ namespace ResearchersPlatform_DAL.Models
         public Researcher? ResearcherCreator { get; set; }
         public ICollection<Researcher> Participants { get; set; }
         public ICollection<TaskIdea> Tasks { get; set; }
+        public ICollection<ExpertRequest> ExpertRequests { get; set; }
         
         [ForeignKey(nameof(Specality))]
         public int? SpecalityId {get; set; }

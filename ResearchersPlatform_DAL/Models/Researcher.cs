@@ -22,6 +22,7 @@ namespace ResearchersPlatform_DAL.Models
         public ICollection<TaskIdea> Tasks { get; set; }    
         public ICollection<Notification> Notifications { get; set; }
         public ICollection<Invitation> Invitations { get; set; }
+        public ICollection<ExpertRequest> ExpertRequests { get; set; }
         
         [ForeignKey(nameof(Specality))]
         public int SpecalityId { get; set; }
@@ -37,6 +38,7 @@ namespace ResearchersPlatform_DAL.Models
             Invitations = new HashSet<Invitation>();
             Papers = new HashSet<Paper>();
             Requests = new HashSet<RequestIdea>();
+            ExpertRequests = new HashSet<ExpertRequest>();
         }
 
     }

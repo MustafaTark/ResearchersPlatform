@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using ResearchersPlatform.Hubs;
 using ResearchersPlatform_BAL.Contracts;
+using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_BAL.ViewModels;
 using System.Data;
 
@@ -17,12 +18,17 @@ namespace ResearchersPlatform.Controllers
     {
         private readonly IHubContext<DiscussionHub, IChatClient> _discussionHub;
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;
+        private readonly IHubContext<PrivateChatHub, IChatClient> _privateHub;
         private readonly IRepositoryManager _repositoryManager;
-        public ChatController(IHubContext<DiscussionHub, IChatClient> discussionHub, IHubContext<ChatHub, IChatClient> chatHub, IRepositoryManager repositoryManager)
+        public ChatController(IHubContext<DiscussionHub, IChatClient> discussionHub,
+            IHubContext<ChatHub, IChatClient> chatHub,
+            IHubContext<PrivateChatHub, IChatClient> privateHub,
+            IRepositoryManager repositoryManager)
         {
             _discussionHub = discussionHub;
             _chatHub = chatHub;
             _repositoryManager = repositoryManager;
+            _privateHub = privateHub;
         }
         [HttpPost("Discussion/{ideaId}")]
         [Authorize(Roles = "Student")]
@@ -63,9 +69,18 @@ namespace ResearchersPlatform.Controllers
             await _repositoryManager.SaveChangesAsync();
             await  _chatHub.Clients.All.ReceiveMessage(message);
             return Ok(message);
+        } 
+        [HttpPost("Private")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> PostPrivateMessage([FromBody] PrivateMessageDto message)
+        {
+             _repositoryManager.Chat.CreatePrivateMessage(message);
+            await _repositoryManager.SaveChangesAsync();
+            await  _privateHub.Clients.All.ReceivePrivate(message);
+            return Ok(message);
         }
         [HttpGet("Discussion/{ideaId})")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetMessagesToIdea(Guid ideaId)
         {
            var messages= await _repositoryManager.Chat.GetMessagesToIdea(ideaId);
@@ -76,6 +91,13 @@ namespace ResearchersPlatform.Controllers
         public async Task<IActionResult> GetMessagesToTask(Guid taskId)
         {
            var messages= await _repositoryManager.Chat.GetMessagesToTasks(taskId);
+            return Ok(messages);
+        }
+       [ HttpGet("Private")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> GetMessagesToTask(string senderId,string reciverId)
+        {
+           var messages= await _repositoryManager.Chat.GetPrivateMessages(senderId,reciverId);
             return Ok(messages);
         }
     }

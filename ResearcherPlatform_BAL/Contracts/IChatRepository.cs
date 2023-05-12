@@ -14,5 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<MessageDto>> GetMessagesToTasks(Guid taskId);
        void CreateIdeaMessage(Guid ideaId, Guid researcherId, MessageViewModel messageVM);
         void CreateTaskMessage(Guid taskId, Guid researcherId, MessageViewModel messageVM);
+        void CreatePrivateMessage(PrivateMessageDto messageDto);
+        Task<IEnumerable<PrivateMessageDto>> GetPrivateMessages(string senderId, string reciverId);
     }
 }

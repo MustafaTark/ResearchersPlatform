@@ -47,6 +47,7 @@ namespace ResearchersPlatform_BAL
 
             CreateMap<MessageDto, IdeaMessage>().ReverseMap();
             CreateMap<MessageDto, TaskMessage>().ReverseMap();
+            CreateMap<PrivateMessageDto, PrivateMessage>().ReverseMap();
             CreateMap<Badge, BadgeDto>();
             CreateMap<Video, VideoDto>();
             CreateMap<IdeaForCreateDTO,Idea>();

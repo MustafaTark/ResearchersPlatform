@@ -22,8 +22,10 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public void CreateProblem(Problem problem)
              => Create(problem);
-        public async Task<IEnumerable<Problem>> GetProblemsAsync(int categoryId)
-            => await FindByCondition(p=>p.ProblemCategoryId==categoryId,trackChanges:false).ToListAsync();
+        public async Task<IEnumerable<ProblemDto>> GetProblemsAsync(int categoryId)
+            => await FindByCondition(p=>p.ProblemCategoryId==categoryId,trackChanges:false)
+                    .ProjectTo<ProblemDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
         public async Task<ProblemDto?> GetProblemByIdAsync(Guid id)
           =>await 
             FindByCondition(p=>p.Id==id, trackChanges:false)

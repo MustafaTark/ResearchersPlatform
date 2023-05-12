@@ -9,6 +9,7 @@ using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,17 +57,16 @@ namespace ResearchersPlatform_BAL.Repositories
             };
             _context.TaskMessages.Add(message);
         }
-        //public void CreateTaskMessage(Guid taskId,Guid researcherId,MessageDto messageVM)
-        //{
-        //    var message = new TaskMessage
-        //    {
-        //        Content = messageVM.Content,
-        //        Date = messageVM.Date,
-        //        ResearcherId = researcherId,
-        //        TaskIdeaId = taskId,
-        //    };
-        //    _context.TaskMessages.Add(message);
-        //}
+        public void CreatePrivateMessage(PrivateMessageDto messageDto)
+        {
+            var message = _mapper.Map<PrivateMessage>(messageDto);
+            _context.PrivateMessages.Add(message);
+        }
+        public async Task<IEnumerable<PrivateMessageDto>> GetPrivateMessages(string senderId, string reciverId)
+         => await _context.PrivateMessages
+               .Where(i => i.SenderId==senderId&&i.ReciverId==reciverId)
+               .ProjectTo<PrivateMessageDto>(_mapper.ConfigurationProvider)
+               .ToListAsync();
 
     }
 }

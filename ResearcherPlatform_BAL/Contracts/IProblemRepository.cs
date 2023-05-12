@@ -11,7 +11,7 @@ namespace ResearchersPlatform_BAL.Contracts
     public interface IProblemRepository
     {
         void CreateProblem(Problem problem);
-        Task<IEnumerable<Problem>> GetProblemsAsync(int categoryId);
+        Task<IEnumerable<ProblemDto>> GetProblemsAsync(int categoryId);
         Task<ProblemDto?> GetProblemByIdAsync(Guid id);
     }
 }

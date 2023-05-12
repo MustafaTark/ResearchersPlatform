@@ -11,6 +11,7 @@ namespace ResearchersPlatform_BAL.Contracts
     public interface IExpertRequestRepository
     {
         void CreateRequest(ExpertRequest request);
+        void DeleteRequest(ExpertRequest request);
         Task<ExpertRequestDto?> GetRequestById(Guid requestId , bool trackChanges);
         Task<IEnumerable<ExpertRequestDto>> GetAllRequestsByIdeaId(Guid ideaId, bool trackChanges);
         Task<IEnumerable<ExpertRequestDto>> GetAllRequestsForResearcher(Guid researcherId,bool trackChanges);

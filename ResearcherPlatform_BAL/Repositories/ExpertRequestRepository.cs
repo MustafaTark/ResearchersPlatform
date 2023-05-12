@@ -54,5 +54,6 @@ namespace ResearchersPlatform_BAL.Repositories
             => await FindAll(trackChanges)
             .ProjectTo<ExpertRequestDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+        public void DeleteRequest(ExpertRequest request) => Delete(request);
     }
 }

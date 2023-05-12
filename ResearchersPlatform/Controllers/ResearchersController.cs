@@ -235,7 +235,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(topics);
         }
         [HttpPost("Ideas/ExpertRequest")]
-        [Authorize(Roles = "Student,Admin")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> SendRequestToExpert([FromBody] ExpertRequestDto requestDto)
         {
             if (!ModelState.IsValid)
@@ -259,6 +259,21 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             var requestToReturn = _mapper.Map<ExpertRequestDto>(request);
             return Ok(requestToReturn);
+        }
+        [HttpGet("Ideas/ExpertRequests/{participantId}")]
+        //[Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> GetAllExpertRequestsForParticipant(Guid participantId)
+        {
+            var researcher = await _repository.Researcher.GetResearcherByIdAsync(participantId, false);
+            if (researcher is null)
+                return BadRequest($"Researcher with ID {participantId} doesn't exist in the database");
+            var requests = await _repository.ExpertRequest.GetAllRequestsForResearcher(participantId, trackChanges: false);
+            if (requests is null)
+            {
+                return NotFound("There are no ExpertRequests for this idea");
+            }
+            var requestEntities = _mapper.Map<IEnumerable<ExpertRequestDto>>(requests);
+            return Ok(requestEntities);
         }
     }
 }

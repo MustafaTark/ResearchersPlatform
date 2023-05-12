@@ -400,5 +400,30 @@ namespace ResearchersPlatform.Controllers
             await _repositoryManager.SaveChangesAsync();
             return NoContent();
         }
+        [HttpGet("ExpertRequests/{ideaId}")]
+        [Authorize(Roles ="Student,Admin")]
+        public async Task<IActionResult> GetAllExpertRequestsForIdea(Guid ideaId)
+        {
+            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId,false);
+            if (idea is null)
+                return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
+            var requests = await _repositoryManager.ExpertRequest.GetAllRequestsByIdeaId(ideaId, trackChanges: false);
+            if(requests is null)
+            {
+                return NotFound("There are no ExpertRequests for this idea");
+            }
+            var requestEntities = _mapper.Map<IEnumerable<ExpertRequestDto>>(requests);
+            return Ok(requestEntities);
+        }
+        [HttpGet("ExpertRequests/SignleRequest/{requestId}")]
+        [Authorize(Roles ="Student,Admin")]
+        public async Task<IActionResult> GetExpertRequest(Guid requestId)
+        {
+            var request = await _repositoryManager.ExpertRequest.GetRequestById(requestId, trackChanges: false);
+            if (request is null)
+                return NotFound($"There is no Expert Request with id {requestId} in the database");
+            var requestEntity = _mapper.Map<ExpertRequestDto>(request);
+            return Ok(requestEntity);
+        }
     }
 }

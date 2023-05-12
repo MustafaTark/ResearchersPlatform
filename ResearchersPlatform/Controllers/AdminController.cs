@@ -167,7 +167,19 @@ namespace ResearchersPlatform.Controllers
                 }
             }
         }
-
+        [HttpDelete("ExpertRequests/{requestId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteExpertRequest(Guid requestId)
+        {
+            var request = await _repository.ExpertRequest.GetRequestById(requestId,false);
+            if (request is null)
+                return BadRequest($"There is no Request with ID {requestId} in the database");
+            var requestEntity = _mapper.Map<ExpertRequest>(request);
+            _repository.ExpertRequest.DeleteRequest(requestEntity);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+        }
+        
     }
 }
 

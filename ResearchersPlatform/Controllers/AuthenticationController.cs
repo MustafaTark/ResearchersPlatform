@@ -57,12 +57,22 @@ namespace ResearchersPlatform.Controllers
         {
             if (!await _authService.ValidateUser(user))
                  return Unauthorized();
-            
+           
+
             var student = await _userManager.FindByEmailAsync(user.Email!);
+            var token = await _authService.CreateToken();
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(20),
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+            Response.Cookies.Append("StudentId", student!.Id, cookieOptions);
+            Response.Cookies.Append("Token", token, cookieOptions);
             return Ok(
             new
             {
-                Token = await _authService.CreateToken(),
+                Token = token,
                 UserId = await _userManager.GetUserIdAsync(student!)
             }
             );
@@ -75,17 +85,25 @@ namespace ResearchersPlatform.Controllers
             {
                 return Unauthorized();
             }
-
-
             var admin = await _userManager.FindByEmailAsync(user.Email!);
             var useradmin = await _userManager.IsInRoleAsync(admin!, "Admin");
+            var token = await _authService.CreateToken();
+            var userId = await _userManager.GetUserIdAsync(admin!);
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(20),
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+            Response.Cookies.Append("StudentId", userId, cookieOptions);
+            Response.Cookies.Append("Token", token, cookieOptions);
             if (!useradmin)
                 return NotFound();
             return Ok(
             new
             {
-                Token = await _authService.CreateToken(),
-                UserId = await _userManager.GetUserIdAsync(admin!)
+                Token =  token,
+                UserId = userId
             }
             );
         }

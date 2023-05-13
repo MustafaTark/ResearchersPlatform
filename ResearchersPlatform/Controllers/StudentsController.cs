@@ -96,7 +96,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("Courses")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetStudentEnrolledCourses(string studentId)
         {
 

@@ -128,13 +128,13 @@ namespace ResearchersPlatform.Controllers
         [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> DeleteIdea(Guid ideaId)
         {
-            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, trackChanges: false);
+            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, trackChanges: true);
             if(idea is null)
             {
                 return NotFound($"Idea with ID {ideaId} doesn't exist in the database");
             }
-            var hasParticipants = await _repositoryManager.Idea.HasParticipants(ideaId);
-            if(hasParticipants)
+            var hasParticipants = await _repositoryManager.Idea.HasParticipantsMoreThanOne(ideaId);
+            if(!hasParticipants)
             {
                 return BadRequest($"Idea with ID {ideaId} does have Participants , you cant delete it ");
             }

@@ -82,11 +82,8 @@ namespace ResearchersPlatform_BAL.Repositories
                 .FirstOrDefaultAsync();
 
             var topics = new List<TopicsDto>();
-  
-
             if (researcherPoints > 4) {
-                return await _context.Topics.ProjectTo<TopicsDto>(_mapper.ConfigurationProvider).ToListAsync();
-                
+                return await _context.Topics.ProjectTo<TopicsDto>(_mapper.ConfigurationProvider).ToListAsync();  
             }
             else
             {
@@ -106,6 +103,12 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             var ideaParticipants = await _context.Ideas.Where(i => i.Id == ideaId && i.Participants.Any()).ToListAsync();
             if(ideaParticipants.Any()) return true;
+            return false;
+        }
+        public async Task<bool> HasParticipantsMoreThanOne(Guid ideaId)
+        {
+            var participantNumber = await _context.Ideas.Where(i => i.Id == ideaId).Select(p => p.ParticipantsNumber).FirstOrDefaultAsync();
+            if (participantNumber < 2) return true;
             return false;
         }
         public async Task<bool> CheckParticipantsNumber(Guid ideaId)

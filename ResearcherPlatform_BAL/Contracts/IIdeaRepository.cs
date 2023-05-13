@@ -22,6 +22,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<TopicsDto>> GetAvailableTopics(Guid researcherId);
         Task<bool> ValidateResearcherForIdea(Guid ideaId, Guid researcherId);
         Task<bool> HasParticipants(Guid ideaId);
+        Task<bool> HasParticipantsMoreThanOne(Guid ideaId);
         Task<bool> CheckParticipantsNumber(Guid ideaId);
         Task<bool> CheckResearcherIdeasNumber(Guid researcherId);
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResearchersPlatform_DAL.Data;
 
@@ -11,9 +12,11 @@ using ResearchersPlatform_DAL.Data;
 namespace ResearchersPlatform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230512021517_AddExpertUpdate")]
+    partial class AddExpertUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,25 +99,25 @@ namespace ResearchersPlatform.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "968bf1ff-7993-4d4e-80b7-f771ceeb76b5",
+                            Id = "2cce98d1-54a4-49d1-8fd9-ad02b3c37234",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f98e5596-dda0-4713-8482-8cc7bf9ecd0a",
+                            Id = "35ebfbc9-89b7-443b-b516-0de053523d3f",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = "a43bfaa5-99de-4ea8-9093-dfea075d6255",
+                            Id = "b2297157-ee6f-4527-be03-227f811b0cae",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f87151e2-cff8-4cd0-8af2-907055d36878",
+                            Id = "914530bb-ce2f-4c4c-8dbf-ee3d806d2d40",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -687,9 +690,6 @@ namespace ResearchersPlatform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rate")
                         .HasColumnType("int");
 
                     b.Property<int>("SpecalityId")

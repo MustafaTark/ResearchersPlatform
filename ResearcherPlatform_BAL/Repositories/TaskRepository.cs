@@ -87,5 +87,15 @@ namespace ResearchersPlatform_BAL.Repositories
                     return false;
             return true;
         }
+        public void Submit(Guid taskId)
+        {
+            var task = FindByCondition(t=>t.Id==taskId, trackChanges: true).FirstOrDefault();
+            bool isBeforeDeadline = DateTime.Now <= task!.Deadline;
+            if(isBeforeDeadline)
+            {
+
+            }
+            task.Progress = Progress.COMPLETED;
+        }
     }
 }

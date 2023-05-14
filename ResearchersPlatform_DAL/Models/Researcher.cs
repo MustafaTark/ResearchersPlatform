@@ -16,6 +16,7 @@ namespace ResearchersPlatform_DAL.Models
         public Student? StudentObj { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
+        public int Rate { get; set; } = 500;
         public ICollection<Idea> Ideas { get; set; }
         [MaxLength(2)]
         public ICollection<Idea> IdeasLeader { get; set; }

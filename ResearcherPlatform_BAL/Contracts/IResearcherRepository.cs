@@ -19,6 +19,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteSpeciality(Guid researcherId);
         void CreatePapersToResearcher(Guid researcherId, List<Paper> papers);
         Task<IEnumerable<SingleResearcherDto>> GetAllIdeaParticipants(Guid ideaId);
+        Task<IEnumerable<SingleResearcherDto>> GetAllTaskParticipants(Guid taskId);
         Task<string?> GetResearcherByStudentId(string studentId);
         Task<ICollection<Skill>> GetSkillsAsync();
         Task<ICollection<Specality>> GetSpecalitiesAsync();

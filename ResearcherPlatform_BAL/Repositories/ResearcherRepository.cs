@@ -102,6 +102,10 @@ namespace ResearchersPlatform_BAL.Repositories
              => await FindByCondition(i => i.Ideas.FirstOrDefault(i => i.Id== ideaId)!.Id == ideaId, trackChanges: false)
              .ProjectTo<SingleResearcherDto>(_mapper.ConfigurationProvider)
              .ToListAsync();
+        public async Task<IEnumerable<SingleResearcherDto>> GetAllTaskParticipants(Guid taskId)
+             => await FindByCondition(i => i.Tasks.FirstOrDefault(i => i.Id == taskId)!.Id == taskId, trackChanges: false)
+             .ProjectTo<SingleResearcherDto>(_mapper.ConfigurationProvider)
+             .ToListAsync();
         public async Task<string?> GetResearcherByStudentId(string studentId)
             => await FindByCondition(r => r.StudentId == studentId,trackChanges:false)
             .Select(r => r.Id.ToString()).FirstOrDefaultAsync();

@@ -365,6 +365,24 @@ namespace ResearchersPlatform.Controllers
             }
             return Ok(ideaTasks);
         }
+
+        [HttpGet("Tasks/Participants/{taskId}")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> GetAllTaskParticipants(Guid taskId)
+        {
+            var task = await _repositoryManager.Task.GetTaskByIdAsync(taskId, trackChanges: false);
+            if (task is null)
+            {
+                return NotFound($"Task with ID {taskId} doesn't have any Ideas in the database");
+            }
+            var researchers = await _repositoryManager.Researcher.GetAllTaskParticipants(taskId);
+            if (researchers is null)
+            {
+                return NotFound("There are no participants yet");
+            }
+            var researchersEntities = _mapper.Map<IEnumerable<SingleResearcherDto>>(researchers);
+            return Ok(researchersEntities);
+        }
         [HttpGet("Tasks/SingleTask/{taskId}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetTaskById(Guid taskId)

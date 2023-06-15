@@ -20,5 +20,6 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<bool> ValidateTaskParticipants(List<Guid> participantsIds, Guid taskId);
         Task<bool> ValidateTaskSingleParticipant(Guid participantId, Guid taskId);
 
+
     }
 }

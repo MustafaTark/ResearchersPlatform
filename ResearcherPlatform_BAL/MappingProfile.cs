@@ -59,6 +59,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<SpecialityForCreationDto, Specality>();
             CreateMap<Paper, PaperDto>().ReverseMap();
             CreateMap<PaperForCreationDto, Paper>().ReverseMap();
+            CreateMap<PaperForCreationDto, PaperDto>();
             CreateMap<Problem, ProblemDto>();
             CreateMap<ProblemFoCreateDto, Problem>();
             CreateMap<Researcher, ResearcherDto>();

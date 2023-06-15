@@ -128,7 +128,7 @@ namespace ResearchersPlatform.Controllers
         }
         [HttpPut("Papers/{paperId}")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> UpdatePaper([FromBody] PaperDto paperDto, Guid paperId)
+        public async Task<IActionResult> UpdatePaper([FromBody] PaperForCreationDto paperDto, Guid paperId)
         {
             if(paperDto is null)
             {
@@ -141,7 +141,8 @@ namespace ResearchersPlatform.Controllers
             }
             _mapper.Map(paperDto,paper);
             await _repository.SaveChangesAsync();
-            return NoContent();
+            return StatusCode(201, "Paper has been Updated successfully");
+
         }
 
         [HttpDelete("Papers/{paperId}")]

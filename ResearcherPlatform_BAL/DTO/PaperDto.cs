@@ -8,6 +8,7 @@ namespace ResearchersPlatform_BAL.DTO
 {
     public class PaperDto
     {
+        public Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Citation { get; set; }
         public required string Url { get; set; }

@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RepoExtentions;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Data;
 using ResearchersPlatform_DAL.Models;
@@ -50,10 +52,11 @@ namespace ResearchersPlatform_BAL.Repositories
             };
             return resercherVM;
         }
-        public async Task<IEnumerable<Researcher?>> GetAllResearchersAsync(bool trackChanges)
+        public async Task<IEnumerable<Researcher?>> GetAllResearchersAsync(ResearcherParamters paramters,bool trackChanges)
             => await FindAll(trackChanges)
             .Include(s => s.StudentObj)
             .Include(s => s.SpecalityObject)
+            .Search(paramters.SearchTerm!,paramters.Level,paramters.Specality)
             .ToListAsync();
         public void CreateSpecality(int specality,string studentId)
         {

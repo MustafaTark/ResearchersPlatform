@@ -13,5 +13,6 @@ namespace ResearchersPlatform_BAL.Contracts
         void CreateProblem(Problem problem);
         Task<IEnumerable<ProblemDto>> GetProblemsAsync(int categoryId);
         Task<ProblemDto?> GetProblemByIdAsync(Guid id);
+        Task<IEnumerable<ProblemCategory>> GetProblemCategories()
     }
 }

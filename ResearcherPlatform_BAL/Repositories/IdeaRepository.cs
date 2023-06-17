@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RepoExtentions;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Data;
 using ResearchersPlatform_DAL.Models;
 using System;
@@ -33,6 +35,7 @@ namespace ResearchersPlatform_BAL.Repositories
         public void DeleteIdea(Idea idea) => Delete(idea);
         public async Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges)
             => await FindAll(trackChanges)
+           
             .OrderBy(o => o.Name)
             .ToListAsync();
         public async Task<Idea?> GetIdeaAsync(Guid ideaId, bool trackChanges)
@@ -57,12 +60,12 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(t => t.TopicObject)
             .Include(r => r.ResearcherCreator)
             .OrderBy(o => o.Deadline).ToListAsync();
-        public async Task<IEnumerable<IdeaDto>> GetAllIdeas(bool trackChanges)
+        public async Task<IEnumerable<IdeaDto>> GetAllIdeas(IdeasParamters paramters, bool trackChanges)
             => await FindAll(trackChanges)
             .ProjectTo<IdeaDto>(_mapper.ConfigurationProvider)
-            //.Include(s => s.SpecalityObj)
-            //.Include(t => t.TopicObject)
-            //.Include(r => r.CreatorId)
+            .Search(paramters.SearchTerm!,paramters.Topic,paramters.Specality)
+            .Skip((paramters.PageNumber - 1) * paramters.PageSize)
+            .Take(paramters.PageSize)
             .OrderBy(o => o.Deadline).ToListAsync();
         public async Task<bool> ValidateIdeaCreation(Guid researcherId)
         {

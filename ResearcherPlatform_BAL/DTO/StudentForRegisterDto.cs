@@ -21,6 +21,7 @@ namespace ResearchersPlatform_BAL.DTO
         [Required]
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
+        public int NationalityId { get; set; }
         public Gender Gender { get; set; }
         [Range(18, 70, ErrorMessage = "Age must be between (18 - 70)")]
         public int Age { get; set; }

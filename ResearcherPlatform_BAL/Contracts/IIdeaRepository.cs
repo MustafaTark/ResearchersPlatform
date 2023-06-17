@@ -1,4 +1,5 @@
 ﻿using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace ResearchersPlatform_BAL.Contracts
         void CreateIdea(Idea idea , Guid creatorId);
         void UpdateIdea(Idea idea);
         void DeleteIdea(Idea idea);
-        Task<IEnumerable<Idea?>> GetAllIdeasAsync(bool trackChanges);
+        Task<IEnumerable<Idea?>> GetAllIdeasAsync( bool trackChanges);
         Task<Idea?> GetIdeaAsync(Guid odeaId , bool trackChanges);
         Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(Guid researcherId , bool trackChanges);
         Task<IEnumerable<Idea?>> GetAllIdeasForCreatorAsync(Guid researcherId, bool trackChanges);
-        Task<IEnumerable<IdeaDto>> GetAllIdeas(bool trackChanges);
+        Task<IEnumerable<IdeaDto>> GetAllIdeas(IdeasParamters paramters, bool trackChanges);
         Task<bool> ValidateIdeaCreation(Guid researcherId);
         Task<IEnumerable<TopicsDto>> GetAvailableTopics(Guid researcherId);
         Task<bool> ValidateResearcherForIdea(Guid ideaId, Guid researcherId);

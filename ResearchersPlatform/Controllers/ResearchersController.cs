@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_BAL.Repositories;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Models;
 using System.Data;
 
@@ -28,9 +29,9 @@ namespace ResearchersPlatform.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Student,Admin")]
-        public async Task<IActionResult> GetAllResearchers()
+        public async Task<IActionResult> GetAllResearchers([FromQuery]ResearcherParamters paramters)
         {
-            var researchers = await _repository.Researcher.GetAllResearchersAsync(trackChanges: false);
+            var researchers = await _repository.Researcher.GetAllResearchersAsync(paramters,trackChanges: false);
             if(researchers is null)
             {
                 return NotFound("There are no researchers in the database");

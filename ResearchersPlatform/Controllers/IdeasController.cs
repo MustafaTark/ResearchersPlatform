@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_BAL.Repositories;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Models;
 using System.Data;
 
@@ -27,9 +28,9 @@ namespace ResearchersPlatform.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Student,Admin")]
-        public async Task<IActionResult> GetAllIdeas()
+        public async Task<IActionResult> GetAllIdeas([FromQuery]IdeasParamters paramters)
         {
-            var ideas = await _repositoryManager.Idea.GetAllIdeas(trackChanges: false);
+            var ideas = await _repositoryManager.Idea.GetAllIdeas(paramters,trackChanges: false);
             if (ideas is null)
             {
                 return NotFound("There are no ideas in the database");
@@ -155,14 +156,10 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Idea with ID {ideaId} doesn't exist in the database");
             }
-            var researchers = await _repositoryManager.Researcher.GetAllResearchersAsync(trackChanges: true);
-            if (researchers == null || !researchers.Any())
-            {
-                return NotFound($"There are no researchers in the database");
-            }
+           
             foreach (var researcherId in researcherIds)
             {
-                var researcher = researchers.FirstOrDefault(r => r!.Id == researcherId);
+                var researcher = await _repositoryManager.Researcher.GetResearcherByIdAsync(researcherId,trackChanges:false);
                 if (researcher == null)
                 {
                     return BadRequest($"Researcher with ID {researcherId} does not exist in the database");

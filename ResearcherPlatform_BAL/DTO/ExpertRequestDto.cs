@@ -8,6 +8,7 @@ namespace ResearchersPlatform_BAL.DTO
 {
     public class ExpertRequestDto
     {
+        public Guid Id { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
         public Guid IdeaId { get; set; }

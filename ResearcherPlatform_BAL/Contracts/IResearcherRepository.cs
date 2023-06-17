@@ -1,4 +1,5 @@
 ﻿using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Models;
 using System;
@@ -14,7 +15,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteResearcher(Researcher researcher);
         Task<ResearcherViewModel?> GetSingleResearcherByIdAsync(Guid researcherId, bool trackChanges);
         Task<Researcher?> GetResearcherByIdAsync(Guid researcherId, bool trackChanges);
-        Task<IEnumerable<Researcher?>> GetAllResearchersAsync(bool trackChanges);
+        Task<IEnumerable<Researcher?>> GetAllResearchersAsync(ResearcherParamters paramters, bool trackChanges);
         void AddSpeciality(Guid researcherId,int specialityId);
         void DeleteSpeciality(Guid researcherId);
         void CreatePapersToResearcher(Guid researcherId, List<Paper> papers);

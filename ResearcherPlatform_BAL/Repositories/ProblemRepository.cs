@@ -32,5 +32,9 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(p=>p.ProblemCategory)
             .ProjectTo<ProblemDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+        public async Task<IEnumerable<ProblemCategory>> GetProblemCategories()
+        {
+            return await _context.ProblemCategories.ToListAsync();
+        }
     }
 }

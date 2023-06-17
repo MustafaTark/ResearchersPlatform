@@ -179,7 +179,14 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             return NoContent();
         }
-        
+        [HttpGet("ProblemCategories")]
+        public async Task<IActionResult> GetProblemCategories()
+        {
+            var categories = await _repository.Problem.GetProblemCategories();
+            return Ok(categories);
+        }
+
+
     }
 }
 

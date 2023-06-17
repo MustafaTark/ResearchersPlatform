@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_DAL.Data;
 using ResearchersPlatform_DAL.Models;
@@ -19,7 +20,7 @@ namespace ResearchersPlatform_BAL.Repositories
         }
 
         public int IdeasCount(bool trackChanges) => _context.Ideas.Count();
-
+        
 
         public int ResearchersCount(bool trackChanges) => _context.Researchers.Count();
 

@@ -31,6 +31,10 @@ namespace ResearchersPlatform_BAL.Repositories
             => await FindByCondition(p => p.Id == paperId, trackChanges)
             .ProjectTo<PaperDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+        public async Task<Paper?> GetSinglePaperById(Guid paperId, bool trackChanges)
+            => await FindByCondition(p => p.Id.Equals(paperId), trackChanges)
+            .FirstOrDefaultAsync();
+
         public async Task<Paper?> GetPaperByIdForDeletion(Guid paperId, bool trackChanges)
             => await FindByCondition(p => p.Id == paperId, trackChanges)
             .FirstOrDefaultAsync();

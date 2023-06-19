@@ -135,7 +135,7 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("PaperDto object sent from client is null");
             }
-            var paper = await _repository.Paper.GetPaperById(paperId, trackChanges: true);
+            var paper = await _repository.Paper.GetSinglePaperById(paperId, trackChanges: true);
             if(paper is null)
             {
                 return NotFound($"Paper With ID {paperId} doesn't exist in the database");

@@ -14,6 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void UpdatePaper(Paper paper);
         void DeletePaper(Paper paper);
         Task<PaperDto?> GetPaperById(Guid paperId , bool trackChanges);
+        Task<Paper?> GetSinglePaperById(Guid paperId , bool trackChanges);
         Task<Paper?> GetPaperByIdForDeletion(Guid paperId , bool trackChanges);
         Task<IEnumerable<PaperDto?>> GetAllPapers(bool trackChanges);
     }

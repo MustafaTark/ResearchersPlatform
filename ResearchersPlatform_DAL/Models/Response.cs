@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_DAL.Models
 {
-    public class Problem
+    public class Response
     {
         public Guid Id { get; set; }
-        public required string Description { get; set; }
+        public required string Message { get; set; }
+
         [ForeignKey(nameof(Models.Student))]
         public required string StudentId { get; set; }
         public Student? Student { get; set; }
-        [ForeignKey(nameof(Models.ProblemCategory))]
-        public int ProblemCategoryId { get; set; }
-        public ProblemCategory? ProblemCategory { get; set;}
-        //[ForeignKey(nameof(Models.Response))]
-        //public Guid ResponseId { get; set; }
-        //public Response? Response { get; set; }
+        
+        [ForeignKey(nameof(Models.Problem))]
+        public required Guid ProblemId { get; set; }
+        public Problem? Problem { get; set; }
     }
 }

@@ -41,6 +41,7 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<PrivateMessage> PrivateMessages { get; set; }
         public DbSet<ExpertRequest> ExpertRequests { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
+        public DbSet<Response> Responses { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)

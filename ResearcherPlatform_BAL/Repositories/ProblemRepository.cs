@@ -24,6 +24,7 @@ namespace ResearchersPlatform_BAL.Repositories
              => Create(problem);
         public async Task<IEnumerable<ProblemDto>> GetProblemsAsync(int categoryId)
             => await FindByCondition(p=>p.ProblemCategoryId==categoryId,trackChanges:false)
+                    .Include(c => c.ProblemCategory)
                     .ProjectTo<ProblemDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
         public async Task<ProblemDto?> GetProblemByIdAsync(Guid id)
@@ -36,5 +37,13 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             return await _context.ProblemCategories.ToListAsync();
         }
+        public bool ValidateResponse(string studentId, Guid problemId)
+        {
+            var problem = _context.Problems.FirstOrDefault(p => p.StudentId==studentId && p.Id == problemId);
+            if (problem == null)
+                return false;
+            return true;
+        }
+
     }
 }

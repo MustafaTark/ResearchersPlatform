@@ -13,7 +13,7 @@ namespace ResearchersPlatform_BAL.DTO
         public Guid Id { get; set; }
         public required string Description { get; set; }
         public required string StudentId { get; set; }
-        public int ProblemCategoryId { get; set; }
+        //public int ProblemCategoryId { get; set; }
         public ProblemCategory? ProblemCategory { get; set; }
     }
 }

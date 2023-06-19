@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId , bool trackChanges);
         void EnrollForCourse(Guid courseId, Student student);
         Task<bool> CheckToEnroll(Guid courseId, string studentId);
+        Task<IEnumerable<NationalityDto>> GetAllNationalitiesAsync(bool trackChanges);
 
     }
 }

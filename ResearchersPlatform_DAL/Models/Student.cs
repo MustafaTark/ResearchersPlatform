@@ -19,7 +19,7 @@ namespace ResearchersPlatform_DAL.Models
         [ForeignKey(nameof(Models.Nationality))]
         public int NationalityId { get; set; }
         public Nationality? Nationality { get; set; }
-        public Type Type { get; set; }
+        public Typee Type { get; set; }
         public string? GoogleSchoolerLink { get; set; }
         public string? OrcaId { get; set; }
         public bool IsMentor { get; set; }
@@ -36,7 +36,7 @@ namespace ResearchersPlatform_DAL.Models
         MALE,
         FEMALE
     }
-    public enum Type
+    public enum Typee
     {
         Student,
         Graduated,

@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
+using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Data;
 using ResearchersPlatform_DAL.Models;
 using System;
@@ -12,10 +15,11 @@ namespace ResearchersPlatform_BAL.Repositories
 {
     public class StudentRepository : GenericRepository<Student> , IStudentRepository
     {
-       
-        public StudentRepository(AppDbContext dbContext)
+        private readonly IMapper _mapper;
+        public StudentRepository(AppDbContext dbContext , IMapper mapper)
             :base(dbContext) 
         {
+            _mapper = mapper;
         }
 
         public void UpdateStudent(Student student) => Update(student);
@@ -64,7 +68,10 @@ namespace ResearchersPlatform_BAL.Repositories
             }
             return true;
         }
-         
+        public async Task<IEnumerable<NationalityDto>> GetAllNationalitiesAsync(bool trackChanges)
+            =>  await _context.Nationalities.ProjectTo<NationalityDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+
 
     }
 }

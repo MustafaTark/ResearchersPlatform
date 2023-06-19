@@ -93,7 +93,8 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<GenericRepository<User>, AdminRepository>();
             services.AddScoped<GenericRepository<Problem>, ProblemRepository>();
             services.AddScoped<GenericRepository<ExpertRequest>, ExpertRequestRepository>();
-
+            services.AddScoped<GenericRepository<Response>, ResponseRepository>();
+            
 
             services.AddScoped<IRepositoryManager,RepositoryManager>();
             services.AddScoped<IChatRepository, ChatRepository>();
@@ -116,6 +117,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IProblemRepository, ProblemRepository>();
             services.AddScoped<IExpertRequestRepository, ExpertRequestRepository>();
+            services.AddScoped<IResponseRepository, ResponseRepository>();
 
         }
     }

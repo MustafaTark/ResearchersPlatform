@@ -77,6 +77,9 @@ namespace ResearchersPlatform_BAL
             CreateMap<TopicForCreationDto, Topic>();
             CreateMap<ExpertRequestForCreateDto,ExpertRequest>();
             CreateMap<ExpertRequest, ExpertRequestDto>().ReverseMap();
+            CreateMap<Nationality,NationalityDto>();
+            CreateMap<ResponseForCreationDto, Response>();
+            CreateMap<Response, ResponseDto>();
 
 
         }

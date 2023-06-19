@@ -28,6 +28,7 @@ namespace ResearchersPlatform_BAL.Repositories
         private IChatRepository _chat;
         private IAdminRepository _admin;
         private IProblemRepository _problem;
+        private IResponseRepository _response;
         private IExpertRequestRepository _expertRequest;
         private readonly IMemoryCache _memoryCache;
         private readonly IMapper _mapper;
@@ -49,6 +50,7 @@ namespace ResearchersPlatform_BAL.Repositories
             , IChatRepository chat, IMemoryCache memoryCache
             , IAdminRepository admin
             ,IProblemRepository problem
+            ,IResponseRepository response
             ,IExpertRequestRepository expertRequest)
         {
             _context = context;
@@ -69,6 +71,7 @@ namespace ResearchersPlatform_BAL.Repositories
             _memoryCache = memoryCache;
             _admin = admin;
             _problem = problem;
+            _response = response;
             _expertRequest = expertRequest;
         }
         public IStudentRepository Student
@@ -76,7 +79,7 @@ namespace ResearchersPlatform_BAL.Repositories
             get
             {
                 //null-coalescing operator
-                _student ??= new StudentRepository(_context);
+                _student ??= new StudentRepository(_context,_mapper);
                 
                 return _student;
             }
@@ -194,6 +197,14 @@ namespace ResearchersPlatform_BAL.Repositories
             {
                 _problem ??= new ProblemRepository(_context, _mapper);
                 return _problem;
+            }
+        }
+        public IResponseRepository Response
+        {
+            get
+            {
+                _response ??= new ResponseRepository(_context, _mapper);
+                return _response;
             }
         }
         public IExpertRequestRepository ExpertRequest

@@ -30,6 +30,7 @@ namespace ResearchersPlatform_DAL.Configurations
                  .ToTable("FinalQuizzes").HasBaseType<Quiz>();
             builder.Entity<SectionQuiz>()
                  .ToTable("SectionQuizzes").HasBaseType<Quiz>();
+            //builder.Entity<Response>().HasOne(r => r.Problem).WithOne(p => p.Response);
 
         }
         public static void AddManyToManyTables(this ModelBuilder builder)

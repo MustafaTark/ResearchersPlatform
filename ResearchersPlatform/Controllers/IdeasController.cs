@@ -406,7 +406,7 @@ namespace ResearchersPlatform.Controllers
             }
             if(task.ParticipantsNumber < participantsIds.Count)
             {
-                return BadRequest($"Allowd Participants count is {task.ParticipantsNumber}");
+                return BadRequest($"Allowed Participants count is {task.ParticipantsNumber}");
             }
             var validateParticipants = await _repositoryManager.Task.ValidateTaskParticipants(participantsIds, taskId);
             if(!validateParticipants)

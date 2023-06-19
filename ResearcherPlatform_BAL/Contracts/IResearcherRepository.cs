@@ -23,6 +23,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<SingleResearcherDto>> GetAllTaskParticipants(Guid taskId);
         Task<string?> GetResearcherByStudentId(string studentId);
         Task<ICollection<Skill>> GetSkillsAsync();
+        Task<ICollection<Skill>> GetSkillsToStudent();
         Task<ICollection<Specality>> GetSpecalitiesAsync();
         Task<ICollection<Topic>> GetTopicsAsync();
 

@@ -215,13 +215,14 @@ namespace ResearchersPlatform.Controllers
             var IdeaEntities = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
             return Ok(IdeaEntities);
         }
+
         [HttpGet("Skills")]
         [Authorize(Roles = "Student,Admin")]
-        public async Task<IActionResult> GetSkills()
+        public async Task<IActionResult> GetSkillsForStudent()
         {
-            var skills = await _repository.Researcher.GetSkillsAsync();
+            var skills = await _repository.Researcher.GetSkillsToStudent();
             return Ok(skills);
-        }  
+        }
         [HttpGet("Specialties")]
         [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetSpecialties()

@@ -114,7 +114,21 @@ namespace ResearchersPlatform_BAL.Repositories
             .Select(r => r.Id.ToString()).FirstOrDefaultAsync();
         public async Task<ICollection<Skill>> GetSkillsAsync()
             => await _context.Skills.AsNoTracking().ToListAsync();
-          public async Task<ICollection<Specality>> GetSpecalitiesAsync()
+        public async Task<ICollection<Skill>> GetSkillsToStudent()
+        {
+            var quizzes = await _context.FinalQuizzes.AsNoTracking().ToListAsync();
+            var skillsWithQuizzes = new List<Skill>();
+            foreach (var quiz in quizzes)
+            {
+                var skill = await _context.Skills.AsNoTracking().FirstOrDefaultAsync(s => s.Id == quiz.SkillId);
+                if(skill is not null && !skillsWithQuizzes.Contains(skill))
+                {
+                    skillsWithQuizzes.Add(skill);
+                }
+            }
+            return skillsWithQuizzes;
+        }
+        public async Task<ICollection<Specality>> GetSpecalitiesAsync()
             => await _context.Specalities.AsNoTracking().ToListAsync();
         public async Task<ICollection<Topic>> GetTopicsAsync()
             => await _context.Topics.AsNoTracking().ToListAsync();

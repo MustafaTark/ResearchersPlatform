@@ -167,6 +167,13 @@ namespace ResearchersPlatform.Controllers
                 }
             }
         }
+        [HttpGet("Skills")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetSkills()
+        {
+            var skills = await _repository.Researcher.GetSkillsAsync();
+            return Ok(skills);
+        }
         [HttpDelete("ExpertRequests/{requestId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteExpertRequest(Guid requestId)

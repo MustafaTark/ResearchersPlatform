@@ -155,7 +155,6 @@ namespace ResearchersPlatform.Controllers
             return Ok(problem);
         }
         [HttpGet("Nationalites")]
-        [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetAllNationalites()
         {
             var nationality = await _repositoryManager.Student.GetAllNationalitiesAsync(trackChanges:false);

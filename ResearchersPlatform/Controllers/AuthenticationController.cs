@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,6 @@ namespace ResearchersPlatform.Controllers
             _studentRepository = studentRepository;
         }
         [HttpPost]
-
         public async Task<IActionResult> RegisterUser([FromBody] StudentForRegisterDto userForRegistration)
         {
             var user = _mapper.Map<Student>(userForRegistration);
@@ -50,6 +50,30 @@ namespace ResearchersPlatform.Controllers
                 }
                 );
 
+        }
+        [HttpPost("Student/SpecialAccount")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> SpecialAccountRegiseration([FromBody] StudentSpecialAccountsForCreationDto studentDto)
+        {
+            var user = _mapper.Map<Student>(studentDto);
+            var result = await _userManager.CreateAsync(user, studentDto.Password!);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+            await _userManager.AddToRoleAsync(user, "Student");
+            var student = await _userManager.FindByNameAsync(user.UserName!);
+            _studentRepository.CreateTrails(studentId: student!.Id);
+            return Ok(
+                new
+                {
+                    UserId = await _userManager.GetUserIdAsync(student!)
+                }
+                );
         }
         [HttpPost("login")]
 

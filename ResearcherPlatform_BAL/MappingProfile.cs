@@ -80,6 +80,8 @@ namespace ResearchersPlatform_BAL
             CreateMap<Nationality,NationalityDto>();
             CreateMap<ResponseForCreationDto, Response>();
             CreateMap<Response, ResponseDto>();
+            CreateMap<StudentSpecialAccountsForCreationDto, Student>();
+            CreateMap<ResearcherSpecialAccountsForCreationDto, Researcher>();
 
 
         }

@@ -47,6 +47,7 @@ namespace ResearchersPlatform.Controllers
             await _userAdminManager.AddToRoleAsync(user, "Admin");
             return StatusCode(201);
         }
+
         [HttpPost("Login")]
 
         public async Task<IActionResult> Authenticate([FromBody] UserForLoginDto user)
@@ -64,6 +65,24 @@ namespace ResearchersPlatform.Controllers
             }
             );
         }
+        [HttpPost("Researchers/SpecialAccount/{studentId}")]
+        //[Authorize(Roles ="Admin")]
+        public async Task<IActionResult> CreateResearcherSpecialAccounts([FromBody] ResearcherSpecialAccountsForCreationDto researcherDto
+            ,string studentId)
+        {
+            var student = _repository.Student.GetStudentByIdAsync(studentId,trackChanges:false);
+            if(student == null)
+                return NotFound($"Student with ID {studentId} doesn't exist in the database");
+
+            if (!ModelState.IsValid || researcherDto == null)
+                return BadRequest($"Something Wrong in Filling the Form :{ModelState}");
+            var researcher = _mapper.Map<Researcher>(researcherDto);
+            _repository.Researcher.CreateSpecialResearcher(researcher,studentId);
+            await _repository.SaveChangesAsync();
+            return StatusCode(201, new { researcherId = researcher.Id });
+        }
+
+
         [HttpGet("Researchers")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetResearchersCount()

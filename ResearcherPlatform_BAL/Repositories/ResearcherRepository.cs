@@ -132,7 +132,33 @@ namespace ResearchersPlatform_BAL.Repositories
             => await _context.Specalities.AsNoTracking().ToListAsync();
         public async Task<ICollection<Topic>> GetTopicsAsync()
             => await _context.Topics.AsNoTracking().ToListAsync();
+        public void CreateSpecialResearcher(Researcher researcher,string studentId)
+        {
 
+            var student = _context.Students.AsNoTracking().Where(s => s.Id == studentId).FirstOrDefault();
+            if (student is not null)
+            {
+                researcher.StudentId = studentId;
+                Create(researcher);
+                DetermineLevel(researcher.Id);
+            }
+        }
+        private void DetermineLevel(Guid sresearcherId)
+        {
+            var researcher = _context.Researchers.FirstOrDefault(r => r.Id == sresearcherId);
+            if (researcher is not null)
+            {
+                var pointscheck = researcher!.Points + 1;
+                researcher.Level = pointscheck switch
+                {
+                    1 or 2 or 3 => Level.Beginner,
+                    4 or 5 or 6 => Level.Intermediate,
+                    7 or 8 => Level.Professional,
+                    _ => Level.Expert // this is the default case
+                };
+                researcher!.Points++;
+            }
+        }
     }
 }
     

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_BAL.DTO
 {
-    public class SpecialAccountsForCreationDto
+    public class StudentSpecialAccountsForCreationDto
     {
         public  required string Firstname { get; set; }
         public required string Lastname { get; set; }

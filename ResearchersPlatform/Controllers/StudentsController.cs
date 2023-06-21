@@ -28,7 +28,7 @@ namespace ResearchersPlatform.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        [Authorize(Roles = "Student,Admin")]
+        //[Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetAllStudents()
         {
             var student = await _repositoryManager.Student.GetAllStudentsAsync();

@@ -27,11 +27,13 @@ namespace ResearchersPlatform_BAL.Repositories
         public async Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges)
             => await FindByCondition(e => e.Id == studentId, trackChanges)
             .Include(s=>s.Badges)
+            .Include(n => n.Nationality)
             .OrderBy(e => e.UserName)
             .FirstOrDefaultAsync();
         public async Task<IEnumerable<Student?>> GetAllStudentsAsync()
             => await FindAll(trackChanges:false)
             .Include(s => s.Badges)
+            .Include(n => n.Nationality)
             .OrderBy(e => e.UserName)
             .ToListAsync();
         public void CreateTrails(string studentId)

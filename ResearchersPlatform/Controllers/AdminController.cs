@@ -66,25 +66,36 @@ namespace ResearchersPlatform.Controllers
             );
         }
         [HttpPost("Researchers/SpecialAccount/{studentId}")]
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateResearcherSpecialAccounts([FromBody] ResearcherSpecialAccountsForCreationDto researcherDto
             ,string studentId)
         {
-            var student = _repository.Student.GetStudentByIdAsync(studentId,trackChanges:false);
+            var student = await _repository.Student.GetStudentByIdAsync(studentId,trackChanges:false);
             if(student == null)
                 return NotFound($"Student with ID {studentId} doesn't exist in the database");
 
             if (!ModelState.IsValid || researcherDto == null)
-                return BadRequest($"Something Wrong in Filling the Form :{ModelState}");
+                return BadRequest($"Something Went Wrong in Filling the Form :{ModelState}");
+            try { 
             var researcher = _mapper.Map<Researcher>(researcherDto);
             _repository.Researcher.CreateSpecialResearcher(researcher,studentId);
+            _repository.Researcher.DetermineLevel(researcher);
             await _repository.SaveChangesAsync();
             return StatusCode(201, new { researcherId = researcher.Id });
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
+                {
+                    return BadRequest("A researcher with the same student ID already exists.");
+                }
+                return StatusCode(400, new { message = "An error occurred while creating the Researcher." });
+            }
         }
 
 
         [HttpGet("Researchers")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]    
         public IActionResult GetResearchersCount()
         {
             var researchersCount = _repository.Admin.ResearchersCount(trackChanges: false);

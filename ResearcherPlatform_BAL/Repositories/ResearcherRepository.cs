@@ -29,12 +29,14 @@ namespace ResearchersPlatform_BAL.Repositories
             var resercher = await FindByCondition(r => r.Id == researcherId, trackChanges)
              .Include(i => i.SpecalityObject)
             .Include(i => i.Papers)
+            .Include(s => s.StudentObj)
             .ProjectTo<ResearcherDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
             var student = await _context.Students
                
                 .Where(s => s.Id == resercher!.StudentId)
                 .Include(s => s.Badges)
+                .Include(s => s.Nationality)
                 .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
                 //.Select(s => new { Id = s.Id, Badges = s.Badges, FirstName = s.Firstname, LastName = s.Lastname })
                 .FirstOrDefaultAsync();
@@ -48,6 +50,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 Level = resercher.Level,
                 Papers = resercher!.Papers,
                 Specality = resercher.SpecalityObject,
+                //StudentObj = student.,
                 Badges = student!.Badges,
             };
             return resercherVM;
@@ -134,29 +137,31 @@ namespace ResearchersPlatform_BAL.Repositories
             => await _context.Topics.AsNoTracking().ToListAsync();
         public void CreateSpecialResearcher(Researcher researcher,string studentId)
         {
-
-            var student = _context.Students.AsNoTracking().Where(s => s.Id == studentId).FirstOrDefault();
-            if (student is not null)
-            {
+            var student = _context.Students.FirstOrDefault(s => s.Id == studentId);
                 researcher.StudentId = studentId;
                 Create(researcher);
-                DetermineLevel(researcher.Id);
-            }
         }
-        private void DetermineLevel(Guid sresearcherId)
+        private static readonly IDictionary<int, Level> PointsToLevelMap = new Dictionary<int, Level>
+{
+             { 1, Level.Beginner },
+             { 2, Level.Beginner },
+             { 3, Level.Beginner },
+             { 4, Level.Intermediate },
+             { 5, Level.Intermediate },
+             { 6, Level.Intermediate },
+             { 7, Level.Professional },
+             { 8, Level.Professional }
+};          
+
+        public void DetermineLevel(Researcher researcher)
         {
-            var researcher = _context.Researchers.FirstOrDefault(r => r.Id == sresearcherId);
-            if (researcher is not null)
+            if (PointsToLevelMap.TryGetValue(researcher.Points, out var level))
             {
-                var pointscheck = researcher!.Points + 1;
-                researcher.Level = pointscheck switch
-                {
-                    1 or 2 or 3 => Level.Beginner,
-                    4 or 5 or 6 => Level.Intermediate,
-                    7 or 8 => Level.Professional,
-                    _ => Level.Expert // this is the default case
-                };
-                researcher!.Points++;
+                researcher.Level = level;
+            }
+            else
+            {
+                researcher.Level = Level.Expert;
             }
         }
     }

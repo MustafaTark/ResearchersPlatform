@@ -15,6 +15,7 @@ namespace ResearchersPlatform_BAL.ViewModels
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public required string StudentId { get; set; }
+        public Student? StudentObj { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
         public Specality? Specality { get; set; }

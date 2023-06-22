@@ -27,7 +27,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<ICollection<Specality>> GetSpecalitiesAsync();
         Task<ICollection<Topic>> GetTopicsAsync();
         void CreateSpecialResearcher(Researcher researcher,string studentId);
-        //void DetermineLevel(Guid researcherId);
+        void DetermineLevel(Researcher researcher);
 
 
     }

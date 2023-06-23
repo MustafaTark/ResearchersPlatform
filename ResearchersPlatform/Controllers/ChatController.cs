@@ -79,7 +79,7 @@ namespace ResearchersPlatform.Controllers
             await  _privateHub.Clients.All.ReceivePrivate(message);
             return Ok(message);
         }
-        [HttpGet("Discussion/{ideaId})")]
+        [HttpGet("Discussion/{ideaId}")]
         [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetMessagesToIdea(Guid ideaId)
         {

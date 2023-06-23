@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using ResearchersPlatform.Extenstions;
 using ResearchersPlatform.Hubs;
@@ -16,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                policy =>
                {
-                   policy.WithOrigins("http://localhost:3000").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                   policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                });
 });
 builder.Services.AddAuthorization(options =>
@@ -74,6 +71,7 @@ builder.Services.AddSwaggerGen(s =>
 });
 
 var app = builder.Build();
+app.UseRouting();
 app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -89,5 +87,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<DiscussionHub>("hubs/discussion");
 app.MapHub<ChatHub>("hubs/chat");
-app.MapHub<ChatHub>("hubs/Privatechat");
+app.MapHub<PrivateChatHub>("hubs/Privatechat");
 app.Run();

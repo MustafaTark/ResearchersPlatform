@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ResearchersPlatform_BAL.Repositories
 {
@@ -130,7 +132,41 @@ namespace ResearchersPlatform_BAL.Repositories
                 return false;
             return true;
         }
+       
+        public async Task Submit(Guid ideaId)
+        {
+            await AddRateToCreator(ideaId);
+        }
+        
+        public async Task<bool> IsCreatorToIdea(Guid ideaId, Guid creatorId)
+        {
+            var idea = await FindByCondition(i => i.Id == ideaId && i.CreatorId==creatorId, trackChanges: false)
+               .FirstOrDefaultAsync();
+            if(idea != null)
+                return true;
+            return false;
+        }
+        private async Task AddRateToCreator(Guid ideaId)
+        {
+            var idea = await FindByCondition(i => i.Id == ideaId, trackChanges: false)
+                .Select(i => new { i.CreatorId,i.Deadline})
+                .FirstOrDefaultAsync();
+            var researcher = await _context.Researchers.Where(r => r.Id == idea!.CreatorId).FirstOrDefaultAsync();
+            bool isBeforeDeadline = DateTime.Now <= idea!.Deadline;
+            if (isBeforeDeadline)
+            {
+                researcher!.SumRates += 10;
+                researcher.TotalRates += 1;
 
+                researcher.OverallRate = researcher.SumRates / researcher.TotalRates;
+            }
+            else
+            {
+                researcher!.SumRates += 5;
+                researcher.TotalRates += 1;
+                researcher.OverallRate = researcher.SumRates / researcher.TotalRates;
+            }
+        }
 
     }
 }

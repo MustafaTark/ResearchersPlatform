@@ -26,6 +26,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<bool> HasParticipantsMoreThanOne(Guid ideaId);
         Task<bool> CheckParticipantsNumber(Guid ideaId);
         Task<bool> CheckResearcherIdeasNumber(Guid researcherId);
-
+        Task Submit(Guid ideaId);
+        Task<bool> IsCreatorToIdea(Guid ideaId, Guid creatorId);
     }
 }

@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_BAL.Repositories;
 using ResearchersPlatform_BAL.RequestFeatures;
+using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Models;
 using System.Data;
 
@@ -439,6 +441,39 @@ namespace ResearchersPlatform.Controllers
                 return NotFound($"There is no Expert Request with id {requestId} in the database");
             var requestEntity = _mapper.Map<ExpertRequestDto>(request);
             return Ok(requestEntity);
+        }
+        [HttpPost("AddRateToParticipants/{ideaId}/{creatorId}")]
+        public async Task<IActionResult> AddRateToParticipants(Guid ideaId,
+            [FromBody]HashSet<ResearcherRatePostViewModel> researcherRates,Guid creatorId)
+        {
+            var creator = await _repositoryManager.Researcher.GetResearcherByIdAsync(creatorId,trackChanges: false);
+            if (creator is null)
+                return NotFound($"this ResearcherId {creatorId} Not Found ");
+            bool isCreator = await _repositoryManager.Idea.IsCreatorToIdea(ideaId, creatorId);
+            if (!isCreator)
+                return BadRequest($"This CreatorId {creatorId} doesn't Creator To Idea");
+            foreach(var reasearcherRate in researcherRates)
+            {
+                var researcher =await _repositoryManager.Researcher.GetResearcherByIdAsync(reasearcherRate.ResearcherId,trackChanges:false);
+                if (researcher is null)
+                    return BadRequest($"this ResearcherId {reasearcherRate} Not Found ");
+                await _repositoryManager.Researcher.AddRateToParticipate(reasearcherRate.ResearcherId, reasearcherRate.Rate);
+                await _repositoryManager.SaveChangesAsync();
+            }
+            return StatusCode(201);
+        }
+        [HttpPost("Submit")]
+        public async Task<IActionResult> SubmitIdea(Guid ideaId,Guid creatorId)
+        {
+            var creator = await _repositoryManager.Researcher.GetResearcherByIdAsync(creatorId, trackChanges: false);
+            if (creator is null)
+                return NotFound($"this ResearcherId {creatorId} Not Found ");
+            bool isCreator = await _repositoryManager.Idea.IsCreatorToIdea(ideaId, creatorId);
+            if (!isCreator)
+                return BadRequest($"This CreatorId {creatorId} doesn't Creator To Idea");
+            await _repositoryManager.Idea.Submit(ideaId);
+            await _repositoryManager.SaveChangesAsync();
+            return StatusCode(201);
         }
     }
 }

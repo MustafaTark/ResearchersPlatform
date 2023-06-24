@@ -28,6 +28,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<ICollection<Topic>> GetTopicsAsync();
         void CreateSpecialResearcher(Researcher researcher,string studentId);
         void DetermineLevel(Researcher researcher);
+        Task AddRateToParticipate(Guid researcherId, int rate);
 
 
     }

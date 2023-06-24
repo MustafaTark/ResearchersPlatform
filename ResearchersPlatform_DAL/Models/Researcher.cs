@@ -16,7 +16,10 @@ namespace ResearchersPlatform_DAL.Models
         public Student? StudentObj { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
-        public int Rate { get; set; } = 500;
+        [Range(0, 10, ErrorMessage = "Rate Should be between 0 and 10")]
+        public int OverallRate { get; set; }
+        public int SumRates { get; set; }
+        public int TotalRates { get; set; }
         public ICollection<Idea> Ideas { get; set; }
         [MaxLength(2)]
         public ICollection<Idea> IdeasLeader { get; set; }

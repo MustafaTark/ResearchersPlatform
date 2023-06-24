@@ -89,25 +89,25 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         public void Submit(Guid taskId)
         {
-            var task = FindByCondition(t=>t.Id==taskId, trackChanges: true)
-                .Include(t=>t.Participants)
-                .FirstOrDefault();
-            bool isBeforeDeadline = DateTime.Now <= task!.Deadline;
-            if(isBeforeDeadline)
-            {
-                foreach(var researcher in task.Participants!)
-                {
-                    researcher.Rate += 100;
-                }
-            }
-            else if (!isBeforeDeadline)
-            {
-                foreach (var researcher in task.Participants!)
-                {
-                    researcher.Rate -= 100;
-                }
-            }
-            task.Progress = Progress.COMPLETED;
+            //var task = FindByCondition(t=>t.Id==taskId, trackChanges: true)
+            //    .Include(t=>t.Participants)
+            //    .FirstOrDefault();
+            //bool isBeforeDeadline = DateTime.Now <= task!.Deadline;
+            //if(isBeforeDeadline)
+            //{
+            //    foreach(var researcher in task.Participants!)
+            //    {
+            //        researcher.Rate += 100;
+            //    }
+            //}
+            //else if (!isBeforeDeadline)
+            //{
+            //    foreach (var researcher in task.Participants!)
+            //    {
+            //        researcher.Rate -= 100;
+            //    }
+            //}
+            //task.Progress = Progress.COMPLETED;
         }
     }
 }

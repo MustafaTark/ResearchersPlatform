@@ -164,6 +164,15 @@ namespace ResearchersPlatform_BAL.Repositories
                 researcher.Level = Level.Expert;
             }
         }
+
+        public async Task AddRateToParticipate(Guid researcherId, int rate)
+        {
+            var researcher = await FindByCondition(r => r.Id == researcherId, true).FirstOrDefaultAsync();
+            researcher!.SumRates += rate;
+            researcher.TotalRates += 1;
+            await _context.SaveChangesAsync();
+            researcher.OverallRate = researcher.SumRates / researcher.TotalRates;
+        }
     }
 }
     

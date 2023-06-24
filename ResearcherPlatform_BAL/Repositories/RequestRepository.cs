@@ -53,9 +53,9 @@ namespace ResearchersPlatform_BAL.Repositories
                 var request = new RequestIdea { IdeaId = ideaId, ResearcherId = researcherId };
                 _context.Requests.Add(request);
         }
-        private bool ValidateAcception(Guid requestId, Guid researcherId)
+        private async Task< bool> ValidateAcception(Guid requestId, Guid researcherId)
         {
-            var request = FindByCondition(i => i.Id == requestId
+            var request =await FindByCondition(i => i.Id == requestId
               && i.ResearcherId == researcherId
               && i.IsAccepted == false, trackChanges: false).FirstOrDefaultAsync();
             if (request is null)
@@ -67,7 +67,8 @@ namespace ResearchersPlatform_BAL.Repositories
             var researcher = await _context.Researchers.Include(r => r.Requests).FirstOrDefaultAsync(r => r.Id == researcherId);
             var request =  researcher!.Requests.FirstOrDefault(r => r.Id == requestId);
             var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == request!.IdeaId);
-            if(ValidateAcception(requestId, researcherId))
+            bool isAccepted = await ValidateAcception(requestId, researcherId);
+            if (isAccepted)
             {
                 request!.IsAccepted = true;
                 _context.Set<Idea>().FirstOrDefault(i => i.Id == idea!.Id)!.Participants.Add(researcher);

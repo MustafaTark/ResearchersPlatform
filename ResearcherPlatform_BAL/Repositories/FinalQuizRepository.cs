@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Data;
@@ -142,7 +143,7 @@ namespace ResearchersPlatform_BAL.Repositories
             foreach(var result in results)
             {
                 var quiz = FindByCondition(q => q.Id == result.QuizId && q.SkillId == skillId, false);
-                if (quiz is not null)
+                if (!quiz.IsNullOrEmpty())
                     return true;
             }
             return false;

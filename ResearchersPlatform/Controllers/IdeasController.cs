@@ -40,6 +40,18 @@ namespace ResearchersPlatform.Controllers
             var ideaEntity = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
             return Ok(ideaEntity);
         }
+        [HttpGet("CompletedIdeas")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> GetAllCompletedIdeas([FromQuery] IdeasParamters paramters)
+        {
+            var ideas = await _repositoryManager.Idea.GetAllCompletedIdeas(paramters, trackChanges: false);
+            if (ideas is null)
+            {
+                return NotFound("There are no completed ideas in the database yet");
+            }
+            var ideaEntity = _mapper.Map<IEnumerable<IdeaDto>>(ideas);
+            return Ok(ideaEntity);
+        }
         [HttpPost("InitiateIdea/{researcherId}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> InitiateIdea([FromBody] IdeaForCreateDTO ideaDto, Guid researcherId)

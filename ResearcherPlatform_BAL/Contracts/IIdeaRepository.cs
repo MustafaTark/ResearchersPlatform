@@ -19,6 +19,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<Idea?>> GetAllIdeasForResearcherAsync(Guid researcherId , bool trackChanges);
         Task<IEnumerable<Idea?>> GetAllIdeasForCreatorAsync(Guid researcherId, bool trackChanges);
         Task<IEnumerable<IdeaDto>> GetAllIdeas(IdeasParamters paramters, bool trackChanges);
+        Task<IEnumerable<IdeaDto>> GetAllCompletedIdeas(IdeasParamters paramters, bool trackChanges);
         Task<bool> ValidateIdeaCreation(Guid researcherId);
         Task<IEnumerable<TopicsDto>> GetAvailableTopics(Guid researcherId);
         Task<bool> ValidateResearcherForIdea(Guid ideaId, Guid researcherId);

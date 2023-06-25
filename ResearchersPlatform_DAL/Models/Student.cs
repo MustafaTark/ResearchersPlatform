@@ -39,7 +39,8 @@ namespace ResearchersPlatform_DAL.Models
     public enum Typee
     {
         Student,
-        Graduated,
-        Specialist
+        Graduate,
+        DoctorOrSpecialist,
+        Other
     }
 }

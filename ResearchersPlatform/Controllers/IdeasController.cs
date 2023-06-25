@@ -339,7 +339,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest("The deadline for the task shouldn't last longer than the deadline for this idea");
             }
             var ideaParticipantNumber = await _repositoryManager.Task.IdeaParticipantNumber(ideaId);
-            if(ideaParticipantNumber <= taskDto.ParticipantsNumber)
+            if(ideaParticipantNumber < taskDto.ParticipantsNumber)
             {
                 return BadRequest("Task Participant number shouldn't be bigger than idea participant number");
             }

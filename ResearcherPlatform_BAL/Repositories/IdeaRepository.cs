@@ -135,6 +135,8 @@ namespace ResearchersPlatform_BAL.Repositories
        
         public async Task Submit(Guid ideaId)
         {
+            var idea = await FindByCondition(i => i.Id == ideaId, trackChanges:true).FirstOrDefaultAsync();
+            idea!.IsCompleted = true; 
             await AddRateToCreator(ideaId);
         }
         

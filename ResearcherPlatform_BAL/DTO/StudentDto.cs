@@ -19,6 +19,7 @@ namespace ResearchersPlatform_BAL.DTO
         public Typee Type { get; set; }
         public string? GoogleSchoolerLink { get; set; }
         public string? OrcaId { get; set; }
+        public bool IsMentor { get; set; }
         //public List<Course>? Courses { get; set; }
         //public int Trails { get; set; }
         public List<BadgeDto>? Badges { get; set; }

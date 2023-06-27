@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RepoExtentions;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Data;
 using ResearchersPlatform_DAL.Models;
 using System;
@@ -30,11 +32,14 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(n => n.Nationality)
             .OrderBy(e => e.UserName)
             .FirstOrDefaultAsync();
-        public async Task<IEnumerable<Student?>> GetAllStudentsAsync()
-            => await FindAll(trackChanges:false)
+        public async Task<IEnumerable<Student?>> GetAllStudentsAsync(StudentParamters paramters)
+            => await FindAll(trackChanges: false)
             .Include(s => s.Badges)
             .Include(n => n.Nationality)
-            .OrderBy(e => e.UserName)
+            .Search(paramters.SearchTerm!)
+            .Skip((paramters.PageNumber - 1) * paramters.PageSize)
+            .Take(paramters.PageSize)
+            .OrderBy(e => e.Firstname)
             .ToListAsync();
         public void CreateTrails(string studentId)
         {

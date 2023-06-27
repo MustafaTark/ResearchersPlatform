@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Models;
 using System.Data;
 
@@ -29,9 +30,9 @@ namespace ResearchersPlatform.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Student,Admin")]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<IActionResult> GetAllStudents([FromQuery] StudentParamters paramters)
         {
-            var student = await _repositoryManager.Student.GetAllStudentsAsync();
+            var student = await _repositoryManager.Student.GetAllStudentsAsync(paramters);
             if(student is null )
             {
                 return NotFound("There are no students in the database");

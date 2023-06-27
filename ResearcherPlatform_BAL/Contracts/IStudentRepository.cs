@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.RequestFeatures;
 using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void UpdateStudent(Student student);
         void DeleteStudent(Student student);
         Task<Student?> GetStudentByIdAsync(string studentId, bool trackChanges);
-        Task<IEnumerable<Student?>> GetAllStudentsAsync();
+        Task<IEnumerable<Student?>> GetAllStudentsAsync(StudentParamters paramters);
         void CreateTrails(string studentId);
         Task<IEnumerable<Student>> GetAllStudentsEnrolledInCourseAsync(Guid courseId , bool trackChanges);
         void EnrollForCourse(Guid courseId, Student student);

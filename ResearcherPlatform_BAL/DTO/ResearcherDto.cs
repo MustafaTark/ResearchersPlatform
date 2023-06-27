@@ -14,6 +14,8 @@ namespace ResearchersPlatform_BAL.DTO
         public StudentDto? Student { get; set; }
         public Level Level { get; set; }
         public int Points { get; set; }
+        public int OverallRate { get; set; }
+        public int TotalRates { get; set; }
         public ICollection<Idea>? Ideas { get; set; }
         public ICollection<Idea>? IdeasLeader { get; set; }
         public Specality? SpecalityObject { get; set; }

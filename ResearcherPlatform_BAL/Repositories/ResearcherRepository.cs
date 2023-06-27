@@ -52,6 +52,8 @@ namespace ResearchersPlatform_BAL.Repositories
                 Specality = resercher.SpecalityObject,
                 //StudentObj = student.,
                 Badges = student!.Badges,
+                OverallRate = resercher.OverallRate,
+                TotalRates = resercher.TotalRates,
             };
             return resercherVM;
         }
@@ -60,6 +62,8 @@ namespace ResearchersPlatform_BAL.Repositories
             .Include(s => s.StudentObj)
             .Include(s => s.SpecalityObject)
             .Search(paramters.SearchTerm!,paramters.Level,paramters.Specality)
+            .Skip((paramters.PageNumber - 1) * paramters.PageSize)
+            .Take(paramters.PageSize)
             .ToListAsync();
         public void CreateSpecality(int specality,string studentId)
         {

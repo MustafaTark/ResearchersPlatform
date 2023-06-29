@@ -23,10 +23,12 @@ namespace ResearchersPlatform.Controllers
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        public IdeasController(IRepositoryManager repository , IMapper mapper)
+        private readonly IFilesRepository _filesRepository;
+        public IdeasController(IRepositoryManager repository , IMapper mapper, IFilesRepository filesRepository)
         {
-            _repositoryManager= repository;
-            _mapper= mapper;
+            _repositoryManager = repository;
+            _mapper = mapper;
+            _filesRepository = filesRepository;
         }
         [HttpGet]
         [Authorize(Roles = "Student,Admin")]
@@ -474,6 +476,81 @@ namespace ResearchersPlatform.Controllers
             }
             return StatusCode(201);
         }
+        [HttpPost("IdeaFile"),DisableRequestSizeLimit]
+        public async Task<IActionResult> AddFileToIdea([FromForm] FileForCreateViewModel file,Guid ideaId,Guid researcherId)
+        {
+            var researcher = await _repositoryManager.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
+            if (researcher is null)
+                return NotFound($"this ResearcherId {researcherId} Not Found ");
+            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, false);
+            if (idea is null)
+                return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
+            _filesRepository.UploadFileToIdea(ideaId, researcherId, file.File, file.Name);
+           await _repositoryManager.SaveChangesAsync();
+            return StatusCode(201, "File Uploaded Successfully");
+        }
+        [HttpGet("IdeaFileStream/{fileId}")]
+        public async Task<IActionResult> GetFileToIdea(int fileId)
+        {
+            try
+            {
+                FileStream file = await _filesRepository.GetFileToIdea(fileId);
+                return new FileStreamResult(file, "application/pdf");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500,$"{ex}");
+            }
+            
+        }
+        [HttpGet("IdeaFile/{ideaId}")]
+        public async Task<IActionResult> GetFilesToIdea(Guid ideaId)
+        {
+            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, false);
+            if (idea is null)
+                return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
+            var files = await _filesRepository.GetFilesToIdea(ideaId);
+            return Ok(files);
+        }
+        [HttpPost("TaskFile"), DisableRequestSizeLimit]
+        public async Task<IActionResult> AddFileToTask([FromForm] FileForCreateViewModel file, Guid taskId, Guid researcherId)
+        {
+            var researcher = await _repositoryManager.Researcher.GetResearcherByIdAsync(researcherId, trackChanges: false);
+            if (researcher is null)
+                return NotFound($"this ResearcherId {researcherId} Not Found ");
+            var task = await _repositoryManager.Task.GetTaskByIdAsync(taskId, false);
+            if (task is null)
+                return BadRequest($"Idea with ID {taskId} doesn't exist in the database");
+            _filesRepository.UploadFileToTask(taskId, researcherId, file.File, file.Name);
+            await _repositoryManager.SaveChangesAsync();
+            return StatusCode(201, "File Uploaded Successfully");
+        }
+        [HttpGet("TaskFileStream/{fileId}")]
+        public async Task<IActionResult> GetFileToTask(int fileId)
+        {
+            try
+            {
+                FileStream file = await _filesRepository.GetFileToTask(fileId);
+                return new FileStreamResult(file, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex}");
+            }
+
+        }
+        [HttpGet("TaskFile/{taskId}")]
+        public async Task<IActionResult> GetFilesToTask(Guid taskId)
+        {
+            var task = await _repositoryManager.Task.GetTaskByIdAsync(taskId, trackChanges: false);
+            if (task is null)
+            {
+                return NotFound($"Task with ID {taskId} doesn't exist in the database");
+            }
+            var files = await _filesRepository.GetFilesToTask(taskId);
+            return Ok(files);
+        }
+
         [HttpPost("Submit")]
         public async Task<IActionResult> SubmitIdea(Guid ideaId,Guid creatorId)
         {

@@ -3,6 +3,7 @@ using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace ResearchersPlatform_DAL.Configurations
 {
     public static class ExtentionModelBuilder
     {
+      
+
         public static void AddIndexes(this ModelBuilder builder)
         {
             builder.Entity<Topic>().HasIndex(p => p.MinmumPoints);
@@ -18,8 +21,6 @@ namespace ResearchersPlatform_DAL.Configurations
             builder.Entity<Topic>().HasIndex(n => n.Name).IsUnique();
             builder.Entity<Skill>().HasIndex(n => n.Name).IsUnique();
             builder.Entity<Specality>().HasIndex(n => n.Name).IsUnique();
-
-
         }
         public static void AddInhertanceTables(this ModelBuilder builder) 
         {

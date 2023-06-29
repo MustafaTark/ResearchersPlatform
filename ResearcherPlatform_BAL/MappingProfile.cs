@@ -83,7 +83,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<StudentSpecialAccountsForCreationDto, Student>();
             CreateMap<ResearcherSpecialAccountsForCreationDto, Researcher>();
 
-
+            CreateMap<IdeaFile, FileDto>();
         }
     }
 }

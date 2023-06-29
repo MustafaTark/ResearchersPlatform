@@ -42,6 +42,8 @@ namespace ResearchersPlatform_DAL.Data
         public DbSet<ExpertRequest> ExpertRequests { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<Response> Responses { get; set; }
+        public DbSet<IdeaFile> IdeaFiles { get; set; }
+        public DbSet<TaskFile> TaskFiles { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) :
             base(options)

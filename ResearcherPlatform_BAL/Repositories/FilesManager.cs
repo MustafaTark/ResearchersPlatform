@@ -19,6 +19,15 @@ namespace ResearchersPlatform_BAL.Repositories
             var dbPath = Path.Combine(pathToSave, fileName);
             var fileStream = new FileStream(dbPath, FileMode.Open, FileAccess.Read);
             return fileStream;
+        } 
+        public byte[] GetFileBytes(string fileName)
+        {
+
+            var folderName = Path.Combine("Resources", "Media");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var dbPath = Path.Combine(pathToSave, fileName);
+            byte[] fileBytes = File.ReadAllBytes(dbPath);
+            return fileBytes;
         }
 
         public string UploadFiles(IFormFile file)

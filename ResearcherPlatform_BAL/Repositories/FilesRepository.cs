@@ -57,5 +57,65 @@ namespace ResearchersPlatform_BAL.Repositories
                 _context.Videos.Add(videoEntity);
             
         }
+        public void UploadFileToIdea(Guid ideaId,Guid researcherId,IFormFile file,string title)
+        {
+            
+               var url= _filesManager.UploadFiles(file);
+            var fileEntity = new IdeaFile
+            {
+                Title = title,
+                Path = url,
+                IdeaId = ideaId,
+                SenderId = researcherId
+          };
+                _context.IdeaFiles.Add(fileEntity);
+            
+        } public void UploadFileToTask(Guid taskId,Guid researcherId,IFormFile file,string title)
+        {
+            
+               var url= _filesManager.UploadFiles(file);
+            var fileEntity = new TaskFile
+            {
+                Title = title,
+                Path = url,
+                TaskId = taskId,
+                SenderId = researcherId
+          };
+                _context.TaskFiles.Add(fileEntity);
+            
+        }
+        public async Task<IEnumerable<FileDto>> GetFilesToIdea(Guid ideaId)
+        {
+            var files = await _context.IdeaFiles.Where(i => i.IdeaId == ideaId)
+                .ProjectTo<FileDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return files;
+        }
+        public async Task<FileStream> GetFileToIdea(int fileId)
+        {
+            var file = await _context.IdeaFiles.Where(i => i.ID == fileId).FirstOrDefaultAsync();
+            return _filesManager.GetFile(file!.Path);
+        }
+        public async Task<IEnumerable<FileDto>> GetFilesToTask(Guid taskId)
+        {
+            var files = await _context.TaskFiles.Where(i => i.TaskId == taskId)
+                .ProjectTo<FileDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return files;
+        }
+        public async Task<FileStream> GetFileToTask(int fileId)
+        {
+            var file = await _context.TaskFiles.Where(i => i.ID == fileId).FirstOrDefaultAsync();
+            return _filesManager.GetFile(file!.Path);
+        }
+
+        //public async Task<FileStream> GetVideoToSection(int videoId)
+        //{
+        //    var url = await _context.Videos.Where(v => v.Id == videoId)
+        //                                   .Select(v => v.VideoUrl)
+        //                                   .SingleOrDefaultAsync();
+        //    return _filesManager.GetFile(url!);
+
+        //}
     }
 }

@@ -13,12 +13,14 @@ namespace ResearchersPlatform_DAL.Models
         public TaskIdea()
         {
             Participants = new List<Researcher>();
+            Files = new HashSet<TaskFile>();
         }
         public Guid Id { get; set; }
         public int ParticipantsNumber { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
         public DateTime Deadline { get; set; }
+        public ICollection<TaskFile> Files { get; set; }
         public Progress Progress { get; set; }
         public ICollection<Researcher>? Participants { get; set; }
         [ForeignKey(nameof(Idea))]

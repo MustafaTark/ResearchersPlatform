@@ -13,6 +13,7 @@ namespace ResearchersPlatform_BAL.DTO
         public StudentDto? StudentObj { get; set; }
         public int Points { get; set; }
         public string Level { get; set; }
+        public int OverallRate { get; set; }
         public Specality? SpecalityObject { get; set; }
 
     }

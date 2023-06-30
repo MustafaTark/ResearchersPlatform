@@ -84,6 +84,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<ResearcherSpecialAccountsForCreationDto, Researcher>();
 
             CreateMap<IdeaFile, FileDto>();
+            CreateMap<TaskFile, FileDto>();
         }
     }
 }

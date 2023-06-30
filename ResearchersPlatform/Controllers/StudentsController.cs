@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
+using ResearchersPlatform_BAL.Repositories;
 using ResearchersPlatform_BAL.RequestFeatures;
+using ResearchersPlatform_BAL.ViewModels;
 using ResearchersPlatform_DAL.Models;
 using System.Data;
 
@@ -20,13 +22,15 @@ namespace ResearchersPlatform.Controllers
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly IFilesRepository _filesRepository;
         //private readonly ILogger _logger;
 
         public StudentsController(
-            IRepositoryManager repository,IMapper mapper)
+            IRepositoryManager repository,IMapper mapper, IFilesRepository filesRepository)
         {
             _repositoryManager = repository;
             _mapper = mapper;
+            _filesRepository = filesRepository;
         }
         [HttpGet]
         [Authorize(Roles = "Student,Admin")]
@@ -236,6 +240,32 @@ namespace ResearchersPlatform.Controllers
             _repositoryManager.Response.DeleteResponse(response);
             await _repositoryManager.SaveChangesAsync();
             return NoContent();
+        }
+        [HttpPost("UploadImage"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadImage([FromForm] ImageForUploadViewModel img, string userId)
+        {
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(userId, trackChanges: false);
+            if (student is null)
+            {
+                return NotFound($"Student with ID: {userId} doesn't exist in the database ");
+            }
+            _filesRepository.UploadImageToUser(userId,img.File);
+            await _repositoryManager.SaveChangesAsync();
+            return StatusCode(201, "File Uploaded Successfully");
+        }
+        [HttpGet("Image/{userId}")]
+        public async Task<IActionResult> GetImage(string userId)
+        {
+            try
+            {
+                FileStream file = await _filesRepository.GetImageToUser(userId);
+                return new FileStreamResult(file, "image/png");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex}");
+            }
+
         }
 
     }

@@ -70,7 +70,8 @@ namespace ResearchersPlatform_BAL.Repositories
           };
                 _context.IdeaFiles.Add(fileEntity);
             
-        } public void UploadFileToTask(Guid taskId,Guid researcherId,IFormFile file,string title)
+        }
+        public void UploadFileToTask(Guid taskId,Guid researcherId,IFormFile file,string title)
         {
             
                var url= _filesManager.UploadFiles(file);
@@ -108,7 +109,17 @@ namespace ResearchersPlatform_BAL.Repositories
             var file = await _context.TaskFiles.Where(i => i.ID == fileId).FirstOrDefaultAsync();
             return _filesManager.GetFile(file!.Path);
         }
-
+        public void UploadImageToUser(string userId,IFormFile img)
+        {
+            var url = _filesManager.UploadFiles(img);
+            var user = _context.Users.FirstOrDefault(u=>u.Id==userId);
+            user!.ImageUrl = url;
+        }
+        public async Task<FileStream> GetImageToUser(string userId)
+        {
+            var img = await _context.Users.AsNoTracking().Where(u=>u.Id.Equals(userId)).Select(u=>u.ImageUrl).FirstOrDefaultAsync();
+            return _filesManager.GetFile(img!);
+        }
         //public async Task<FileStream> GetVideoToSection(int videoId)
         //{
         //    var url = await _context.Videos.Where(v => v.Id == videoId)

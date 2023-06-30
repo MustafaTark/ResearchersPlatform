@@ -20,5 +20,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<FileDto>> GetFilesToTask(Guid taskId);
         void UploadFileToTask(Guid taskId, Guid researcherId, IFormFile file, string title);
         Task<FileStream> GetFileToTask(int fileId);
+        void UploadImageToUser(string userId, IFormFile img);
+        Task<FileStream> GetImageToUser(string userId);
     }
 }

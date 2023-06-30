@@ -10,7 +10,7 @@ namespace ResearchersPlatform_DAL.Models
 {
     public class User : IdentityUser
     {
-        
+        public string ImageUrl { get; set; } = "NotFound";
     }
    
 }

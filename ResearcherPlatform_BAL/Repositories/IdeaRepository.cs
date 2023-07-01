@@ -65,14 +65,14 @@ namespace ResearchersPlatform_BAL.Repositories
         public async Task<IEnumerable<IdeaDto>> GetAllIdeas(IdeasParamters paramters, bool trackChanges)
             => await FindAll(trackChanges)
             .ProjectTo<IdeaDto>(_mapper.ConfigurationProvider)
-            .Search(paramters.SearchTerm!,paramters.Topic,paramters.Specality)
+            .Search(paramters.SearchTerm!,paramters.Topic,paramters.Specality,paramters.Month)
             .Skip((paramters.PageNumber - 1) * paramters.PageSize)
             .Take(paramters.PageSize)
             .OrderBy(o => o.Deadline).ToListAsync();
         public async Task<IEnumerable<IdeaDto>> GetAllCompletedIdeas(IdeasParamters paramters, bool trackChanges)
             => await FindByCondition(i => i.IsCompleted == true,trackChanges)
              .ProjectTo<IdeaDto>(_mapper.ConfigurationProvider)
-             .Search(paramters.SearchTerm!, paramters.Topic, paramters.Specality)
+             .Search(paramters.SearchTerm!, paramters.Topic, paramters.Specality, paramters.Month)
              .Skip((paramters.PageNumber - 1) * paramters.PageSize)
              .Take(paramters.PageSize)
              .OrderBy(o => o.Deadline).ToListAsync();

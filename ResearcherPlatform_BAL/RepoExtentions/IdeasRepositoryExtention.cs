@@ -12,7 +12,7 @@ namespace ResearchersPlatform_BAL.RepoExtentions
     public static class IdeasRepositoryExtention
     {
         public static IQueryable<IdeaDto> Search(
-            this IQueryable<IdeaDto> ideas, string searchTerm, int topic, int specality )
+            this IQueryable<IdeaDto> ideas, string searchTerm, int topic, int specality,int month )
         {
             var result = ideas;
             if (topic is not 0)
@@ -29,6 +29,10 @@ namespace ResearchersPlatform_BAL.RepoExtentions
             {
                 var lowerCaseTerm = searchTerm.Trim().ToLower();
                 result = result.Where(e => e.Name!.Contains(lowerCaseTerm));
+            }
+            if(month is not 0)
+            {
+                result = result.Where(e => e.Deadline.Month < month);
             }
             return result;
         }

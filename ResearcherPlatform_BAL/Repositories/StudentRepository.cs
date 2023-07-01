@@ -67,9 +67,9 @@ namespace ResearchersPlatform_BAL.Repositories
             => _context.Set<Course>().FirstOrDefault(c => c.Id == courseId)!.Students.Add(student);
         public async Task<bool> CheckToEnroll(Guid courseId, string studentId)
         {
-            var enroll = await GetAllStudentsEnrolledInCourseAsync(courseId, false);
-            var student = enroll.Where(e => e.Id == studentId).FirstOrDefault();
-            if (student is not null)
+            var students = await GetAllStudentsEnrolledInCourseAsync(courseId, false);
+            var student = students.Where(e => e.Id == studentId).FirstOrDefault();
+            if (student is null)
             {
                 return false;
             }

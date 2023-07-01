@@ -128,8 +128,26 @@ namespace ResearchersPlatform.Controllers
             var studentDto = _mapper.Map<IEnumerable<StudentDto>>(student);
             return Ok(studentDto);
         }
+        [HttpGet("CheckEnrollment")]
+        [Authorize(Roles = "Student,Admin")]
+        public async Task<IActionResult> CheckEnrollement(Guid courseId,string studentId)
+        {
+            var student = await _repositoryManager.Student.GetStudentByIdAsync(studentId, trackChanges: false);
+            var course = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: false) ;
+
+            if (student is null || course is null)
+            {
+                return BadRequest($"Student's ID (OR) Course's ID doesn't exist in the database");
+
+            }
+            bool result = await _repositoryManager.Student.CheckToEnroll(courseId, studentId);
+            return Ok(new
+            {
+                IsEnrolled = result,
+            });
+        }
         [HttpPut("Enrollment")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EnrollForACourse([FromBody] EnrollmentDto enrollment ,Guid courseId)
         {
             if(courseId.ToString().IsNullOrEmpty())

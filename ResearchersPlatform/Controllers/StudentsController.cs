@@ -261,9 +261,9 @@ namespace ResearchersPlatform.Controllers
                 FileStream file = await _filesRepository.GetImageToUser(userId);
                 return new FileStreamResult(file, "image/png");
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
-                return StatusCode(500, $"{ex}");
+                return BadRequest($"User doesn't have Image : {ex}");
             }
 
         }

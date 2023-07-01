@@ -485,7 +485,7 @@ namespace ResearchersPlatform.Controllers
             var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, false);
             if (idea is null)
                 return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
-            _filesRepository.UploadFileToIdea(ideaId, researcherId, file.File, file.Name);
+            _filesRepository.UploadFileToIdea(ideaId, researcherId, file.File, file.Name,isSubmitedFile:false);
            await _repositoryManager.SaveChangesAsync();
             return StatusCode(201, "File Uploaded Successfully");
         }
@@ -552,17 +552,32 @@ namespace ResearchersPlatform.Controllers
         }
 
         [HttpPost("Submit")]
-        public async Task<IActionResult> SubmitIdea(Guid ideaId,Guid creatorId)
+        public async Task<IActionResult> SubmitIdea(Guid ideaId,Guid creatorId,
+            [FromForm] FileForCreateViewModel file)
         {
             var creator = await _repositoryManager.Researcher.GetResearcherByIdAsync(creatorId, trackChanges: false);
             if (creator is null)
                 return NotFound($"this ResearcherId {creatorId} Not Found ");
+            var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, false);
+            if (idea is null)
+                return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
             bool isCreator = await _repositoryManager.Idea.IsCreatorToIdea(ideaId, creatorId);
             if (!isCreator)
                 return BadRequest($"This CreatorId {creatorId} doesn't Creator To Idea");
-            await _repositoryManager.Idea.Submit(ideaId);
-            await _repositoryManager.SaveChangesAsync();
-            return StatusCode(201);
+            
+            if (!idea.IsCompleted)
+            {
+                _filesRepository.UploadFileToIdea(ideaId, creatorId, file.File, file.Name, isSubmitedFile: true);
+                await _repositoryManager.Idea.Submit(ideaId);
+                await _repositoryManager.SaveChangesAsync();
+                return StatusCode(201);
+            }
+            else
+            {
+                return BadRequest("Idea is already Submited");
+            }
+           
+            
         }
     }
 }

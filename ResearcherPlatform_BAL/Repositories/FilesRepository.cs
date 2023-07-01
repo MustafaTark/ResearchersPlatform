@@ -57,7 +57,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 _context.Videos.Add(videoEntity);
             
         }
-        public void UploadFileToIdea(Guid ideaId,Guid researcherId,IFormFile file,string title)
+        public void UploadFileToIdea(Guid ideaId,Guid researcherId,IFormFile file,string title,bool isSubmitedFile)
         {
             
                var url= _filesManager.UploadFiles(file);
@@ -66,8 +66,9 @@ namespace ResearchersPlatform_BAL.Repositories
                 Title = title,
                 Path = url,
                 IdeaId = ideaId,
-                SenderId = researcherId
-          };
+                SenderId = researcherId,
+                IsSubmitedFile = isSubmitedFile
+            };
                 _context.IdeaFiles.Add(fileEntity);
             
         }

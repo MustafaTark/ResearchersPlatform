@@ -14,7 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<VideoDto>> GetAllVideosToSection(Guid sectionId);
         Task<FileStream> GetVideoToSection(int videoId);
         public void UploadVideoToSection(Guid sectionId, IFormFile video, string title);
-        void UploadFileToIdea(Guid ideaId, Guid researcherId, IFormFile file, string title);
+        void UploadFileToIdea(Guid ideaId, Guid researcherId, IFormFile file, string title, bool isSubmitedFile);
         Task<FileStream> GetFileToIdea(int fileId);
         Task<IEnumerable<FileDto>> GetFilesToIdea(Guid ideaId);
         Task<IEnumerable<FileDto>> GetFilesToTask(Guid taskId);

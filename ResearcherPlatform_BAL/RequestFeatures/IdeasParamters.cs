@@ -11,5 +11,6 @@ namespace ResearchersPlatform_BAL.RequestFeatures
         public string? SearchTerm { get; set; }
         public int Topic { get; set; }
         public int Specality { get; set; }
+        public int Month { get; set; }
     }
 }

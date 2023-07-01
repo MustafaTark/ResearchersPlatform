@@ -10,5 +10,6 @@ namespace ResearchersPlatform_BAL.ViewModels
     {
         public required string Content { get; set; }
         public DateTime Date { get; set; }
+        public Guid ResearcherId { get; set; }
     }
 }

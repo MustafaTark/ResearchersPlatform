@@ -95,7 +95,7 @@ namespace ResearchersPlatform.Controllers
         }
        [ HttpGet("Private")]
         [Authorize(Roles = "Student,Admin")]
-        public async Task<IActionResult> GetMessagesToTask(string senderId,string reciverId)
+        public async Task<IActionResult> GetMessagesToPrivate(string senderId,string reciverId)
         {
            var messages= await _repositoryManager.Chat.GetPrivateMessages(senderId,reciverId);
             return Ok(messages);

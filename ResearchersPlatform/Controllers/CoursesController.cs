@@ -167,7 +167,7 @@ namespace ResearchersPlatform.Controllers
 
             }
             var enrolled = await _repositoryManager.Student.CheckToEnroll(courseId, enrollment.studentId);
-            if(enrolled == false)
+            if(enrolled != false)
             {
                 return BadRequest("This student is already enrolled in the course");
             }

@@ -30,6 +30,9 @@ namespace ResearchersPlatform_BAL.Repositories
             => await FindByCondition(t => t.Id == taskId, trackChanges)
             .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+        public async Task<TaskIdea?> GetSingleTaskByIdAsync(Guid taskId, bool trackChanges)
+            => await FindByCondition(t => t.Id == taskId, trackChanges)
+            .FirstOrDefaultAsync();
         private async Task<bool> ValidateIdeaAndCreator(Guid ideaId, Guid creatorId)
         {
             var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == ideaId && i.CreatorId == creatorId);

@@ -207,7 +207,7 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Researcher with ID {researcherId} doesn't exist in the database");
             }
-            var ideas = await _repository.Idea.GetAllIdeasForCreatorAsync(researcherId, trackChanges: false);
+            var ideas = await _repository.Idea.GetAllIdeasForResearcherAsync(researcherId, trackChanges: false);
             if (ideas is null)
             {
                 return NotFound($"Researcher with ID {researcherId} doesn't have any Ideas in the database");

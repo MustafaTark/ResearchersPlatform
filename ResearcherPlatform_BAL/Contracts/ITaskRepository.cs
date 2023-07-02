@@ -14,6 +14,7 @@ namespace ResearchersPlatform_BAL.Contracts
         void DeleteTask(TaskIdea task);
         Task<IEnumerable<TaskDto?>> GetAllTasksForAnIdeaAsync(Guid ideaId, bool trackChanges);
         Task<TaskDto?> GetTaskByIdAsync(Guid taskId, bool trackChanges);
+        Task<TaskIdea?> GetSingleTaskByIdAsync(Guid taskId, bool trackChanges);
         Task CreateTask(Guid ideaId, Guid creatorId, TaskIdea task);
         Task AssignParticipantsToTask(Guid ideaId , List<Guid> participantsIds);
         Task<int> IdeaParticipantNumber(Guid ideaId);

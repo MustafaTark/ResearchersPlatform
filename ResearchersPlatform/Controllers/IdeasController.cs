@@ -407,6 +407,36 @@ namespace ResearchersPlatform.Controllers
             }
             return Ok(task);
         }
+        [HttpPut("Tasks/TaskProgress/{taskId}/{researcherId}")]
+        [Authorize(Roles ="Student")]
+        public async Task<IActionResult> ChangeTaskState(Guid taskId , Guid researcherId , [FromBody] TaskStateToUpdateDto taskDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+            var task = await _repositoryManager.Task.GetSingleTaskByIdAsync(taskId, trackChanges: true);
+            if (task is null)
+            {
+                return NotFound($"Task with ID {taskId} doesn't exist in the database");
+            }
+            var researchers = await _repositoryManager.Researcher.GetAllTaskParticipants(taskId);
+            if (researchers is null)
+            {
+                return NotFound("There are no participants yet");
+            }
+            foreach(var researcher in researchers)
+            {
+                if(researcherId == researcher.Id)
+                {
+                    _mapper.Map(taskDto, task);
+                    await _repositoryManager.SaveChangesAsync();
+                    return StatusCode(201, "Task State has been Updated successfully");
+                }
+            }
+            return BadRequest($"Researcher With ID {researcherId} isn't a participant");
+        }
+
         [HttpPost("Tasks/Participants/{taskId}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> AssignParticipantsToTask(Guid taskId , [FromBody] List<Guid> participantsIds)

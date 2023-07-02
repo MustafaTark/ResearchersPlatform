@@ -72,6 +72,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<TaskForCreateDto, TaskIdea>();
             CreateMap<TaskIdea, TaskDto>();
             CreateMap<TaskForParticipantsDto, TaskIdea>();
+            CreateMap<TaskStateToUpdateDto, TaskIdea>();
             CreateMap<AdminForRegisterDto, User>();
             CreateMap<SkillForCreationDto, Skill>();
             CreateMap<TopicForCreationDto, Topic>();

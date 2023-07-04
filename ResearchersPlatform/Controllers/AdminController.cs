@@ -230,7 +230,7 @@ namespace ResearchersPlatform.Controllers
             return NoContent();
         }
         [HttpGet("ExpertRequests")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllExpertRequests()
         {
             var requests = await _repository.ExpertRequest.GetAllExpertRequests();

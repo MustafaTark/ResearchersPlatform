@@ -93,13 +93,9 @@ namespace ResearchersPlatform.Controllers
         public async Task<IActionResult> UpdateCourse([FromBody]CourseForUpdateDto course
             ,Guid courseId)
         {
-            if (course is null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("CourseForUpdateDto object sent from client is null");
-            }
-            if (courseId.ToString().IsNullOrEmpty())
-            {
-                return BadRequest("Course ID field shouldn't be null or empty");
+                return UnprocessableEntity(ModelState);
             }
             var courseEntity = await _repositoryManager.Course.GetCourseByIdAsync(courseId, trackChanges: true);
             if (courseEntity is null)

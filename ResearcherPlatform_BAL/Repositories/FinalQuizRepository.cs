@@ -74,6 +74,13 @@ namespace ResearchersPlatform_BAL.Repositories
             int randomIndex = random.Next(quizes.Count);
             return quizes[randomIndex];
         }
+        public async Task<IEnumerable<FinalQuiz>> GetAllQuizzes(int skillId , bool trackChanges)
+               => await FindByCondition(q => q.SkillId == skillId, trackChanges)
+                 .Include(q => q.SkillObj)
+                 .Include(s => s.Questions)
+                 .ThenInclude(a => a.Answers)
+                 .ToListAsync();
+        public void DeleteQuiz(FinalQuiz finalQuiz) => Delete(finalQuiz);
         public int GetScore(List<Guid> answersIds)
         {
             int score = 0;
@@ -193,5 +200,7 @@ namespace ResearchersPlatform_BAL.Repositories
            // _context.SaveChanges();
         }
 
+        public async Task<FinalQuiz?> GetQuizById(Guid quizId, bool trackChanges)
+            => await FindByCondition(q => q.Id == quizId, trackChanges).FirstOrDefaultAsync();
     }
 }

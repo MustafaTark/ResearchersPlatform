@@ -245,7 +245,27 @@ namespace ResearchersPlatform.Controllers
             var categories = await _repository.Problem.GetProblemCategories();
             return Ok(categories);
         }
-
+        [HttpGet("Quizzes/{skillId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllQuizzes(int skillId)
+        {
+            var quizzes = await _repository.FinalQuiz.GetAllQuizzes(skillId,trackChanges:false);
+            if (quizzes is null)
+                return NotFound("There are no quizzes have been inserted in the database yet");
+            var quizzesEntity = _mapper.Map<IEnumerable<FinalQuizDto>>(quizzes);
+            return Ok(quizzesEntity);
+        }
+        [HttpDelete("Quizzes/{quizId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteFinalQuiz(Guid quizId)
+        {
+            var quiz = await _repository.FinalQuiz.GetQuizById(quizId, trackChanges:false);
+            if (quiz is null)
+                return BadRequest($"There is no Quiz with ID {quizId} in the database");
+            _repository.FinalQuiz.DeleteQuiz(quiz);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+        }
 
     }
 }

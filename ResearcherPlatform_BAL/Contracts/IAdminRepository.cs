@@ -1,4 +1,5 @@
-﻿using ResearchersPlatform_DAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ResearchersPlatform_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace ResearchersPlatform_BAL.Contracts
         int ResearchersCount(bool trackChanges);
         void AddSkill(Skill skill);
         void AddTopic(Topic topic);
+        void UpdateSkill(Skill skill);
+        Task<Skill> GetSkillById(int skillId);
 
     }
 }

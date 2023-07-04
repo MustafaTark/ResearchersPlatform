@@ -176,6 +176,11 @@ namespace ResearchersPlatform_BAL.Repositories
                 researcher.OverallRate = researcher.SumRates / researcher.TotalRates;
             }
         }
+        public async Task<bool> ValidateTasks(Guid ideaId)
+        {
+            bool anyTaskNotCompleted = await _context.Tasks.AnyAsync(t => t.IdeaId == ideaId && !t.IsCompleted);
+            return !anyTaskNotCompleted;
+        }
 
     }
 }

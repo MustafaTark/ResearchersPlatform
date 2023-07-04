@@ -24,6 +24,7 @@ namespace ResearchersPlatform_BAL.DTO
         public int Age { get; set; }
         public Typee Type { get; set; }
         public bool IsMentor { get; set; }
+        public string? Bio { get; set; }
 
     }
 }

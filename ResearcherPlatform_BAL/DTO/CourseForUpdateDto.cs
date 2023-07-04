@@ -14,6 +14,7 @@ namespace ResearchersPlatform_BAL.DTO
         public double Price { get; set; }
         public string? Hours { get; set; }
         public string? Brief { get; set; }
+        public string? DriveLink { get; set; }
         public int SkillId { get; set; }
     }
 }

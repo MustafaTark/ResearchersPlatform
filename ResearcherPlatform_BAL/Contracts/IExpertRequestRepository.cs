@@ -17,6 +17,6 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<ExpertRequestDto>> GetAllRequestsForResearcher(Guid researcherId,bool trackChanges);
         Task<IEnumerable<ExpertRequestDto>> GetAllRequestsForExpert(bool trackChanges);
         Task<bool> ValidateParticipantPoints(Guid participantId);
-
+        Task<IEnumerable<ExpertRequestDto>> GetAllExpertRequests();
     }
 }

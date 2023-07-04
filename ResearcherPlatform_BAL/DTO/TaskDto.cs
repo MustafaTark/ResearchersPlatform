@@ -16,5 +16,6 @@ namespace ResearchersPlatform_BAL.DTO
         public required string Description { get; set; }
         public Progress Progress { get; set; }
         public DateTime Deadline { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

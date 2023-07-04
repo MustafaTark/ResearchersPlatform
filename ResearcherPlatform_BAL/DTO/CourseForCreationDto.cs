@@ -16,6 +16,7 @@ namespace ResearchersPlatform_BAL.DTO
         //public ICollection<Section> Sections { get; set; }
         public required string Hours { get; set; }
         public required string Brief { get; set; }
+        public required string DriveLink { get; set; }
         public int SkillId { get; set; }
 
 

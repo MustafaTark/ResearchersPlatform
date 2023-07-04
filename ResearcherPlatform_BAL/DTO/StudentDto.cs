@@ -21,6 +21,7 @@ namespace ResearchersPlatform_BAL.DTO
         public string? GoogleSchoolerLink { get; set; }
         public string? OrcaId { get; set; }
         public bool IsMentor { get; set; }
+        public string? Bio { get; set; }
         //public List<Course>? Courses { get; set; }
         //public int Trails { get; set; }
         public List<BadgeDto>? Badges { get; set; }

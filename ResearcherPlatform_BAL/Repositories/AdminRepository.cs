@@ -32,5 +32,12 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             _context.Skills.Add(skill);
         }
+        public void UpdateSkill(Skill skill) => _context.Skills.Update(skill);
+
+        public async Task<Skill> GetSkillById(int skillId)
+        {
+            var skill  = await _context.Skills.FirstOrDefaultAsync(i => i.Id == skillId);
+            return skill!;
+        }
     }
 }

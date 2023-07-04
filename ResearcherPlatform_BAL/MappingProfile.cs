@@ -75,6 +75,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<TaskStateToUpdateDto, TaskIdea>();
             CreateMap<AdminForRegisterDto, User>();
             CreateMap<SkillForCreationDto, Skill>();
+            CreateMap<SkillForUpdateDto, Skill>();
             CreateMap<TopicForCreationDto, Topic>();
             CreateMap<ExpertRequestForCreateDto,ExpertRequest>();
             CreateMap<ExpertRequest, ExpertRequestDto>().ReverseMap();

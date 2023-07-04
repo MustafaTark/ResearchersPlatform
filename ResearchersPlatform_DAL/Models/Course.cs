@@ -19,6 +19,7 @@ namespace ResearchersPlatform_DAL.Models
         public required int Enrollments { get; set; } 
         public required string Hours { get; set; }
         public required string Brief { get; set; }
+        public required string DriveLink { get; set; }
         [ForeignKey(nameof(Skill))]
         public int SkillId { get; set; }
         public Skill? SkillObj {  get; set; }

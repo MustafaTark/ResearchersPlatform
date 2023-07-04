@@ -46,7 +46,9 @@ namespace ResearchersPlatform_BAL.Repositories
             {
                 var idea = await _context.Ideas.FirstOrDefaultAsync(i => i.Id == ideaId);
                     idea!.Tasks.Add(task);
-                    task.Progress = 0; // NotStarted
+                    task.Progress = 0; // Assigned
+                var creator = await _context.Researchers.FirstOrDefaultAsync(i => i.Id == creatorId);
+                task.Participants!.Add(creator!);
             }
         }
         public async Task AssignParticipantsToTask(Guid taskId,List<Guid> participantsIds)
@@ -90,27 +92,11 @@ namespace ResearchersPlatform_BAL.Repositories
                     return false;
             return true;
         }
-        public void Submit(Guid taskId)
+        public async Task Submit(Guid taskId)
         {
-            //var task = FindByCondition(t=>t.Id==taskId, trackChanges: true)
-            //    .Include(t=>t.Participants)
-            //    .FirstOrDefault();
-            //bool isBeforeDeadline = DateTime.Now <= task!.Deadline;
-            //if(isBeforeDeadline)
-            //{
-            //    foreach(var researcher in task.Participants!)
-            //    {
-            //        researcher.Rate += 100;
-            //    }
-            //}
-            //else if (!isBeforeDeadline)
-            //{
-            //    foreach (var researcher in task.Participants!)
-            //    {
-            //        researcher.Rate -= 100;
-            //    }
-            //}
-            //task.Progress = Progress.COMPLETED;
+            var task = await FindByCondition(t => t.Id == taskId , trackChanges:true).FirstOrDefaultAsync();
+            task!.IsCompleted = true;
+            task.Progress = Progress.CLOSED;
         }
     }
 }

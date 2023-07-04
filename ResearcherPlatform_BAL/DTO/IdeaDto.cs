@@ -18,7 +18,7 @@ namespace ResearchersPlatform_BAL.DTO
         public int? SpecalityId { get; set; }
         public SpecialityDto? SpecalityObj { get; set; }
         public DateTime Deadline { get; set; }
-        public required bool IsCompleted { get; set; } = false;
+        public required bool IsCompleted { get; set; }
         public required int TopicId { get; set; }
 
         public TopicsDto? TopicObject { get; set; }

@@ -20,5 +20,6 @@ namespace ResearchersPlatform_BAL.DTO
         public int NationalityId { get; set; }
         public Typee Type { get; set; }
         public string? GoogleSchoolerLink { get; set; }
+        public string? Bio { get; set; }
     }
 }

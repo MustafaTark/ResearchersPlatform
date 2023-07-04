@@ -197,6 +197,19 @@ namespace ResearchersPlatform.Controllers
                 }
             }
         }
+        [HttpPut("Skills/{skillId}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> UpdateSkill([FromBody] SkillForUpdateDto skillDto,int skillId)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            var skill = await _repository.Admin.GetSkillById(skillId);
+            if (skill is null)
+                return NotFound($"Skill With ID {skillId} doesn't exist in the database");
+            _mapper.Map(skillDto, skill);
+            await _repository.SaveChangesAsync();
+            return StatusCode(201, new { name =  skill.Name });
+        }
         [HttpGet("Skills")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetSkills()
@@ -216,6 +229,16 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             return NoContent();
         }
+        [HttpGet("ExpertRequests")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllExpertRequests()
+        {
+            var requests = await _repository.ExpertRequest.GetAllExpertRequests();
+            if (requests is null)
+                return NotFound("You Have No Expert Requests Yet");
+            return Ok(requests);
+        }
+
         [HttpGet("ProblemCategories")]
         public async Task<IActionResult> GetProblemCategories()
         {

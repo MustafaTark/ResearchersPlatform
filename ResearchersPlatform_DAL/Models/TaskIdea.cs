@@ -26,7 +26,7 @@ namespace ResearchersPlatform_DAL.Models
         [ForeignKey(nameof(Idea))]
         public Guid IdeaId { get; set; }
         public Idea? IdeaObject { get; set; }
-        public bool IsCompleted = false;
+        public bool IsCompleted { get; set; } = false;
     }
     public enum Progress
     {

@@ -594,7 +594,9 @@ namespace ResearchersPlatform.Controllers
             bool isCreator = await _repositoryManager.Idea.IsCreatorToIdea(ideaId, creatorId);
             if (!isCreator)
                 return BadRequest($"This CreatorId {creatorId} doesn't Creator To Idea");
-            
+            var validateTasks = await _repositoryManager.Idea.ValidateTasks(ideaId);
+            if (validateTasks)
+                return BadRequest($"All tasks must be completed first to submit the idea");
             if (!idea.IsCompleted)
             {
                 _filesRepository.UploadFileToIdea(ideaId, creatorId, file.File, file.Name, isSubmitedFile: true);
@@ -606,8 +608,32 @@ namespace ResearchersPlatform.Controllers
             {
                 return BadRequest("Idea is already Submited");
             }
-           
-            
+        }
+        [HttpPost("Tasks/Submit")]
+        //[Authorize(Roles ="Admin,Student")]
+        public async Task<IActionResult> SubmitTask(Guid taskId , Guid participantId,
+            [FromForm] FileForCreateViewModel file)
+        {
+            var participant = await _repositoryManager.Researcher.GetResearcherByIdAsync(participantId, trackChanges: false);
+            if (participant is null)
+                return NotFound($"Researcher with ID {participantId} doesn't exist in the database");
+            var task = await _repositoryManager.Task.GetSingleTaskByIdAsync(taskId, false);
+            if (task is null)
+                return BadRequest($"Task with ID {taskId} doesn't exist in the database");
+            bool isParticipant = await _repositoryManager.Task.ValidateTaskSingleParticipant(participantId,taskId);
+            if (!isParticipant)
+                return BadRequest($"This Participant with ID {participantId} doesn't belong to the Task");
+            if (!task.IsCompleted)
+            {
+                _filesRepository.UploadFileToTask(taskId, participantId, file.File, file.Name);
+                await _repositoryManager.Task.Submit(taskId);
+                await _repositoryManager.SaveChangesAsync();
+                return StatusCode(201);
+            }
+            else
+            {
+                return BadRequest("Task is already Submited");
+            }
         }
     }
 }

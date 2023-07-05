@@ -87,13 +87,13 @@ namespace ResearchersPlatform.Controllers
             return Ok(messages);
         }[
         HttpGet("Task/{ideaId})")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Admin,Student")]
         public async Task<IActionResult> GetMessagesToTask(Guid taskId)
         {
            var messages= await _repositoryManager.Chat.GetMessagesToTasks(taskId);
             return Ok(messages);
         }
-       [ HttpGet("Private")]
+        [HttpGet("Private")]
         [Authorize(Roles = "Student,Admin")]
         public async Task<IActionResult> GetMessagesToPrivate(string senderId,string reciverId)
         {

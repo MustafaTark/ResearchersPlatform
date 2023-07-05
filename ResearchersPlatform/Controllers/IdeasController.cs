@@ -363,7 +363,7 @@ namespace ResearchersPlatform.Controllers
             return StatusCode(201, "Task has been created successfully");
         }
         [HttpGet("Tasks/AllTasks/{ideaId}")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Admin,Student")]
         public async Task<IActionResult> GetTaksForIdea(Guid ideaId)
         {
             var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId,trackChanges: false);
@@ -397,7 +397,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(researchersEntities);
         }
         [HttpGet("Tasks/SingleTask/{taskId}")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Admin,Student")]
         public async Task<IActionResult> GetTaskById(Guid taskId)
         {
             var task = await _repositoryManager.Task.GetTaskByIdAsync(taskId , trackChanges: false);
@@ -438,7 +438,7 @@ namespace ResearchersPlatform.Controllers
         }
 
         [HttpPost("Tasks/Participants/{taskId}")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Admin,Student")]
         public async Task<IActionResult> AssignParticipantsToTask(Guid taskId , [FromBody] List<Guid> participantsIds)
         {
             if(!ModelState.IsValid)
@@ -595,7 +595,7 @@ namespace ResearchersPlatform.Controllers
             if (!isCreator)
                 return BadRequest($"This CreatorId {creatorId} doesn't Creator To Idea");
             var validateTasks = await _repositoryManager.Idea.ValidateTasks(ideaId);
-            if (validateTasks)
+            if (!validateTasks)
                 return BadRequest($"All tasks must be completed first to submit the idea");
             if (!idea.IsCompleted)
             {

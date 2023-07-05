@@ -17,7 +17,7 @@ namespace ResearchersPlatform_BAL.DTO
         public string? Hours { get; set; }
         public string? Brief { get; set; }
         public string? DriveLink { get; set; }
-        public Skill? SkillObj { get; set; }
+        //public Skill? SkillObj { get; set; }
 
     }
 }

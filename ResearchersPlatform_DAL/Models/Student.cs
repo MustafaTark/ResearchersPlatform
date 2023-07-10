@@ -23,7 +23,7 @@ namespace ResearchersPlatform_DAL.Models
         public string? GoogleSchoolerLink { get; set; }
         public string? OrcaId { get; set; }
         public bool IsMentor { get; set; }
-        public required string Bio { get; set; }
+        public  string? Bio { get; set; }
         public ICollection<Course> Courses { get; set; }
         
         public ICollection<Badge> Badges { get; set; }

@@ -67,11 +67,11 @@ namespace ResearchersPlatform.Controllers
             {
                 return NotFound($"Researcher With ID {researcherId} doesn't exist in the database");
             }
-            var researcherIdeasNumber = await _repositoryManager.Idea.CheckResearcherIdeasNumber(researcherId);
-            if(!researcherIdeasNumber)
-            {
-                return BadRequest($"You have exceeded Your Limit For Idea Initialization .");
-            }
+            //var researcherIdeasNumber = await _repositoryManager.Idea.CheckResearcherIdeasNumber(researcherId);
+            //if(!researcherIdeasNumber)
+            //{
+            //    return BadRequest($"You have exceeded Your Limit For Idea Initialization .");
+            //}
             var ideaValidation = await _repositoryManager.Idea.ValidateIdeaCreation(researcherId);
             if(ideaValidation)
             {

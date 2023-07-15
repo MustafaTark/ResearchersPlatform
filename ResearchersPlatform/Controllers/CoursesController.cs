@@ -275,6 +275,32 @@ namespace ResearchersPlatform.Controllers
             var videos = await _filesRepository.GetAllVideosToSection(sectionId);
             return Ok(videos);
         }
+        [HttpDelete("Videos/{videoId}")]
+        public async Task<IActionResult> DeleteVideo(int videoId)
+        {
+            try
+            {
+               await _filesRepository.DeleteVideo(videoId);
+               return NoContent();
+            }catch(Exception)
+            {
+                return BadRequest("There is problem when Delete Video");
+            }
+        }
+        [HttpDelete("Sections/{sectionId}")]
+        public async Task<IActionResult> DeleteSection(Guid sectionId)
+        {
+            var section = await _repositoryManager.Section
+                                              .GetSectionByIdAsync(sectionId, trackChanges: false);
+            if (section is null)
+            {
+                return NotFound();
+            }
+            var sectionEntity = _mapper.Map<Section>(section);
+            _repositoryManager.Section.DeleteSection(sectionEntity);
+           await _repositoryManager.SaveChangesAsync();
+            return NoContent();
+        }
 
 
     }

@@ -13,5 +13,6 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<SectionDto>> GetSectionsToCourse(Guid courseId);
         void CreateSectionsToCourse(Guid courseId,List<Section> sections);
         Task<SectionDto?> GetSectionByIdAsync(Guid sectionId, bool trackChanges);
+        void DeleteSection(Section section);
     }
 }

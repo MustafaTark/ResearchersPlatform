@@ -45,7 +45,7 @@ namespace ResearchersPlatform_BAL.Repositories
                 key,
                 async entry =>
                 {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
                     return await FindByCondition(s => s.Id == sectionId, trackChanges)
                                .ProjectTo<SectionDto>(_mapper.ConfigurationProvider)
                                .FirstOrDefaultAsync();
@@ -53,6 +53,11 @@ namespace ResearchersPlatform_BAL.Repositories
               );
             return sections!;
         }
+        public void DeleteSection(Section section)
+        {
+            Delete(section);
+        }
+        
         
     }
 }

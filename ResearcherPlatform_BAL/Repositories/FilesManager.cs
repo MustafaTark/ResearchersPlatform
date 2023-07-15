@@ -19,6 +19,17 @@ namespace ResearchersPlatform_BAL.Repositories
             var dbPath = Path.Combine(pathToSave, fileName);
             var fileStream = new FileStream(dbPath, FileMode.Open, FileAccess.Read);
             return fileStream;
+        }
+        public void DeleteFile(string fileName)
+        {
+
+            var folderName = Path.Combine("Resources", "Media");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var dbPath = Path.Combine(pathToSave, fileName);
+            if (File.Exists(dbPath))
+            {
+                File.Delete(dbPath);
+            }
         } 
         public byte[] GetFileBytes(string fileName)
         {

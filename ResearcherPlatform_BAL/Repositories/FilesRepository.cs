@@ -43,6 +43,12 @@ namespace ResearchersPlatform_BAL.Repositories
               return _filesManager.GetFile(url!);
                
         }
+        public async Task DeleteVideo(int videoId)
+        {
+            string fileName  = await _context.Videos.Where(v => v.Id == videoId).Select(v=>v.VideoUrl).FirstOrDefaultAsync();
+            await _context.Videos.Where(v => v.Id == videoId).ExecuteDeleteAsync();
+            _filesManager.DeleteFile(fileName!);
+        }
 
         public void UploadVideoToSection(Guid sectionId,IFormFile video,string title)
         {

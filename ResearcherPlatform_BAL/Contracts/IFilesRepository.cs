@@ -22,5 +22,6 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<FileStream> GetFileToTask(int fileId);
         void UploadImageToUser(string userId, IFormFile img);
         Task<FileStream> GetImageToUser(string userId);
+        Task DeleteVideo(int videoId);
     }
 }

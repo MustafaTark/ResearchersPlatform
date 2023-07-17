@@ -9,6 +9,6 @@ namespace ResearchersPlatform_BAL.ViewModels
 {
     public class ImageForUploadViewModel
     {
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

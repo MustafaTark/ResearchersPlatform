@@ -266,6 +266,16 @@ namespace ResearchersPlatform.Controllers
             await _repository.SaveChangesAsync();
             return NoContent();
         }
+        [HttpGet("Responses/ProbelmCategory/{categoryId}")]
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> GetAllResponsesByCateogryId(int categoryId)
+        {
+            var responses = await _repository.Response.GetAllResponsesByCatergoryId(categoryId);
+            if (responses is null)
+                return NotFound($"There are no responses for Cateogry_ID {categoryId}");
+            return Ok(responses);
+        }
 
     }
 }

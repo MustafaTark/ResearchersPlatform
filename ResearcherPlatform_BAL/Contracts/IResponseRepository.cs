@@ -16,6 +16,7 @@ namespace ResearchersPlatform_BAL.Contracts
         Task<IEnumerable<ResponseDto>> GetAllStudentResponses(bool trackChanges , string studentId);
         void CreateResponse(ResearchersPlatform_DAL.Models.Response response);
         void DeleteResponse(ResearchersPlatform_DAL.Models.Response response);
+        Task<IEnumerable<ResponseDto>> GetAllResponsesByCatergoryId(int problemCategory);
 
 
     }

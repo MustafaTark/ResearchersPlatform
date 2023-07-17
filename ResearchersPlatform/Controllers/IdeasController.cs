@@ -515,7 +515,7 @@ namespace ResearchersPlatform.Controllers
             var idea = await _repositoryManager.Idea.GetIdeaAsync(ideaId, false);
             if (idea is null)
                 return BadRequest($"Idea with ID {ideaId} doesn't exist in the database");
-            _filesRepository.UploadFileToIdea(ideaId, researcherId, file.File, file.Name,isSubmitedFile:false);
+            _filesRepository.UploadFileToIdea(ideaId, researcherId, file.File!, file.Name!,isSubmitedFile:false);
            await _repositoryManager.SaveChangesAsync();
             return StatusCode(201, "File Uploaded Successfully");
         }
@@ -551,7 +551,7 @@ namespace ResearchersPlatform.Controllers
             var task = await _repositoryManager.Task.GetTaskByIdAsync(taskId, false);
             if (task is null)
                 return BadRequest($"Idea with ID {taskId} doesn't exist in the database");
-            _filesRepository.UploadFileToTask(taskId, researcherId, file.File, file.Name);
+            _filesRepository.UploadFileToTask(taskId, researcherId, file.File!, file.Name!);
             await _repositoryManager.SaveChangesAsync();
             return StatusCode(201, "File Uploaded Successfully");
         }
@@ -599,7 +599,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest($"All tasks must be completed first to submit the idea");
             if (!idea.IsCompleted)
             {
-                _filesRepository.UploadFileToIdea(ideaId, creatorId, file.File, file.Name, isSubmitedFile: true);
+                _filesRepository.UploadFileToIdea(ideaId, creatorId, file.File!, file.Name!, isSubmitedFile: true);
                 await _repositoryManager.Idea.Submit(ideaId);
                 await _repositoryManager.SaveChangesAsync();
                 return StatusCode(201);
@@ -625,7 +625,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest($"This Participant with ID {participantId} doesn't belong to the Task");
             if (!task.IsCompleted)
             {
-                _filesRepository.UploadFileToTask(taskId, participantId, file.File, file.Name);
+                _filesRepository.UploadFileToTask(taskId, participantId, file.File!, file.Name!);
                 await _repositoryManager.Task.Submit(taskId);
                 await _repositoryManager.SaveChangesAsync();
                 return StatusCode(201);

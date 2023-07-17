@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace ResearchersPlatform_BAL.DTO
 {
-    public class SectionForUpdateDto
+    public class ResetPasswordModelDto
     {
-        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Token { get; set; }
+        public string? NewPassword { get; set; }
     }
 }

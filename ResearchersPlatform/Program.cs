@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using ResearchersPlatform.Extenstions;
 using ResearchersPlatform.Hubs;
@@ -35,6 +36,8 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSignalR();
+//builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 builder.Services.AddControllers().AddJsonOptions(
   opt =>
       opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles

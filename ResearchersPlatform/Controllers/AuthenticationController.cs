@@ -131,5 +131,21 @@ namespace ResearchersPlatform.Controllers
             }
             );
         }
+        [HttpPost("Reset-Password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModelDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email!);
+            if (user == null)
+                return BadRequest($"Invalid Email Address");
+            var result = await _userManager.ResetPasswordAsync(user,model.Token!,model.NewPassword!);
+            if (result.Succeeded)
+            {
+                return StatusCode(201,"Password reset successful");
+            }
+            else
+            {
+                return BadRequest("An Error occurred in reset password please try again");
+            }
+        }
     }
 }

@@ -236,7 +236,7 @@ namespace ResearchersPlatform.Controllers
                 return NotFound();
             }
             try {
-            if (video.File.Length > 0)
+            if (video.File!.Length > 0)
             {
                 _filesRepository.UploadVideoToSection(sectionId, video.File, video.Title);
                 await _repositoryManager.SaveChangesAsync();
@@ -291,7 +291,7 @@ namespace ResearchersPlatform.Controllers
         public async Task<IActionResult> DeleteSection(Guid sectionId)
         {
             var section = await _repositoryManager.Section
-                                              .GetSectionByIdAsync(sectionId, trackChanges: false);
+                                              .GetSingleSectionByIdAsync(sectionId, trackChanges: false);
             if (section is null)
             {
                 return NotFound();

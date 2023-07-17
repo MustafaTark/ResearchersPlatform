@@ -53,6 +53,9 @@ namespace ResearchersPlatform_BAL.Repositories
               );
             return sections!;
         }
+        public async Task<Section?> GetSingleSectionByIdAsync(Guid sectionId, bool trackChanges)
+            => await FindByCondition(s => s.Id == sectionId, trackChanges)
+            .FirstOrDefaultAsync();
         public void DeleteSection(Section section)
         {
             Delete(section);

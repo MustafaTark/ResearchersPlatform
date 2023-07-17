@@ -38,5 +38,9 @@ namespace ResearchersPlatform_BAL.Repositories
             .ToListAsync();
         public void CreateResponse(ResearchersPlatform_DAL.Models.Response response) => Create(response);
         public void DeleteResponse(ResearchersPlatform_DAL.Models.Response response) => Delete(response);
+        public async Task<IEnumerable<ResponseDto>>GetAllResponsesByCatergoryId(int problemCategory)
+            => await FindByCondition(e => e.Problem!.ProblemCategoryId == problemCategory,trackChanges:false)
+                .ProjectTo<ResponseDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
     }
 }

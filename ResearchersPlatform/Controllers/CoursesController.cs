@@ -295,9 +295,9 @@ namespace ResearchersPlatform.Controllers
                 await _filesRepository.UpdateVideo(videoId, request.NewVideoFile!, request.NewTitle!);
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("There is a problem when updating the video.");
+                return BadRequest($"There is a problem when updating the video. {ex.Message}");
             }
         }
         [HttpDelete("Sections/{sectionId}")]

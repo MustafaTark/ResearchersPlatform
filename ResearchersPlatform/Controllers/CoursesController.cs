@@ -287,6 +287,19 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest("There is problem when Delete Video");
             }
         }
+        [HttpPut("Videos/{videoId}")]
+        public async Task<IActionResult> UpdateVideo(int videoId, [FromForm] UpdateVideoRequestDto request)
+        {
+            try
+            {
+                await _filesRepository.UpdateVideo(videoId, request.NewVideoFile!, request.NewTitle!);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest("There is a problem when updating the video.");
+            }
+        }
         [HttpDelete("Sections/{sectionId}")]
         public async Task<IActionResult> DeleteSection(Guid sectionId)
         {

@@ -50,6 +50,7 @@ namespace ResearchersPlatform_BAL
             CreateMap<PrivateMessageDto, PrivateMessage>().ReverseMap();
             CreateMap<Badge, BadgeDto>();
             CreateMap<Video, VideoDto>();
+            CreateMap<UpdateVideoRequestDto, Video>();
             CreateMap<IdeaForCreateDTO,Idea>();
             CreateMap<Idea, IdeaDto>();
             CreateMap<Idea, SingleIdeaDto>();
@@ -87,6 +88,7 @@ namespace ResearchersPlatform_BAL
 
             CreateMap<IdeaFile, FileDto>();
             CreateMap<TaskFile, FileDto>();
+            CreateMap<ResetPasswordModelDto, User>();
         }
     }
 }

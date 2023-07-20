@@ -49,7 +49,17 @@ namespace ResearchersPlatform_BAL.Repositories
             await _context.Videos.Where(v => v.Id == videoId).ExecuteDeleteAsync();
             _filesManager.DeleteFile(fileName!);
         }
-
+        public async Task UpdateVideo(int videoId, IFormFile newVideoFile, string newTitle)
+        {
+            var video = await _context.Videos.FirstOrDefaultAsync(v => v.Id == videoId);
+                string oldFileName = video!.VideoUrl;
+                string newFileName = _filesManager.UploadFiles(newVideoFile);
+                video.VideoUrl = newFileName;
+                video.Title = newTitle;
+                await _context.SaveChangesAsync();
+                _filesManager.DeleteFile(oldFileName);
+            
+        }
         public void UploadVideoToSection(Guid sectionId,IFormFile video,string title)
         {
             

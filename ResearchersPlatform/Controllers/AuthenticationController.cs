@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using ResearchersPlatform_BAL.Contracts;
 using ResearchersPlatform_BAL.DTO;
 using ResearchersPlatform_DAL.Models;
+using System.Text;
 
 namespace ResearchersPlatform.Controllers
 {
@@ -18,14 +20,17 @@ namespace ResearchersPlatform.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-        private readonly IStudentRepository _studentRepository; 
+        private readonly IStudentRepository _studentRepository;
+        private readonly IEmailService _emailService;
         public AuthenticationController(
-            UserManager<User> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository)
+            UserManager<User> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository
+            , IEmailService emailService)
         {
             _userManager = userManager;
             _authService = authService;
             _mapper = mapper;
             _studentRepository = studentRepository;
+            _emailService = emailService;
         }
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] StudentForRegisterDto userForRegistration)
@@ -131,21 +136,40 @@ namespace ResearchersPlatform.Controllers
             }
             );
         }
-        [HttpPost("Reset-Password")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModelDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email!);
             if (user == null)
-                return BadRequest($"Invalid Email Address");
-            var result = await _userManager.ResetPasswordAsync(user,model.Token!,model.NewPassword!);
+                return NotFound($"Invalid Email Address");
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token!));
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword!);
             if (result.Succeeded)
             {
                 return StatusCode(201,"Password reset successful");
             }
             else
             {
-                return BadRequest("An Error occurred in reset password please try again");
+                return BadRequest(result.Errors);
             }
+        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound($"Invalid Email Address");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var callbackUrl = $"https://localhost:7187/reset-password?email={Uri.EscapeDataString(email)}&token={encodedToken}";
+
+            // Send the password reset email with the callback URL
+            await _emailService.SendPasswordResetEmailAsync(email, callbackUrl);
+
+            return Ok();
         }
     }
 }

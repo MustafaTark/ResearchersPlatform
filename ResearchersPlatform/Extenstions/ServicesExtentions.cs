@@ -120,7 +120,7 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IExpertRequestRepository, ExpertRequestRepository>();
             services.AddScoped<IResponseRepository, ResponseRepository>();
 
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
 
         }
     }

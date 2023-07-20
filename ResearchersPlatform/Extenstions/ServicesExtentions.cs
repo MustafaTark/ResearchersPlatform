@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -120,7 +121,6 @@ namespace ResearchersPlatform.Extenstions
             services.AddScoped<IResponseRepository, ResponseRepository>();
 
             services.AddTransient<IEmailService, EmailService>();
-
 
         }
     }

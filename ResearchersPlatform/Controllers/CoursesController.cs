@@ -287,7 +287,7 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest("There is problem when Delete Video");
             }
         }
-        [HttpPut("Videos/{videoId}")]
+        [HttpPut("Videos/{videoId}"),DisableRequestSizeLimit]
         public async Task<IActionResult> UpdateVideo(int videoId, [FromForm] UpdateVideoRequestDto request)
         {
             try

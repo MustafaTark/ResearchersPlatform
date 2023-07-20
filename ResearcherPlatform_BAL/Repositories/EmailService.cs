@@ -32,11 +32,11 @@ public class EmailService : IEmailService
      
         var setting = new EmailSettings
         {
-            SenderEmail = "yousefyosry123@gmail.com",
+            SenderEmail = "reswebplatform@gmail.com",
             SmtpServer = "smtp.gmail.com",
             EnableSsl = true,
-            SmtpPassword = "hijgbstowzusufkh",
-            SmtpUsername = "yousefyosry123@gmail.com",
+            SmtpPassword = "ybasmcjhyivyjdxy",
+            SmtpUsername = "reswebplatform@gmail.com",
             SmtpPort = 587
         };
         _senderEmail = setting.SenderEmail;
@@ -50,7 +50,7 @@ public class EmailService : IEmailService
         {
             From = new MailAddress(_senderEmail),
             Subject = "Password Reset",
-            Body = $"Click the following link to reset your password: {callbackUrl}",
+            Body = $"Click the following link to reset your password:\n {callbackUrl}",
             IsBodyHtml = true,
         };
 

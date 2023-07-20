@@ -48,20 +48,33 @@ namespace ResearchersPlatform.Controllers
             return StatusCode(201);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("AdminLogin")]
 
-        public async Task<IActionResult> Authenticate([FromBody] UserForLoginDto user)
+        public async Task<IActionResult> AuthenticateToAdmin([FromBody] UserForLoginDto user)
         {
             if (!await _authService.ValidateUser(user))
             {
-                return Unauthorized("Authentication failed. Wrong user name or password.");
+                return Unauthorized();
             }
-            var admin = await _userAdminManager.FindByNameAsync(user.Email!);
+            var admin = await _userAdminManager.FindByEmailAsync(user.Email!);
+            var useradmin = await _userAdminManager.IsInRoleAsync(admin!, "Admin");
+            var token = await _authService.CreateToken();
+            var userId = await _userAdminManager.GetUserIdAsync(admin!);
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(20),
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+            Response.Cookies.Append("StudentId", userId, cookieOptions);
+            Response.Cookies.Append("Token", token, cookieOptions);
+            if (!useradmin)
+                return NotFound();
             return Ok(
             new
             {
-                Token = await _authService.CreateToken(),
-                UserId = await _userAdminManager.GetUserIdAsync(admin!)
+                Token = token,
+                UserId = userId
             }
             );
         }

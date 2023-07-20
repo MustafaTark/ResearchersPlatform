@@ -17,13 +17,13 @@ namespace ResearchersPlatform.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<Student> _userManager;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IStudentRepository _studentRepository;
         private readonly IEmailService _emailService;
         public AuthenticationController(
-            UserManager<User> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository
+            UserManager<Student> userManager, IAuthService authService, IMapper mapper, IStudentRepository studentRepository
             , IEmailService emailService)
         {
             _userManager = userManager;
@@ -106,37 +106,8 @@ namespace ResearchersPlatform.Controllers
             }
             );
         }
-        [HttpPost("AdminLogin")]
 
-        public async Task<IActionResult> AuthenticateToAdmin([FromBody] UserForLoginDto user)
-        {
-            if (!await _authService.ValidateUser(user))
-            {
-                return Unauthorized();
-            }
-            var admin = await _userManager.FindByEmailAsync(user.Email!);
-            var useradmin = await _userManager.IsInRoleAsync(admin!, "Admin");
-            var token = await _authService.CreateToken();
-            var userId = await _userManager.GetUserIdAsync(admin!);
-            var cookieOptions = new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(20),
-                Secure = true,
-                SameSite = SameSiteMode.Strict
-            };
-            Response.Cookies.Append("StudentId", userId, cookieOptions);
-            Response.Cookies.Append("Token", token, cookieOptions);
-            if (!useradmin)
-                return NotFound();
-            return Ok(
-            new
-            {
-                Token =  token,
-                UserId = userId
-            }
-            );
-        }
-        [HttpPost("reset-password")]
+        [HttpPost("resetpassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModelDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email!);
@@ -153,9 +124,13 @@ namespace ResearchersPlatform.Controllers
                 return BadRequest(result.Errors);
             }
         }
-        [HttpPost("forgot-password")]
+        [HttpPost("forgotpassword/{email}")]
         public async Task<IActionResult> ForgotPassword(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email address cannot be null or empty.");
+            }
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
@@ -164,7 +139,7 @@ namespace ResearchersPlatform.Controllers
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var callbackUrl = $"https://localhost:7187/reset-password?email={Uri.EscapeDataString(email)}&token={encodedToken}";
+            var callbackUrl = $"https://localhost:7187/resetpassword?email={Uri.EscapeDataString(email)}&token={encodedToken}";
 
             // Send the password reset email with the callback URL
             await _emailService.SendPasswordResetEmailAsync(email, callbackUrl);

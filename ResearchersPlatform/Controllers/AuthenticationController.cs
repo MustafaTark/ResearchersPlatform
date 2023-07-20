@@ -139,12 +139,18 @@ namespace ResearchersPlatform.Controllers
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var callbackUrl = $"https://localhost:7187/resetpassword?email={Uri.EscapeDataString(email)}&token={encodedToken}";
+            var callbackUrl = $"https://localhost:7187/api/Authentication/resetpassword?email={Uri.EscapeDataString(email)}&token={encodedToken}";
 
             // Send the password reset email with the callback URL
-            await _emailService.SendPasswordResetEmailAsync(email, callbackUrl);
-
-            return Ok();
+            try
+            {
+                await _emailService.SendPasswordResetEmailAsync(email, callbackUrl);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while sending the password reset email. {ex.Message}");
+            }
         }
     }
 }

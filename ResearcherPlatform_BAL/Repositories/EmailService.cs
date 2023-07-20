@@ -32,11 +32,11 @@ public class EmailService : IEmailService
      
         var setting = new EmailSettings
         {
-            SenderEmail = "yousef.yosry82@gmail.com",
+            SenderEmail = "yousefyosry123@gmail.com",
             SmtpServer = "smtp.gmail.com",
             EnableSsl = true,
-            SmtpPassword = "Your_Password",
-            SmtpUsername = "yousef.yosry82@gmail.com",
+            SmtpPassword = "hijgbstowzusufkh",
+            SmtpUsername = "yousefyosry123@gmail.com",
             SmtpPort = 587
         };
         _senderEmail = setting.SenderEmail;
@@ -44,18 +44,18 @@ public class EmailService : IEmailService
         {
             UseDefaultCredentials = false,
             Credentials = new NetworkCredential(setting.SmtpUsername, setting.SmtpPassword),
-            EnableSsl = setting.EnableSsl
+            EnableSsl = setting.EnableSsl,
         };
         var mailMessage = new MailMessage
         {
             From = new MailAddress(_senderEmail),
             Subject = "Password Reset",
             Body = $"Click the following link to reset your password: {callbackUrl}",
-            IsBodyHtml = true
+            IsBodyHtml = true,
         };
 
         mailMessage.To.Add(email);
-
         await _smtpClient.SendMailAsync(mailMessage);
     }
+
 }

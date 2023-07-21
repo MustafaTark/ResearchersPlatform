@@ -88,7 +88,7 @@ namespace ResearchersPlatform_BAL.Repositories
         {
             get
             {
-                _course ??= new CourseRepository(_context,_memoryCache);
+                _course ??= new CourseRepository(_context);
                 return _course;
             }
         }

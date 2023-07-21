@@ -35,7 +35,7 @@ public class EmailService : IEmailService
             SenderEmail = "reswebplatform@gmail.com",
             SmtpServer = "smtp.gmail.com",
             EnableSsl = true,
-            SmtpPassword = "ybasmcjhyivyjdxy",
+            SmtpPassword = "ltzuukqprbbitwwo",
             SmtpUsername = "reswebplatform@gmail.com",
             SmtpPort = 587
         };

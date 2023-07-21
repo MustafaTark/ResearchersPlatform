@@ -46,7 +46,7 @@ namespace ResearchersPlatform.Extenstions
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            var secretKey = Environment.GetEnvironmentVariable("SECRET");
+            var secretKey = Encoding.UTF8.GetBytes("ResearchersAPIKey");
             services.AddAuthentication(opt =>
             {
                 //opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,7 +66,7 @@ namespace ResearchersPlatform.Extenstions
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
                         ValidAudience = jwtSettings.GetSection("validAudience").Value,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
+                        IssuerSigningKey = new SymmetricSecurityKey(secretKey)
                     };
                 })
                 .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"), "jwtBearerScheme2");

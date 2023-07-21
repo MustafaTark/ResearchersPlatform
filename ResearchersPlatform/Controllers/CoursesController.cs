@@ -276,6 +276,7 @@ namespace ResearchersPlatform.Controllers
             return Ok(videos);
         }
         [HttpDelete("Videos/{videoId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteVideo(int videoId)
         {
             try
@@ -288,6 +289,7 @@ namespace ResearchersPlatform.Controllers
             }
         }
         [HttpPut("Videos/{videoId}"),DisableRequestSizeLimit]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateVideo(int videoId, [FromForm] UpdateVideoRequestDto request)
         {
             try
@@ -301,6 +303,7 @@ namespace ResearchersPlatform.Controllers
             }
         }
         [HttpDelete("Sections/{sectionId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSection(Guid sectionId)
         {
             var section = await _repositoryManager.Section

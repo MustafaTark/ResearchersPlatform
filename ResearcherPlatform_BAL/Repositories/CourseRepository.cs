@@ -13,10 +13,8 @@ namespace ResearchersPlatform_BAL.Repositories
 {
     public class CourseRepository : GenericRepository<Course> , ICourseRepository
     {
-        private readonly IMemoryCache _memoryCache;
-        public CourseRepository(AppDbContext context, IMemoryCache memoryCache):base(context) 
+        public CourseRepository(AppDbContext context):base(context) 
         { 
-            _memoryCache = memoryCache;
         }
 
         public void CreateCourse(Course course) => Create(course);
@@ -24,20 +22,11 @@ namespace ResearchersPlatform_BAL.Repositories
         public void DeleteCourse(Course course) => Delete(course);
         public async Task<Course?> GetCourseByIdAsync(Guid courseId, bool trackChanges)
         {
-            string key = $"course:{courseId}";
-            var course = await _memoryCache.GetOrCreateAsync(
-                key,
-                async entry =>
-                {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+            
                     return await FindByCondition(c => c.Id == courseId, trackChanges)
                                 .Include(v => v.Sections)
                                 .Include(c=>c.SkillObj)
-                                .FirstOrDefaultAsync();
-                }
-              );
-            return course!;
-            
+                                .FirstOrDefaultAsync(); 
         }
         public async Task<IEnumerable<Course?>> GetAllCoursesAsync()
          =>await FindAll(trackChanges: false).Include(c=>c.SkillObj).ToListAsync();
@@ -49,7 +38,5 @@ namespace ResearchersPlatform_BAL.Repositories
                                     .Id == studentId, trackChanges)
                                     .Include(c => c.SkillObj)
                                     .ToListAsync();
-        
-     
     }
 }

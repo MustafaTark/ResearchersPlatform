@@ -39,7 +39,7 @@ namespace ResearchersPlatform_BAL.Repositories
         }
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET")!);
+           var key = Encoding.UTF8.GetBytes("ResearchersAPIKey");
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }

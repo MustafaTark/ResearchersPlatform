@@ -35,7 +35,7 @@ public class EmailService : IEmailService
             SenderEmail = "reswebplatform@gmail.com",
             SmtpServer = "smtp.gmail.com",
             EnableSsl = true,
-            SmtpPassword = "ybasmcjhyivyjdxy",
+            SmtpPassword = "ltzuukqprbbitwwo",
             SmtpUsername = "reswebplatform@gmail.com",
             SmtpPort = 587
         };
@@ -50,7 +50,7 @@ public class EmailService : IEmailService
         {
             From = new MailAddress(_senderEmail),
             Subject = "Password Reset",
-            Body = $"Click the following link to reset your password:\n {callbackUrl}",
+            Body = $"Click the following link to reset your password: {callbackUrl}",
             IsBodyHtml = true,
         };
 

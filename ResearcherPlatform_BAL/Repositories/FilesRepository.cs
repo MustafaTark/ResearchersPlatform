@@ -43,6 +43,16 @@ namespace ResearchersPlatform_BAL.Repositories
               return _filesManager.GetFile(url!);
                
         }
+        public async Task<string> GetVideoToBuffer(int id)
+        {
+            var url = await _context.Videos.Where(v => v.Id == id)
+                                           .Select(v => v.VideoUrl)
+                                           .FirstOrDefaultAsync();
+            var folderName = Path.Combine("Resources", "Media");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var dbPath = Path.Combine(pathToSave, url);
+            return dbPath;
+        }
         public async Task DeleteVideo(int videoId)
         {
             string fileName  = await _context.Videos.Where(v => v.Id == videoId).Select(v=>v.VideoUrl).FirstOrDefaultAsync();

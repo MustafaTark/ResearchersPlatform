@@ -317,6 +317,25 @@ namespace ResearchersPlatform.Controllers
            await _repositoryManager.SaveChangesAsync();
             return NoContent();
         }
+        [HttpGet("GetVideoBuffering/{videoId}")]
+        public async Task<IActionResult> GetVideoBuffering(int videoId)
+        {
+            var videoPath = await _filesRepository.GetVideoToBuffer(videoId);
+            var buffer = new byte[4096];
+            var stream = new FileStream(videoPath, FileMode.Open, FileAccess.Read);
+
+            Response.Headers.Add("Content-Type", "video/mp4");
+
+            while (true)
+            {
+                var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytesRead == 0) break;
+                await Response.Body.WriteAsync(buffer, 0, bytesRead);
+                await Response.Body.FlushAsync();
+            }
+
+            return new EmptyResult();
+        }
 
 
     }

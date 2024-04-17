@@ -3,7 +3,7 @@
 ResWeb is a cutting-edge platform designed to empower researchers by providing access to a diverse array of courses, facilitating seamless collaboration, and fostering growth within the research community. This repository contains the backend code for ResWeb, developed using .NET Core Web API.
 
 # Website
-The ResWeb is hosted at https://resweb.netlify.app/. Please visit the website to explore the platform's features and functionalities.
+The ResWeb is hosted at https://resweb.net/. Please visit the website to explore the platform's features and functionalities.
 
 # Features
 - Courses: Researchers can access a comprehensive selection of courses to enhance their skills and knowledge.
